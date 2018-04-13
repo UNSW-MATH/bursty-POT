@@ -1,0 +1,21 @@
+---
+title: "README"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(magrittr)
+```
+
+Install the CTRM package to get the paper to compile:
+
+```{r, eval=FALSE}
+devtools::install_github("strakaps/CTRM", 
+                         ref = "f2d14bc18e4aaec7a6b7583e95fef5165775cac0")
+library(CTRM)
+```
+
+
+
+
