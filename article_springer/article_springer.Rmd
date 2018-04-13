@@ -1,5 +1,5 @@
 ---
-title: Inference for Threshold Crossing Times of Bursty Time Series
+title: Peaks Over Threshold for Bursty Time Series
 # titlerunning: Inference for Heavy-Tailed CTRMs
 thanks: |
     Peter Straka was supported by the 
@@ -82,9 +82,9 @@ library(CTRM)
 Time series displaying temporally inhomogeneous behaviour have received 
 strong interest in the recent statistical physics literature 
 [@Barabasi2005; @Oliveira2005; @Vasquez2006; @Vazquez2007; @Omi2011; 
-@Min2010; @Karsai2011; @Bagrow2013], and have been observed in the context 
+@Min2010; @Karsai2011; @Bagrow2013]. They have been observed in the context 
 of earthquakes, sunspots, neuronal activity and human communication [see 
-@Karsai2012; @Vajna2013 and @MeerschaertStoev08 for a list of references]. 
+@Karsai2012; @Vajna2013; @MeerschaertStoev08 for a list of references]. 
 Such time series exhibit high activity in some 'bursty' intervals, which 
 alternate with other, quiet intervals.  Although several mechanisms are 
 plausible explanations for bursty behaviour (most prominently self-exciting
@@ -98,15 +98,31 @@ of correlations in a succession of waiting times can be undertaken by
 randomly reshuffling the waiting times [@Karsai2012].
 
 Often a magnitude, or mark can be assigned to each event in the renewal process, 
-such as for earthquakes, sun flares or neuron voltages. 
+such as for earthquakes, solar flares or neuron voltages. 
 Extreme value theory provides models for the distribution of the events
 with the largest magnitude. 
-A commonly made assumption is that times between events are either fixed 
-or light-tailed, and this entails that the times at which a (high) 
-threshold is crossed form a Poisson process [@beirlantBook]. 
-In the heavy-tailed waiting time scenario, as we will see, threshold 
-crossing times form a *fractional Poisson process*, which generalizes 
-the standard Poisson process. 
+A commonly made assumption in POT models is that times between 
+events are either fixed 
+or light-tailed, and this entails that the 
+threshold crossing times form a Poisson process [@beirlantBook]. 
+Then as one increases the threshold and thus decreases the threshold 
+crossing probability $p$, the Poisson process is rarefied, i.e. its 
+intensity decreases _linearly_ with $p$. 
+
+As will be shown below, in the heavy-tailed waiting time scenario threshold 
+crossing times form a _fractional Poisson process_ 
+[@Laskin2003; @Meerschaert2010b], which is a 
+renewal process with Mittag-Leffler distributed waiting times. 
+The family of Mittag-Leffler distributions nests the exponential 
+distribution [@Haubold11], and hence the fractional Poisson process
+generalizes the standard Poisson process. 
+Again as the threshold size increases and the threshold crossing
+probability $p$ decreases, the fractional Poisson process is rarefied: 
+The scale parameter of the Mittag-Leffler inter-arrival times of 
+threshold crossing times increases, increases, but _superlinearly_; 
+see the Theorem below.
+
+
 Maxima of events which occur according to a renewal process with
 heavy-tailed waiting times have been studied under 
 the names "Continuous Time Random Maxima process" (CTRM) 
@@ -117,8 +133,7 @@ and "Shock process"
 The existing literature focuses on probabilistic results surrounding these 
 models. 
 In this work, however, we introduce a method of inference for this type of 
-model, a problem which has seemingly received little attention so far, 
-even by the statistical community.
+model, which is seemingly not available in the literature.
 
 We review the CTRM, or max-renewal model, in Section 2, and 
 derive a scaling limit theorem for inter-exceedance times in Sections 3 &
@@ -126,12 +141,11 @@ derive a scaling limit theorem for inter-exceedance times in Sections 3 &
 A statistical procedure to estimate model parameters via stability plots 
 is outlined in Section 5, and diagnostic plots for model criticism are 
 discussed in Section 6. 
-In Section 7, we give case studies for simulated data as well as for two
-real-world datasets, with a discussion in Section 8. 
+In Section 7, we give case studies for simulated data as well as for a
+real-world dataset, with a discussion in Section 8. 
 All statistical computations have been done in R, and all code, data, as 
 well as the source code for this manuscript has been organized into an R 
-software package, available at 
-\url{https://github.com/strakaps/CTRM}. 
+software package, available at <https://github.com/strakaps/CTRM>. 
 
 
 # CTRMs
@@ -142,7 +156,7 @@ Continuous Time Random Maxima (CTRM), or Max-Renewal processes, track the
 largest event in a renewal sequence of events [@Basrak2014; 
 @MeerschaertStoev08; @Hees16]:
 
-Definition (CTRM): 
+**Definition (CTRM):** 
 
 : Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random 
 variables, where the $W_k > 0$ are interpreted as the *waiting times* or 
@@ -170,10 +184,9 @@ In the coupled case, however, their distributions
 can be dramatically different [@Hees16].
 
 The main purpose of this article is to introduce and discuss a method for 
-fitting data to an uncoupled CTRM. The following two quantities are our main 
-ingredients.
+fitting data to an uncoupled CTRM, based on the following observable data:
 
-Definition: 
+**Definition:** 
 
 : The random variables
 $$X(\ell) = V(T(\ell)) - \ell, \quad 
@@ -185,19 +198,20 @@ are called the *exceedance* resp. *time until exceedance* of level $\ell$.
 Since we assume the uncoupled case, $X(\ell)$ and $T(\ell)$ are 
 independent. 
 To see this, note that $X(\ell)$ is, in distribution, simply equal to
-$J | J > \ell$, independent of any waiting times $W_k$. 
-For our inference on the CTRM model, we will extract realizations of 
-$X(\ell)$ and $T(\ell)$ from data by considering thresholds 
+$J | J > \ell$, independent of any waiting time $W_k$. 
+For our inference on the CTRM model, we extract realizations of 
+$X(\ell)$ and $T(\ell)$ from time series data by considering thresholds 
 $\ell$ ranging over some interval $[\ell_0, x_R)$. 
-(For instance, let $\ell_0$ equal the $95$-th percentile of $J$.)
+(A reasonable default value for $\ell_0$ is the $95$-th
+percentile of $J$.)
 Write $X(\ell,i)$ for the $i$-th exceedance of level $\ell$, 
 and $T(\ell,i)$ for the inter-arrival time between
 $X(\ell,i-1)$ and $X(\ell,i)$. 
 Thus for any threshold $\ell \in [\ell_0, x_R)$,
 we construct sequences $\{T(\ell,i)\}_{i}$ and 
 $\{X(\ell,i)\}_{i}$. 
-These sequences are i.i.d. since the underlying $W_k$ and $J_k$
-are i.i.d., and independent because $W_k$ and $J_k$ are uncoupled.
+These sequences are i.i.d. because a renewal occurs at each threshold
+crossing time, and independent because $W_k$ and $J_k$ are uncoupled.
 Extracting the exceedances $X(\ell)$ for inference is a standard procedure
 known as the Peaks Over Threshold (POT) approach in extreme value theory
 [@beirlantBook].
@@ -224,7 +238,7 @@ A standard result from extreme value theory provides the asymptotic
 distribution of $X(\ell)$ as $\ell \uparrow x_R$. For later use, we also 
 include the scaling limit of the cumulative maximum $M(n)$. 
 
-Theorem GEV (e.g. Chapter 2 & Section 5.3, @beirlantBook):
+**Theorem GEV** (e.g. Chapter 2 & Section 5.3, @beirlantBook):
 
 : Suppose the distribution of $J_k$ is continuous. Then there
 exist non-decreasing norming functions $a(c)$ and $d(c)$ such that
@@ -296,7 +310,7 @@ Moreover, the following functional limit theorem holds
 (W_1 + \ldots + W_{\lfloor ct \rfloor})/b(c) \overset{d}{\longrightarrow} D(t), \quad c \to \infty
 \] 
 with convergence in the Skorokhod $J_1$ topology. The limit
-$D(t)$ is a stable subordinator, i.e. an increasing Lévy process with
+$D(t)$ is a stable subordinator, i.e. an increasing Levy process with
 Laplace transform $\exp(-t s^\beta)$.
 
 
@@ -338,7 +352,7 @@ where $F_A(x)$ is a GEV distribution [see e.g. @resnick2013extreme].
 
 The CTRM $V(t)$ results from the running maximum $M(n)$ via a time change by the renewal process $n = N(t)$. This is also reflected in its corresponding limit process:
 
-Theorem MS1 [@MeerschaertStoev08]: 
+**Theorem MS1** [@MeerschaertStoev08]: 
 
 : The CTRM process $V(t) = M(N(t))$ satisfies the following functional scaling limit in the Skorokhod $J_1$ topology: 
 $$
@@ -347,9 +361,10 @@ A(E(t)), \quad c \to \infty.
 $$
 
 The distribution of the _hitting time_ of a level $\ell^*$ by the limit 
-process $A(E(t))$ is also known:
+process $A(E(t))$ is also known, and we give it below for the convenience 
+of the reader:
 
-Theorem MS2 [@MeerschaertStoev08]: 
+**Theorem MS2** [@MeerschaertStoev08]: 
 
 : Let $F_A$ be the CDF of a GEV distribution, and let $A(t)$ be the
 extremal process corresponding to $F_A$ via \eqref{eq:fin-dim-A}. 
@@ -363,7 +378,8 @@ where $X \sim {\rm Exp}(1)$ and $D$ (defined in \eqref{theD}) are
 independent.
 
 The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
-(except for $\beta = 1$) a heavy-tailed positive distribution. 
+a heavy-tailed positive distribution if $\beta < 1$; for $\beta = 1$, 
+it specializes to the Exponential distribution. 
 For $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution 
 of $\sigma Y$, where $Y$ has Laplace transform 
 $\mathbf E[\exp(-s Y)] = 1/(1+s^\beta)$. Due to e.g. Theorem 19.1 in 
@@ -777,26 +793,6 @@ The analyses from this paper are readily reproduced via the R package
 The authors would like to thank Peter Scheffler for insights on 
 stochastic process limits for CTRMs, and Gurtek Gill who helped create
 the MittagLeffleR R-package. 
-
-\appendix
-
-# Diagnostic Plots
-
-```{r simulated-diag, fig.width=5, fig.height=7.5, fig.cap="\\label{fig:simulated-diag}Diagnostic plots for the simulated data."}
-par(mfrow=c(3,2))
-diagnostics(thin_sim_ctrm, tail = tail)
-```
-
-
-```{r bitcoin-diag, fig.width=5, fig.height=7.5, fig.cap="\\label{fig:bitcoin-diag}Diagnostic plots for the Bitcoin data."}
-par(mfrow=c(3,2)) 
-diagnostics(ctrm = thin_bitcoin_ctrm, tail = 0.9)
-```
-
-```{r solar-flare-diag, fig.width=5, fig.height=7.5, fig.cap="\\label{fig:solar-flar-diag}Diagnostic plots for the Solar Flare data."}
-par(mfrow=c(3,2))
-diagnostics(thin_flares_ctrm, tail = 0.85)
-```
 
 
 \newpage
