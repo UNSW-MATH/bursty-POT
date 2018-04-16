@@ -266,7 +266,84 @@ exponential distribution, from the point of view of applied statistics.
 For a detailed reference on the Mittag-Leffler distribution, see e.g. 
 @Haubold11.
 
+_Proof of Theorem:_
+We interpret the threshold crossing time as the hitting time of the 
+underlying CTRM (Continuous Time Random Maxima) or "max-renewal process", 
+and utilize a result by @MeerschaertStoev08. 
+The running maximum process is defined as 
+$$
+M_J(t) := J_1 \vee \ldots \vee J_{\lfloor t \rfloor},
+$$
+and as we assume the $J_k$ have a continuous distribution, there exist 
+norming functions $a(c)$ and $d(c)$ such that 
+$$
+\frac{M_J(t) - d(t)}{a(t)} \stackrel{d}{\longrightarrow} A, \quad t \to \infty
+$$
+where $A$ is a random variable with a generalized extreme value distribution. 
+The underlying CTRM is then defined via 
+$$
+X(t) = M_J(N(t)), \quad t \ge 0
+$$
+where $N(t)$ is the renewal process associated with the waiting times 
+$W_k$: 
+$$
+N(t) = \max\{n: W_1 + \ldots + W_n \le t\}.
+$$
+Now a key observation is that
+$$
+T(\ell) = \inf\{t: V(t) > \ell\}, 
+$$
+and that 
+$$
+T(\ell) > t \quad \text{ if and only if } \quad V(t) \le \ell.
+$$
+By [Theorem 3.1, @MeerschaertStoev08], we have the stochastic process 
+convergence 
+$$
+\frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} \stackrel{d}{\longrightarrow} 
+A(E(t)), \quad t > 0.
+$$
+where: 
 
+* $A(t)$ is the extremal process such that $A(1) \stackrel{d}{=} A$, 
+* $E(t) = \inf\{u: D(u) > t\}$ is an inverse subordinator, 
+  associated with the Levy process $D(t)$ that satisfies 
+  $D(1) \stackrel{d}{=} D$,
+* $\tilde b(c)$ is a regularly varying norming function which is
+  _inverse_ to $b(c)$: $b(\tilde b(c)) \sim c \sim \tilde b(b(c))$. 
+
+Now 
+\begin{align}
+\begin{split}
+\mathbf P \left[T(\ell)/b(1/p) > t \right]
+&= \mathbf P[V(b(1/p) t) \leq \ell] \label{eq:proofTheo}
+= \mathbf P[V(b(1/p)) \le a(c) \ell^* + d(c)]\\
+&= \mathbf P\left(\frac{V(b(1/p)/b(c) \cdot b(c) \cdot t)-d(c)}{a(c)} \le \ell^*\right) \\
+&\stackrel{d}{\to} \mathbf P(A(E(-\log F_A(l))^{-1/\beta} t) \leq \ell^*),
+\end{split}
+\end{align}
+where the convergence follows due to Theorem MS1 (with $c$ replaced by $b(c)$) and the fact that
+\begin{equation}
+\frac{b(1/p)}{b(c)} 
+= \frac{b(1/cp \cdot c)}{b(c)} 
+\sim (cp)^{-1/\beta}
+\to \left( -\log F_A(l)\right)^{-1/\beta} 
+\text{ as } c \to \infty.\label{eq:proofTheo2}
+\end{equation}
+In \eqref{eq:proofTheo2} we used \eqref{eq:np_conv} and 
+$b \in RV(1/\beta)$, which means that 
+$b(\lambda c) / b(c) \rightarrow \lambda^{1/\beta}$ as 
+$c \rightarrow \infty$ uniformly in $\lambda$ on each compact subset of 
+$(0,\infty)$. 
+The limit in \eqref{eq:proofTheo} is equal to
+$$\mathbf P \left( \left( -\log(F_A(\ell^{*})) \right)^ {1/\beta} B(\ell^*) > t\right).$$ 
+Due to Theorem MS2 and \eqref{eq:hitting-ML}, we know that 
+$(-\log F_A (\ell^*))^{1/\beta} B(\ell^*)$ is $ML(\beta,1)$ distributed, 
+and hence the theorem follows. 
+
+
+
+# Statistics of the Mittag-Leffler distribution
 
 
 
@@ -737,33 +814,7 @@ c \cdot p \stackrel{d}{\to} - \log F_A(\ell^*) \label{eq:np_conv}
 \end{equation}
 \noindent as $\ell \uparrow x_R$.
 Now we get
-\begin{align}
-\begin{split}
-\mathbf P \left[T(\ell)/b(1/p) > t \right]
-&= \mathbf P[V(b(1/p) t) \leq \ell] \label{eq:proofTheo}
-= \mathbf P[V(b(1/p)) \le a(c) \ell^* + d(c)]\\
-&= \mathbf P\left(\frac{V(b(1/p)/b(c) \cdot b(c) \cdot t)-d(c)}{a(c)} \le \ell^*\right) \\
-&\stackrel{d}{\to} \mathbf P(A(E(-\log F_A(l))^{-1/\beta} t) \leq \ell^*),
-\end{split}
-\end{align}
-where the convergence follows due to Theorem MS1 (with $c$ replaced by $b(c)$) and the fact that
-\begin{equation}
-\frac{b(1/p)}{b(c)} 
-= \frac{b(1/cp \cdot c)}{b(c)} 
-\sim (cp)^{-1/\beta}
-\to \left( -\log F_A(l)\right)^{-1/\beta} 
-\text{ as } c \to \infty.\label{eq:proofTheo2}
-\end{equation}
-In \eqref{eq:proofTheo2} we used \eqref{eq:np_conv} and 
-$b \in RV(1/\beta)$, which means that 
-$b(\lambda c) / b(c) \rightarrow \lambda^{1/\beta}$ as 
-$c \rightarrow \infty$ uniformly in $\lambda$ on each compact subset of 
-$(0,\infty)$. 
-The limit in \eqref{eq:proofTheo} is equal to
-$$\mathbf P \left( \left( -\log(F_A(\ell^{*})) \right)^ {1/\beta} B(\ell^*) > t\right).$$ 
-Due to Theorem MS2 and \eqref{eq:hitting-ML}, we know that 
-$(-\log F_A (\ell^*))^{1/\beta} B(\ell^*)$ is $ML(\beta,1)$ distributed, 
-and hence the theorem follows. 
+
 
 **Remark:**
 
