@@ -182,8 +182,8 @@ By restarting the MRP at $\tau(\ell)$, one can inductively construct the
 two i.i.d. sequences $T(\ell,n)$ and $X(\ell, n)$, $n \in \mathbb N$.
 Moreover, since we assume the uncoupled case, the two sequences are independent.[^1]
 
-[^1]: (To see why, note that $X(\ell)$ is, in distribution, simply equal to 
-  $J | J > \ell$, independent of any waiting time $W_k$.)
+[^1]: To see why, note that $X(\ell)$ is, in distribution, simply equal to 
+  $J | J > \ell$, independent of any waiting time $W_k$.
 
 ```{r thresholdedBursty, message=FALSE, fig.height=7, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
 #rpareto <- function(n,tail){
@@ -211,7 +211,7 @@ dataset [@HXRBS][^*]. Clearly, the simulated data exhibit long intervals
 _without any_ events, whereas in the real-world dataset events appear 
 continuously. The threshold exceedances, however, appear to have the same 
 statistical behaviour in both models. Observations below a threshold are 
-commonly discarded in Extreme Value Theory; the MRP models 
+commonly discarded in Extreme Value Theory; likewise, our MRP model
 interprets these observations as noise and filters them out.
 
 [^*]: The "complete Hard X Ray Burst Spectrometer event list" 
@@ -228,39 +228,6 @@ magnitudes.
 
 # Scaling limit of Exceedance Times
 
-In classical extreme value theory, there are two main approaches for 
-the inference on GEV distributions: Block
-Maxima and Peaks-Over-Threshold (POT). Block 
-Maxima subdivide the time line into 'blocks' of equal length, 
-and the maximum of each block is taken as realization of the random 
-variable $M_n$. 
-This approach is not appropriate for CTRM data, because maxima in 
-same-sized blocks will not be i.i.d.
-As mentioned in Section 2, the POT approach *does* extract i.i.d. $X(\ell)$ 
-(and $T(\ell)$), and can hence be directly used for the inference on 
-the extreme values of $J_k$. 
-Figure \ref{fig:GP-simulated} shows an example for the so-called 
-"threshold-selection" plots for data drawn from the standard Gumbel 
-distribution. 
-For a range of thresholds, maximum likelihood estimators of the shape and 
-scale parameters in the GP distribution are computed and plotted. 
-Note that the scale parameter is transformed so that it appears independent
-of the threshold [see e.g. Section 4.3.4 in @ColesBook]. 
-
-```{r GPD-simulated-data, warning=FALSE, fig.cap="\\label{fig:GP-simulated}Stability plot for the shape and scale parameters of the generalized Pareto distribution. Here, the magnitudes are standard Gumbel, hence $\\xi = 0$ and $\\sigma = 1$. Plots were generated using the POT package in R [@R-POT]."}
-par(mfrow = c(1,2))
-JJ <- coredata.ctrm(sim_ctrm)
-u.range <- quantile(x = JJ, probs = c(0.75, 0.95))
-POT::tcplot(JJ, u.range = u.range)
-# extRemes::threshrange.plot(mrp("getMags"), type = "GP", set.panels = FALSE)
-```
-
-
-For the remainder of this article, we focus on statistical inference 
-for the inter-exceedance times $T(\ell)$ of the threshold crossings. 
-In our setting, the inter-exceedance times follow a fractional 
-Poisson process instead of a standard Poisson process, which is how our
-approach generalizes the standard POT approach. 
 
 **Theorem:**  
 
