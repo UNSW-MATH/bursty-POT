@@ -68,6 +68,8 @@ preamble: |
 # use this rticles version: 
 devtools::install_github("strakaps/rticles", 
                          ref = "724aeb88d005e2f7befc37328633e7cb2bc1cce0")
+# use the newest MittagLeffleR version:
+devtools::install_github("strakaps/MittagLeffleR")
 ```
 
 ```{r setup, include=FALSE}
