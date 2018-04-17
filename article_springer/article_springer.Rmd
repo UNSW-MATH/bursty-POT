@@ -386,10 +386,15 @@ which could be taken to indicate a reasonable estimate for the true
 tail exponent $0.8$. 
 Even worse, from a QQ-estimator point of view, there is no striking 
 difference between the infinite mean ${\rm ML}(0.8,1)$ distribution and 
-the light-tailed ${\rm Exp}(1)$ distribution (see bottom-right panel). 
-In particular, if only few 
-(e.g. $<100$) data are available, then the static QQ-estimator plots look 
-virtually interchangeable. 
+the light-tailed ${\rm Exp}(1)$ distribution (compare the right two panels). 
+In particular, if only few (e.g. $<100$) data are available, 
+then the static QQ-estimator plots look interchangeable for the two 
+distributions. 
+
+```{r likelihood-ratio-test}
+flares_arrivals <- flares %>% ctrm() %>% thin(k = 500) %>% interarrival()
+mlmle_out <- mlmle(data = flares_arrivals)
+```
 
 Hence if there is some prior expectation that the data are drawn from the 
 Mittag-Leffler distribution
@@ -402,12 +407,23 @@ The tail parameter $\beta$ can be estimated quickly via the log-moment
 method by @Cahoy2013, or via maximum likelihood. 
 Both estimators are implemented in the R package `MittagLeffleR` 
 [@MittagLeffleR]. 
+Since the exponential distribution is nested in the Mittag-Leffler 
+family of distributions, a standard likelihood ratio test can be 
+performed, with the exponential distribution as a null model against 
+a Mittag-Leffler distribution as the alternative. 
+As an example, the threshold crossing times for the solar flare dataset
+yield a difference in deviance of 
+$\approx$ `r round(2 * (mlmle_out$loglik - mlmle_out$null_loglik))`, 
+which evaluates to a strongly significant $\chi^2_1$ test statistic 
+(p-value = $10^{`r round(log10(mlmle_out$p_value))`}$) for the null
+hypothesis $\beta = 1$. 
+
+
 
 
 ```{r QQ-plots, fig.cap="QQ Plots for Mittag-Leffler data (left; $\\beta = 0.8$) and threshold crossing times / magnitudes for the solar flare data (middle / right; threshold is set at the 500th order statistic, $\\beta = 0.83$). Threshold crossing times appear to fit the Mittag-Leffler distribution well, whereas the Magnitudes appear to fit a Pareto distribution better (\\ref{fig:QQ-est}). "}
 par(mfrow = c(1, 3))
 rml(n = 500, tail = 0.8) %>% mlqqplot(tail = 0.8, log = 'xy', main = "Mittag-Leffler data")
-flares_arrivals <- flares %>% ctrm() %>% thin(k = 500) %>% interarrival()
 flares_arrivals_MLparam <- (flares_arrivals %>% mlmle())$par
 mlqqplot(flares_arrivals, 
          tail = flares_arrivals_MLparam["tail"], 
