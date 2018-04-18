@@ -2,7 +2,7 @@ README
 ================
 
 Install the newest versions of the CTRM, MittagLeffleR and rticles
-packages to get the paper to compile:
+packages to get the paper (`article_springer.Rmd`) to compile:
 
 ``` r
 devtools::install_github("strakaps/CTRM")

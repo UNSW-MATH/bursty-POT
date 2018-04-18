@@ -9,7 +9,7 @@ library(magrittr)
 ```
 
 Install the newest versions of the CTRM, MittagLeffleR and rticles 
-packages to get the paper to compile:
+packages to get the paper (`article_springer.Rmd`) to compile:
 
 ```{r, eval=FALSE}
 devtools::install_github("strakaps/CTRM")
