@@ -576,11 +576,22 @@ p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{1/\beta} \sigma_0)
 $$
 where $f(\,\cdot\, | \beta, k^{1/\beta} \sigma_0)$ is the probability density of 
 ${\rm ML}(\beta, k^{1/\beta} \sigma_0)$. 
-
+The more time has passed without a threshold crossing, the more the probability 
+distribution shifts towards larger values for the next crossing
+(see Figure \ref{fig:hazard}, left panel). 
+The hazard rate 
+$$
+h(t) = \frac{f(t| \beta, k^{1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{1/\beta} \sigma_0))\,d\tau}
+$$
+represents the risk of a threshold crossing per unit time, and is a 
+decreasing function for the Mittag-Leffler distribution. 
+The closer $\beta$ is to $1$, the more the hazard rate mimics that of an 
+exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
+right panel). 
 
 Conditional on the last threshold being 
 
-```{r, fig.height=7}
+```{r hazard, fig.height=7, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
 tail <- 0.7
 scale <- 1
 t_0 <- c(0, 1, 10)
@@ -595,25 +606,12 @@ for (k in 1:length(t_0)) {
   yy <- dml(x = xx + t_0[k], tail = tail, scale = scale) / cond
   lines(xx,yy, col = k+1, lty = k)
 }
-legend("topright", c("t_0 = 0", "t_0 = 1", "t_0 = 10"), col = 2:4, lty = 1:3)
+legend("bottomleft", c("t_0 = 0", "t_0 = 1", "t_0 = 10"), col = 2:4, lty = 1:3)
 
-plot(xx, rep(1, length(xx)), ylim = c(0.001,1), type = 'n', log = 'xy', 
-     xlab = 't', ylab = 'p')
-betas <- c(0.8, 0.95, 0.99)
-t_0 <- 1
-for (k in 1:length(betas)) {
-  cond <- pml(q = t_0, tail = betas[k], scale = scale, lower.tail = FALSE)
-  yy <- dml(x = xx + t_0, tail = betas[k], scale = scale) / cond
-  lines(xx, yy, col = k+1, lty = k)
-}
-legend("topright", c("beta = 0.8", "beta = 0.95", "beta = 0.99"), col = 2:4, lty = 1:3)
-```
-
-```{r}
 betas <- c(0.7, 0.8, 0.95, 0.99)
 t_0 <- 1
-plot(xx, rep(1, length(xx)), ylim = c(0.001,1), type = 'n', log = 'xy', 
-     xlab = 't', ylab = 'p')
+plot(xx, rep(1, length(xx)), ylim = c(0.001,2), type = 'n', log = 'xy', 
+     xlab = 't', ylab = 'h')
 for (k in 1:length(betas)) {
   yy <- dml(x = xx, tail = betas[k], scale = scale) / pml(
     q = xx,
@@ -623,7 +621,7 @@ for (k in 1:length(betas)) {
   )
   lines(xx,yy, col = k+1, lty = k)
 }
-legend("topright", c("beta = 0.8", "beta = 0.95", "beta = 0.99"), col = 2:5, lty = 1:4)
+legend("bottomleft", c("beta = 0.7", "beta = 0.8", "beta = 0.95", "beta = 0.99"), col = 2:5, lty = 1:4)
 
 ```
 
