@@ -589,9 +589,7 @@ The closer $\beta$ is to $1$, the more the hazard rate mimics that of an
 exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
 right panel). 
 
-Conditional on the last threshold being 
-
-```{r hazard, fig.height=7, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
+```{r hazard, fig.height=7, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
 tail <- 0.7
 scale <- 1
 t_0 <- c(0, 1, 10)
@@ -625,7 +623,10 @@ legend("bottomleft", c("beta = 0.7", "beta = 0.8", "beta = 0.95", "beta = 0.99")
 
 ```
 
-
+It is beyond the scope of the current paper to incorporate parameter 
+uncertainty into our predictive distribution for the next threshold crossing; 
+however, methods as described by @Scarrott12 and @Lee15 are likely 
+to extend to our setting. 
 
 # Application to data
 
