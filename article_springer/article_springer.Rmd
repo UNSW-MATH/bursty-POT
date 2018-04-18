@@ -437,19 +437,27 @@ flares %>% ctrm() %>% thin(k = 500) %>% coredata() %>%
 
 # Inference on Exceedance times
 
-The Theorem in the [previous Section](#sec:scaling) implies that for high 
-$\ell$ we may 
+```{r solar-flare-tail-scale, message=FALSE, fig.height=4.5, fig.width=8, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$."}
+thin_flares_ctrm <- flares %>% ctrm() %>% thin(k = 700)
+par(mfrow=c(1,2))
+MLestimates(thin_flares_ctrm, tail = 0.9, scale = 3 * 1E7)
+```
+
+The Theorem in Section \ref{sec:scaling} implies that for high 
+threshold $\ell$ we may 
 approximate the distribution of $T(\ell)$ with an 
-${\rm ML}(\beta, b(1/p))$ distribution.
+${\rm ML}(\beta, b(1/p))$ distribution, 
+where $b(\,)$ varies regularly at $\infty$ with parameter $1/\beta$.
 Building on the POT (Peaks Over Threshold) method, we propose the 
 following estimation procedure for the distribution of $T(\ell)$: 
 
-1. For varying thresholds $\ell \uparrow x_R$, extract datasets of
-  exceedance times $\{T(\ell, i)\}_i$.
+1. For a range of thresholds $\ell$ near the largest order statistics, 
+  extract datasets of exceedance times $\{T(\ell, i)\}_i$.
   
-
-2. Fit a Mittag-Leffler distribution to each dataset, which
-  results in the $\ell$-dependent estimates $\{\hat\beta(\ell)\}_\ell$ and 
+2. For each choice of threshold $\ell$, 
+  fit a Mittag-Leffler distribution to the resulting dataset
+  $\{T(\ell, i)\}_i$. 
+  This results in the estimates $\{\hat\beta(\ell)\}_\ell$ and 
   $\{\hat \sigma(\ell)\}_\ell$.
   
 
@@ -473,7 +481,7 @@ following estimation procedure for the distribution of $T(\ell)$:
   the level $\ell$. 
 
 The above approach, though theoretically sound, benefits from the following
-practical adjustments:
+practical adjustments (compare with Figure \ref{fig:flares}):
 
 * We choose $\ell$ from the order statistics, i.e. $\ell$ is the $k$-th
   largest of the observations $X_j$, where $k$ runs from 
@@ -493,40 +501,60 @@ distribution of exceedance times, dependent on the threshold $\ell$:
 \begin{align*}
 T(\ell) \sim {\rm ML}(\hat \beta, k^{-1/\hat \beta} \hat \sigma_0).
 \end{align*}
-For quick estimates of the Mittag-Leffler parameters the method of
-log-transformed moments by @Cahoy2013 was used.
+For quick estimates of the Mittag-Leffler parameters we have used 
+the method of log-transformed moments by @Cahoy2013.
+
+
 
 
 # Checking Model Assumptions 
 
-The CTRM model is based on three main assumptions, which are repeated 
+
+```{r flare-diagnostics-1, fig.height=7, fig.cap="Diagnostic plots for the solar flare data: auto-correlation function.\\label{fig:flare-diagnostics-1}"}
+flares_ctrm <- flares %>% ctrm() %>% thin(k = 200)
+acf(flares_ctrm)
+```
+
+
+```{r flare-diagnostics-2, fig.height=7, fig.cap="Diagnostic plots for the solar flare data: empirical copula and QQ Plot. \\label{fig:flare-diagnostics-2}"}
+par(mfrow = c(2,2))
+empcopula(flares_ctrm)
+mlqqplot(flares_ctrm, log = 'xy', tail = 0.8, main = "Mittag-Leffler QQ Plot")
+```
+
+The MRP model is based on three main assumptions, which are repeated 
 below. For each assumption, we suggest one means of checking if it holds: 
 
 I.i.d.:
-: The pairs $(W_i, J_i)$ are i.i.d. An indication if this is true is given 
+: After removing the "noise observations" below the smallest threshold 
+  $\ell_0$, the pair sequence $(T(\ell_0, i), X(\ell_0,i))$ is i.i.d. 
+  An indication if this is true is given 
   by an auto-correlation plot for the logarithms (to ensure finite moments) 
   of the two time series.
   
-  
 
 Uncoupled:
-: Each $W_i$ is independent of each $J_i$. We propose an empirical copula
+: Each $T(\ell, i)$ is independent of each $X(\ell, i)$. We propose an empirical copula
   plot to check for any dependence. 
   
   
 
-Heavy tails:
-: The waiting times are heavy-tailed with tail parameter 
-  $\beta \in (0,1)$. A Hill plot can confirm this assumption. 
+${\rm ML}(\beta, \sigma)$ distribution of $T(\ell, i)$:
+: Apply a cutoff at the lowest threshold $\ell_0$, 
+  extract the threshold crossing times, 
+  and create a QQ Plot for the Mittag-Leffler distribution. 
+  Use a log-Moment estimate of the tail parameter for the theoretical / population 
+  quantiles of the plot.
 
 
-The motivation behind a CTRM model is to fit extreme observations
-and their inter-arrival times. 
-Observations below a certain threshold may be interpreted as noise and 
-discarded.
-Since the signal rather than the noise needs to satisfy our modelling 
-assumptions, we suggest that the above model assumptions are checked 
-*after* the noisy small observations are discarded. 
+Figures \ref{fig:flare-diagnostics-1} and \ref{fig:flare-diagnostics-2} 
+show the diagnostic plots for a 
+minimum threshold chosen at the 200th order statistic. 
+There is some residual autocorrelation for the sequence of threshold 
+exceedance times that is not accounted for by the MRP model. 
+The fit with a Mittag-Leffler distribution ($\beta = 0.8$) is good, and 
+there is no apparent dependence between threshold exceedance times and 
+event magnitudes. 
 
 
 # Application to data
@@ -631,11 +659,6 @@ duration, and peak rate of each event. We have used "start time" as the
 variable for event times, and "peak rate" as the variable for event 
 magnitudes (Figure \ref{fig:solar-flare-data}). 
 
-```{r solar-flare-tail-scale, message=FALSE, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset."}
-thin_flares_ctrm <- thin(ctrm = flares_ctrm, k = 150)
-par(mfrow=c(1,2))
-MLestimates(thin_flares_ctrm, tail = tail, scale = 2.5 * 1E7)
-```
 
 Figure \ref{fig:flares} shows the fitted tail and scale parameters 
 of the Mittag-Leffler distribution. The dotted line for the tail 
