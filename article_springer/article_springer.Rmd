@@ -64,12 +64,15 @@ preamble: |
   \usepackage{amssymb}
 ---
 
-```{r get-rticles, eval=FALSE, include=FALSE}
+```{r get-rticles, eval=FALSE, include=FALSE, cache=TRUE}
 # use this rticles version: 
 devtools::install_github("strakaps/rticles", 
                          ref = "724aeb88d005e2f7befc37328633e7cb2bc1cce0")
 # use the newest MittagLeffleR version:
 devtools::install_github("strakaps/MittagLeffleR")
+library(MittagLeffleR)
+devtools::install_github("UNSW-MATH/CTRM")
+library(CTRM)
 ```
 
 ```{r setup, include=FALSE}
@@ -127,7 +130,7 @@ generalizes the standard Poisson process.
 Again as the threshold size increases and the threshold crossing
 probability $p$ decreases, the fractional Poisson process is rarefied: 
 The scale parameter of the Mittag-Leffler inter-arrival times of 
-threshold crossing times increases, increases, but _superlinearly_; 
+threshold crossing times increases, but _superlinearly_; 
 see the Theorem below.
 
 
@@ -324,21 +327,19 @@ $$
 \mathbf P\left[ \frac{T(\ell)}{b(1/p)} > t \right]
 = \mathbf P[T(\ell) > b(1/p) t]
 = \mathbf P[V(ct) \le \ell]
-= \ldots
 $$
-where we have substituted $c = b(1/p)$, 
+where we have substituted $c = b(1/p)$. Moreover 
 $$
-\ldots
+\mathbf P[V(ct) \le \ell]
 = \mathbf P\left[ \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
 \le \frac{\ell - d(\tilde b(c))}{a(\tilde b(c))} \right]
 \longrightarrow \mathbf P\left[ Y(t) \le \ell^* \right]
-= \ldots
 $$
 Defining the hitting time of level $\ell^*$ by $Y(t)$ as 
 $\xi_{\ell^*} := \inf\{t: Y(t) > \ell^*\}$,
 we then have 
 $$
-\ldots = \mathbf P[\xi_{\ell^*} > t] 
+P\left[ Y(t) \le \ell^* \right] = \mathbf P[\xi_{\ell^*} > t] 
 = \mathbf P[(-\log F(\ell^*))^{-1/\beta} X^{1/\beta} D > t]
 $$
 by [Proposition 4.2, @MeerschaertStoev08], where $X$ is an exponential 
@@ -531,7 +532,7 @@ mlqqplot(flares_ctrm, log = 'xy', tail = 0.8, main = "Mittag-Leffler QQ Plot")
 The MRP model is based on three main assumptions, which are repeated 
 below. For each assumption, we suggest one means of checking if it holds: 
 
-I.i.d.:
+i.i.d.:
 : After removing the "noise observations" below the smallest threshold 
   $\ell_0$, the pair sequence $(T(\ell_0, i), X(\ell_0,i))$ is i.i.d. 
   An indication if this is true is given 
@@ -659,7 +660,7 @@ threshold crossings (long rests), and
 ii) a high propensity for more threshold crossing events immediately after 
 each threshold crossing event (bursts). 
 The Mittag-Leffler distribution captures both phenomena, due to its heavy
-tail as well as its streteched exponential (peaked) asymptotics for small 
+tail as well as its stretched exponential (peaked) asymptotics for small 
 times. 
 It generalizes the exponential distribution, and 
 in the solar flare data example, this generalization 
