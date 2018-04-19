@@ -64,12 +64,15 @@ preamble: |
   \usepackage{amssymb}
 ---
 
-```{r get-rticles, eval=FALSE, include=FALSE}
+```{r get-rticles, eval=FALSE, include=FALSE, cache=TRUE}
 # use this rticles version: 
 devtools::install_github("strakaps/rticles", 
                          ref = "724aeb88d005e2f7befc37328633e7cb2bc1cce0")
 # use the newest MittagLeffleR version:
 devtools::install_github("strakaps/MittagLeffleR")
+library(MittagLeffleR)
+devtools::install_github("UNSW-MATH/CTRM")
+library(CTRM)
 ```
 
 ```{r setup, include=FALSE}
