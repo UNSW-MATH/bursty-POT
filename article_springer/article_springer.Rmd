@@ -40,7 +40,7 @@ abstract: |
   "bursty". 
   
   This article generalizes the Peaks Over Threshold (POT) model to the setting 
-  where inter-event times are heavy-tailed and i.i.d.. For high thresholds and 
+  where inter-event times are heavy-tailed. For high thresholds and 
   infinite-mean waiting times, we show that the times between threshold 
   crossings are Mittag-Leffler distributed, and thus form a "fractional 
   Poisson Process" which generalizes the standard Poisson Process.
@@ -156,14 +156,14 @@ In Section 7, we discuss the non-memorylessness property of the
 Mittag-Leffler distribution, and how it affects the predictive distribution 
 for the next threshold crossing event. 
 Section 8 concludes.
-All statistical computations have been done in R, and all code, data, as 
+For all statistical computations we have used R [@R], and all code, data, as 
 well as the source code for this manuscript has been organized into an R 
-software package, available at <https://github.com/strakaps/CTRM>. 
+software package, available at <https://github.com/UNSW-MATH/CTRM>. 
 
 
 # Marked Renewal Process (MRP)
 
-**Definition:** 
+**Definition (MRP):** 
 
 : Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random 
 variables, where the $W_k > 0$ are interpreted as the *waiting times* or 
@@ -173,11 +173,11 @@ or marks
 If $W$ and $J$ are independent, the MRP is said to be *uncoupled*. 
 
 
-In this setup, the $k$ magnitude $J_k$ occurs at time
+In this setup, the $k$-th magnitude $J_k$ occurs at time
 $T_k = W_1 + \ldots + W_k$. 
 Based on this simple model, we derive the following two random variables:
 
-**Definition (MRP):** 
+**Definition:** 
 
 : Given a threshold $\ell \in (x_L, x_R)$, 
 consider the stopping time 
@@ -219,7 +219,7 @@ where $J$ is from a standard Gumbel distribution. In the bottom panel,
 we plot a time series of solar flare intensities derived from a NASA
 dataset [@HXRBS][^*]. Clearly, the simulated data exhibit long intervals 
 _without any_ events, whereas in the real-world dataset events appear 
-continuously. The threshold exceedances, however, appear to have the same 
+continuously. The threshold exceedances, however, appear to have similar
 statistical behaviour in both models. Observations below a threshold are 
 commonly discarded in Extreme Value Theory; likewise, our MRP model
 interprets these observations as noise and filters them out.
@@ -238,8 +238,8 @@ magnitudes.
 
 # Scaling limit of Exceedance Times {#sec:scaling}
 
-In this section we state the key theorem below (a proof is in the appendix). 
-For more details on regular variation and stable limit theorems, we 
+In this section we state and prove the key theorem, see below.
+For an accessible introduction to regular variation and stable limit theorems, we 
 recommend the book by @MeerschaertSikorskii. 
 
 **Theorem:**  
@@ -264,8 +264,8 @@ $$
 $$
 
 
-\noindent In general, for $\sigma > 0$ we write ${\rm ML}(\beta, \sigma)$ for the 
-distribution of $\sigma W_\beta$. 
+\noindent For a scale parameter $\sigma > 0$, we write 
+${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma W_\beta$. 
 The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
 a heavy-tailed positive distribution for $\beta < 1$, with infinite mean. 
 However, as $\beta \uparrow 1$, ${\rm ML}(\beta, \sigma)$ converges 
@@ -372,7 +372,7 @@ as the Hill estimator. The QQ-estimator [@Kratz96] is closely related to
 the Hill estimator and fits a 
 least squares line through the logarithms of the ordered statistics 
 (y-axis) and the corresponding quantiles of the exponential distribution 
-(x-axis), and returns the reciprocal slope as the estimate of the tail 
+(x-axis). The reciprocal slope is returned as the estimate of the tail 
 exponent.
 For instance, the left panel in Figure \ref{fig:QQ-plots} shows the 
 (static) QQ-estimator for the magnitudes of the solar flare data, returning 
@@ -382,7 +382,7 @@ a good fit to a Pareto distribution with tail parameter
 However, as described nicely by @Resnick97, the less 
 similar a heavy-tailed distribution is to a Pareto distribution, the less
 useful a Hill estimator is. 
-The top-right panel of \ref{fig:QQ-plots}, for instance, shows the 
+The top-right panel of Figure \ref{fig:QQ-plots}, for instance, shows the 
 QQ-estimator plot for $2000$ draws from the Mittag-Leffler distribution with 
 tail parameter $0.8$. The stretched exponential shape means 
 that the Mittag-Leffler distribution has more probability near $0$ than 
@@ -390,7 +390,7 @@ the Pareto distribution, severely biasing the estimator downwards
 (`r round(ML_exponent, 2)`). Hence a cutoff needs to be introduced, 
 above which the tail exponent is fitted: The dynamic QQ-estimator 
 plots the static QQ-estimates (y-axis) for different cutoffs (x-axis)
-(see bottom-left panel). There is no apparent interval of stability, 
+(see bottom-left panel of Figure \ref{fig:QQ-est}). There is no apparent interval of stability, 
 which could be taken to indicate a reasonable estimate for the true 
 tail exponent $0.8$. 
 Even worse, from a QQ-estimator point of view, there is no striking 
