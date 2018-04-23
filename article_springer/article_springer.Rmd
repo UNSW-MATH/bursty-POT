@@ -66,10 +66,9 @@ preamble: |
 
 ```{r get-rticles, eval=FALSE, include=FALSE, cache=TRUE}
 # use this rticles version: 
-devtools::install_github("strakaps/rticles", 
-                         ref = "724aeb88d005e2f7befc37328633e7cb2bc1cce0")
+devtools::install_github("rstudio/rticles")
 # use the newest MittagLeffleR version:
-devtools::install_github("strakaps/MittagLeffleR")
+devtools::install_github("UNSW-MATH/MittagLeffleR")
 library(MittagLeffleR)
 devtools::install_github("UNSW-MATH/CTRE")
 library(CTRE)
@@ -99,7 +98,7 @@ of earthquakes, sunspots, neuronal activity and human communication [see
 Such time series exhibit high activity in some 'bursty' intervals, which 
 alternate with other, quiet intervals.  Although several mechanisms are 
 plausible explanations for bursty behaviour (most prominently self-exciting
-point processes [@hawkes1971point]), there seems to be one salient feature 
+point process by @hawkes1971point), there seems to be one salient feature 
 which very typically indicates the departure from temporal homogeneity: a 
 heavy-tailed distribution of waiting times [@Vasquez2006; @Karsai2012; 
 @Vajna2013]. As we show below in simulations, a simple renewal process with
@@ -110,15 +109,16 @@ randomly reshuffling the waiting times [@Karsai2012].
 
 Often a magnitude, or mark can be assigned to each event in the renewal process, 
 such as for earthquakes, solar flares or neuron voltages. 
-Extreme value theory provides models for the distribution of the events
-with the largest magnitude. 
+The Peaks-Over-Threshold model [POT, see e.g. @ColesBook] applies a
+threshold to the magnitudes, and fits a Generalized Pareto distribution 
+to the threshold exceedances. 
 A commonly made assumption in POT models is that times between 
 events are either fixed 
 or light-tailed, and this entails that the 
-threshold crossing times form a Poisson process [@beirlantBook]. 
+threshold crossing times form a Poisson process [@Hsing88]. 
 Then as one increases the threshold and thus decreases the threshold 
 crossing probability $p$, the Poisson process is rarefied, i.e. its 
-intensity decreases _linearly_ with $p$. 
+intensity decreases _linearly_ with $p$ [see e.g. @beirlantBook]. 
 
 As will be shown below, in the heavy-tailed waiting time scenario threshold 
 crossing times form a _fractional Poisson process_ 
@@ -151,13 +151,15 @@ derive a scaling limit theorem for inter-exceedance times in Section 3.
 We give a statistical procedure to estimate model parameters via stability plots 
 in Section 5, but to set the stage we first discuss inference for the 
 Mittag-Leffler distribution in Section 4. 
+(A simulation study of the effectiveness of our statistical procedure is 
+given in the appendix.)
 Diagnostic plots for model criticism are discussed in Section 6. 
-In Section 7, we discuss the non-memorylessness property of the 
+In Section 7, we discuss the memory property of the 
 Mittag-Leffler distribution, and how it affects the predictive distribution 
-for the next threshold crossing event. 
-Section 8 concludes.
+for the time until the next threshold crossing event. 
+Section 8 concludes. 
 For all statistical computations we have used R [@R]. 
-Code used for the analysis in this article has been organized into 
+All code and data used for the analysis in this article has been organized into 
 an R package `CTRE` (<https://github.com/UNSW-MATH/CTRE>).
 The source code for the figures generated in this manuscript is 
 available online at <https://github.com/UNSW-MATH/bursty-POT>. 
