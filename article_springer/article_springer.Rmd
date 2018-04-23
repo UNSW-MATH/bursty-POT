@@ -47,8 +47,8 @@ abstract: |
   We provide graphical means of estimating model parameters and assessing 
   model fit. Along the way, we apply our inference method to a real-world
   bursty time series, and 
-  show how the Mittag-Leffler distribution has a memory which affects 
-  the predictive distribution of the next extreme event. 
+  show how the memory of the Mittag-Leffler distribution affects 
+  the predictive distribution for the time until the next extreme event. 
 
 bibliography: CTRMstats.bib
 
@@ -159,48 +159,46 @@ Section 8 concludes.
 For all statistical computations we have used R [@R]. 
 Code used for the analysis in this article has been organized into 
 an R package `CTRM` (<https://github.com/UNSW-MATH/CTRM>).
-The source code for this manuscript is available online at <https://github.com/UNSW-MATH/bursty-POT>. 
+The source code for the figures generated in this manuscript is 
+available online at <https://github.com/UNSW-MATH/bursty-POT>. 
 
 
-# Marked Renewal Process (MRP)
+# Continuous Time Random Exceedances (CTRE)
+
+As a model for extreme observations, we use a Marked Renewal Process (MRP):
 
 **Definition (MRP):** 
 
 : Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random 
-variables, where the $W_k > 0$ are interpreted as the *waiting times* or 
-inter-arrival times and $J_k \in [x_L, x_R]$ as the *event magnitudes* 
-or marks
+variables, where the $W_k > 0$ are interpreted as the *waiting times* 
+and $J_k \in [x_L, x_R]$ as the *event magnitudes* 
 ($x_L \in [-\infty, +\infty), x_R \in (-\infty, +\infty]$). 
-If $W$ and $J$ are independent, the MRP is said to be *uncoupled*. 
+If $W$ and $J$ are independent, the Marked Renewal Process is said to be *uncoupled*. 
+\qed
 
-
-In this setup, the $k$-th magnitude $J_k$ occurs at time
+Note that the $k$-th magnitude $J_k$ occurs at time
 $T_k = W_1 + \ldots + W_k$. 
-Based on this simple model, we derive the following two random variables:
+Based on an MRP, we define the Continuous Time Random Exceedance model
+(CTRE) as follows:
 
-**Definition:** 
+**Definition (CTRE):** 
 
 : Given a threshold $\ell \in (x_L, x_R)$, 
 consider the stopping time 
 $$\tau(\ell) := \min\{k: J_k > \ell\},\quad \ell \in (x_L, x_R).$$
-The random variables
+Define the pair of random variables $(X(\ell), T(\ell))$ via 
 $$X(\ell) = J_{\tau(\ell)} - \ell, \quad 
-T(\ell) = \sum_{k=1}^{\tau(\ell)} W_k$$
-are called the *exceedance* resp. *time until exceedance* of level $\ell$.
-
-
-By restarting the MRP at $\tau(\ell)$, one can inductively construct the
-two i.i.d. sequences $T(\ell,n)$ and $X(\ell, n)$, $n \in \mathbb N$.
-Moreover, since we assume the uncoupled case, the two sequences are independent.[^1]
-
-[^1]: To see why, note that $X(\ell)$ is, in distribution, simply equal to 
-  $J | J > \ell$, independent of any waiting time $W_k$.
+T(\ell) = \sum_{k=1}^{\tau(\ell)} W_k.$$
+By restarting the MRP at $\tau(\ell)$, inductively define the
+two i.i.d. sequences $T(\ell,n)$ and $X(\ell, n)$, $n \in \mathbb N$, 
+called the "interarrival times" and the "exceedances", respectively.
+The pair sequence $(T(\ell, n), W(\ell, n))_{n \in \mathbb N}$ is called 
+a Continuous Time Random Exceedance model (CTRE). 
+If the underlying MRP is uncoupled, then the CTRE is also called 
+uncoupled. 
+\qed
 
 ```{r thresholdedBursty, message=FALSE, fig.height=7, fig.width=9, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
-#rpareto <- function(n,tail){
-#          if(tail<=0) stop("tail must be positive")
-#          rp <- (runif(n)/gamma(1-tail))^(-1/tail)
-#          rp}
 tail <- params$tail
 n <- params$n 
 sigma <- (cos(pi*tail/2))^(1/tail)
@@ -213,6 +211,9 @@ plot(sim_ctrm, p = 0.01, main = "Simulated MRP")
 flares %>% ctrm() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
 ```
 
+In this article, we restrict ourselves to the uncoupled case, where
+the two sequences $X(\ell, n)_{n \in \mathbb N}$
+and $T(\ell, n)_{n \in \mathbb N}$ are independent.[^1]
 Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top 
 panel, where $W$ has a stable distribution with tail parameter 
 $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and 
@@ -222,8 +223,11 @@ dataset [@HXRBS][^*]. Clearly, the simulated data exhibit long intervals
 _without any_ events, whereas in the real-world dataset events appear 
 continuously. The threshold exceedances, however, appear to have similar
 statistical behaviour in both models. Observations below a threshold are 
-commonly discarded in Extreme Value Theory; likewise, our MRP model
+commonly discarded in Extreme Value Theory; likewise, the CTRE model
 interprets these observations as noise and filters them out.
+
+[^1]: To see why, note that $X(\ell)$ is, in distribution, simply equal to 
+  $J | J > \ell$, independent of any waiting time $W_k$.
 
 [^*]: The "complete Hard X Ray Burst Spectrometer event list" 
 is a comprehensive reference for all measurements of the Hard X 
@@ -263,6 +267,7 @@ the positive real numbers via
 $$
 \mathbf E[\exp(-sW_\beta)] = \frac{1}{1+s^\beta}.
 $$
+\qed
 
 
 \noindent For a scale parameter $\sigma > 0$, we write 
@@ -273,7 +278,7 @@ However, as $\beta \uparrow 1$, ${\rm ML}(\beta, \sigma)$ converges
 weakly to the exponential distribution ${\rm Exp}(\sigma)$.
 This means that although its moments are all infinite, the Mittag-Leffler
 distribution may (if $\beta$ is close to 1) be indistinguishable from the 
-exponential distribution, from the point of view of applied statistics. 
+exponential distribution, for the purposes of applied statistics. 
 For a detailed reference on the Mittag-Leffler distribution, see e.g. 
 @Haubold11, and for algorithms, see e.g. the R package `MittagLeffleR`
 [@MittagLeffleR].
@@ -359,7 +364,7 @@ Equation (2.2) in @Gut1999.
 ```{r fig:QQ-plots, fig.cap="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\\label{fig:QQ-plots}", fig.height=5.5, fig.width=7}
 par(mfrow = c(2,3))
 
-flare_mags <- flares %>% ctrm() %>% thin(k=500) %>% coredata()
+flare_mags <- flares %>% ctrm() %>% thin(k=500) %>% magnitudes()
 flares_exponent <- flare_mags %>% qqestplot_static()
 
 flare_mags %>% tea::qqestplot(conf.int = TRUE)
@@ -408,11 +413,11 @@ that the Mittag-Leffler distribution has more probability near $0$ than
 the Pareto distribution, severely biasing the estimator downwards 
 (`r round(ML_exponent, 2)`). 
 Even by looking at different cutoffs via the dynamic QQ-estimator plot 
-(bottom-center panel) one hardly identifies $0.8$ as a stable value, and 
-thus as a clear candidate for a tail parameter estimate.
+(bottom-center panel) one hardly identifies $0.8$ as a clear candidate for 
+a tail parameter estimate.
 
 QQ-estimators, and the closely related Hill estimator, are hence not 
-suitable to detect a heavy-tailed Mittag-Leffler distribution. Indeed, 
+suitable to detect a heavy-tailed Mittag-Leffler distribution. Moreover, 
 QQ-estimator plots of exponentially distributed data are virtually 
 indistinguishable from the bottom-left panel. This shows that 
 _Mittag-Leffler distributed data may look like exponentially distributed 
@@ -427,8 +432,8 @@ Hence if there is some prior expectation that the data are drawn from the
 Mittag-Leffler distribution
 (as is the the case for threshold exceedance times),
 then we recommend avoiding QQ-estimators and Hill plots altogether, 
-and instead examining QQ-plots directly 
-(see Figure \ref{fig:QQ-plots}, right column). 
+and instead examining QQ-plots directly, on a logarithmic scale 
+(see Figure \ref{fig:QQ-plots}, right column).
 The scale parameter $\sigma$ is irrelevant for a QQ-Plot. 
 The tail parameter $\beta$ can be estimated quickly via the log-moment 
 method by @Cahoy2013, or via maximum likelihood. 
@@ -439,12 +444,12 @@ family of distributions, a standard likelihood ratio test can be
 performed, with the exponential distribution as a null model against 
 a Mittag-Leffler distribution as the alternative. 
 As an example, the threshold crossing times for the solar flare dataset
+(Figure \ref{fig:flare-diagnostics-2}, right panel)
 yield a difference in deviance of 
 $\approx$ `r round(2 * (mlmle_out$loglik - mlmle_out$null_loglik))`, 
 which evaluates to a strongly significant $\chi^2_1$ test statistic 
 (p-value = $10^{`r round(log10(mlmle_out$p_value))`}$) for the null
 hypothesis $\beta = 1$. 
-
 
 
 
@@ -458,7 +463,7 @@ par(mfrow=c(1,2))
 MLestimates(thin_flares_ctrm, tail = 0.9, scale = 3 * 1E7)
 ```
 
-The Theorem in Section \ref{sec:scaling} implies that for high 
+The Theorem in Section \ref{sec:scaling} implies that for a high 
 threshold $\ell$ we may 
 approximate the distribution of $T(\ell)$ with an 
 ${\rm ML}(\beta, b(1/p))$ distribution, 
@@ -526,7 +531,7 @@ see the appendix.
 
 
 ```{r flare-diagnostics-1, fig.height=7, fig.cap="Diagnostic plots for the solar flare data: auto-correlation function.\\label{fig:flare-diagnostics-1}"}
-flares_ctrm <- flares %>% ctrm() %>% thin(k = 200)
+flares_ctrm <- flares %>% ctrm() %>% thin(k = 150)
 acf(flares_ctrm)
 ```
 
@@ -537,7 +542,7 @@ empcopula(flares_ctrm)
 flares_ctrm %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.8, main = "Mittag-Leffler QQ Plot")
 ```
 
-The MRP model is based on three main assumptions, which are repeated 
+The CTRE model is based on three main assumptions, which are repeated 
 below. For each assumption, we suggest one means of checking if it holds: 
 
 i.i.d.:
@@ -566,7 +571,7 @@ Figures \ref{fig:flare-diagnostics-1} and \ref{fig:flare-diagnostics-2}
 show the diagnostic plots for a 
 minimum threshold chosen at the 200th order statistic. 
 There is some residual autocorrelation for the sequence of threshold 
-exceedance times that is not accounted for by the MRP model. 
+exceedance times that is not accounted for by the CTRE model. 
 The fit with a Mittag-Leffler distribution ($\beta = 0.8$) is good, 
 though there are signs that the power-law tail tapers off for very large 
 inter-threshold crossing times. 
@@ -675,7 +680,7 @@ in the solar flare data example, this generalization
 is warranted, because the likelihood-ratio test is strongly significant. 
 
 
-When we introduced the MRP model, we assumed that all events are i.i.d. 
+When we introduced the CTRE model, we assumed that all events are i.i.d. 
 This assumption is likely sufficient but not necessary for our limit theorem to hold. 
 Morevoer, any data below a (minimum) threshold $\ell_0$ is discarded in 
 our inference procedure, and hence need not satisfy the i.i.d. assumption.
@@ -683,7 +688,7 @@ For the purposes of statistical inference, we merely require that the
 inter-threshold-crossing times are i.i.d.
 
 
-For some bursty time series, the current MRP model may be too rigid, 
+For some bursty time series, the current CTRE model may be too rigid, 
 because often the heavy-tailed character of the inter-arrival time
 distribution does not hold at all time scales; rather, it often applies at 
 short and intermediate time scales, and is truncated or tempered 
