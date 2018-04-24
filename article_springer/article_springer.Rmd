@@ -225,7 +225,7 @@ dataset [@HXRBS][^*]. Clearly, the simulated data exhibit long intervals
 _without any_ events, whereas in the real-world dataset events appear 
 continuously. The threshold exceedances, however, appear to have similar
 statistical behaviour in both models. Observations below a threshold are 
-commonly discarded in Extreme Value Theory; likewise, the CTRE model
+commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model
 interprets these observations as noise and filters them out.
 
 [^1]: To see why, note that $X(\ell)$ is, in distribution, simply equal to 
@@ -684,10 +684,11 @@ is warranted, because the likelihood-ratio test is strongly significant.
 
 When we introduced the CTRE model, we assumed that all events are i.i.d. 
 This assumption is likely sufficient but not necessary for our limit theorem to hold. 
-Morevoer, any data below a (minimum) threshold $\ell_0$ is discarded in 
+Moreover, any data below a (minimum) threshold $\ell_0$ is discarded in 
 our inference procedure, and hence need not satisfy the i.i.d. assumption.
 For the purposes of statistical inference, we merely require that the 
-inter-threshold-crossing times are i.i.d.
+inter-threshold-crossing times are i.i.d. However, it might be interesting 
+to generalize our theory to the case of a stationary sequence of magnitudes. In case of fixed times between observations, the distribution of the sequence of (correctly normalized) inter-exceedance times converges under certain (mixing) conditions to a mixture of an exponential distribution and a point mass in zero [@ferro2003inference]. Hence, this also leads to a model for extreme events that occur in cluster. Allowing for both, dependence between the magnitudes and heavy tailed waiting times, could maybe further improve modelling of extreme events like earthquakes, that occur in clusters.  
 
 
 For some bursty time series, the current CTRE model may be too rigid, 
