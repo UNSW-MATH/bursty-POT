@@ -1,0 +1,10 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: article_springer.aux
+The style file: spbasic.bst
+I couldn't open database file CTRMstats.bib.bib
+---line 61 of file article_springer.aux
+ : \bibdata{CTRMstats.bib
+ :                       }
+I'm skipping whatever remains of this command
+I found no \citation commands---while reading file article_springer.aux
+I found no database files---while reading file article_springer.aux
+(There were 3 error messages)

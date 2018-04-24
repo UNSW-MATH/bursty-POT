@@ -363,7 +363,7 @@ Equation (2.2) in @Gut1999.
 
 # Inference for the Mittag-Leffler distribution
 
-```{r fig:QQ-plots, fig.cap="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\\label{fig:QQ-plots}", fig.height=5.5, fig.width=7}
+```{r QQ-plots, fig.cap="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\\label{fig:QQ-plots}", fig.height=5.5, fig.width=7}
 par(mfrow = c(2,3))
 
 flare_mags <- flares %>% ctre() %>% thin(k=500) %>% magnitudes()
@@ -459,7 +459,7 @@ hypothesis $\beta = 1$.
 
 # Inference on Exceedance times
 
-```{r solar-flare-tail-scale, message=FALSE, fig.height=4.5, fig.width=8, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$ seconds $\\approx 0.95$ years."}
+```{r solar-flare-tail-scale, message=FALSE, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$ seconds $\\approx 0.95$ years."}
 thin_flares_ctre <- flares %>% ctre() %>% thin(k = 700)
 par(mfrow=c(1,2))
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
@@ -538,8 +538,8 @@ acf(flares_ctre)
 ```
 
 
-```{r flare-diagnostics-2, fig.height=7, fig.cap="Diagnostic plots for the solar flare data: empirical copula and QQ Plot. \\label{fig:flare-diagnostics-2}"}
-par(mfrow = c(2,2))
+```{r flare-diagnostics-2, fig.cap="Diagnostic plots for the solar flare data: empirical copula and QQ Plot. \\label{fig:flare-diagnostics-2}"}
+par(mfrow=c(1,2))
 empcopula(flares_ctre)
 flares_ctre %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.8, main = "Mittag-Leffler QQ Plot")
 ```
@@ -611,14 +611,14 @@ The closer $\beta$ is to $1$, the more the hazard rate mimics that of an
 exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
 right panel). 
 
-```{r hazard, fig.height=7, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
+```{r hazard, fig.height=3.5 , fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
 tail <- 0.7
 scale <- 1
 t_0 <- c(0, 1, 10)
 from <- 0.1
 to <- 100 * scale
 xx <- exp(seq(from = log(from), to = log(to), length.out = 100))
-par(mfrow = c(2,2))
+par(mfrow=c(1,2))
 plot(xx, rep(1, length(xx)), ylim = c(0.001,1), type = 'n', log = 'xy', 
      xlab = 't', ylab = 'p')
 for (k in 1:length(t_0)) {
