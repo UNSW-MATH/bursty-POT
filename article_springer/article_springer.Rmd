@@ -225,7 +225,7 @@ dataset [@HXRBS][^*]. Clearly, the simulated data exhibit long intervals
 _without any_ events, whereas in the real-world dataset events appear 
 continuously. The threshold exceedances, however, appear to have similar
 statistical behaviour in both models. Observations below a threshold are 
-commonly discarded in Extreme Value Theory; likewise, the CTRE model
+commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model
 interprets these observations as noise and filters them out.
 
 [^1]: To see why, note that $X(\ell)$ is, in distribution, simply equal to 
