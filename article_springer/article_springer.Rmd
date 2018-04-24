@@ -666,9 +666,7 @@ where $\sigma$ is the scale parameter of the distribution of threshold
 exceedance times, 
 $p$ is the fraction of magnitudes above the threshold, 
 and $\beta$ the exponent of the power law. 
-
-
-The "anomalous" scaling behaviour in the bursty setting entails two 
+This "anomalous" scaling behaviour in the bursty setting entails two 
 phenomena: 
 i) a heavy tail of the interarrival time distribution of 
 threshold crossings (long rests), and 
@@ -684,19 +682,36 @@ is warranted, because the likelihood-ratio test is strongly significant.
 
 When we introduced the CTRE model, we assumed that all events are i.i.d. 
 This assumption is likely sufficient but not necessary for our limit theorem to hold. 
-Moreover, any data below a (minimum) threshold $\ell_0$ is discarded in 
-our inference procedure, and hence need not satisfy the i.i.d. assumption.
+Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for 
+CTREs, and hence need not satisfy the i.i.d. assumption.
 For the purposes of statistical inference, we merely require that the 
-inter-threshold-crossing times are i.i.d. However, it might be interesting 
-to generalize our theory to the case of a stationary sequence of magnitudes. In case of fixed times between observations, the distribution of the sequence of (correctly normalized) inter-exceedance times converges under certain (mixing) conditions to a mixture of an exponential distribution and a point mass in zero [@ferro2003inference]. Hence, this also leads to a model for extreme events that occur in cluster. Allowing for both, dependence between the magnitudes and heavy tailed waiting times, could maybe further improve modelling of extreme events like earthquakes, that occur in clusters.  
+inter-threshold-crossing times are i.i.d. 
 
 
-For some bursty time series, the current CTRE model may be too rigid, 
+The bursty CTRE approach to model "non-Poissonian" threshold crossing times
+should be contrasted with the (now standard) approach of clusters of 
+extremes, see e.g. @ferro2003inference. In this approach, i.i.d. event 
+sequences of magnitudes are generalized to stationary sequences of
+event magnitudes (subject to a mixing condition). The two approaches are 
+fundamentally different: A clustering model assumes that each event 
+belongs to one particular (latent) group of events. For bursts, however,
+the aim is to identify an underlying scale-free pattern in the event 
+dynamics, which is often characteristic of complex systems.
+It is an interesting open problem to develop quality criteria, based
+e.g. on measures of surprise [@Lee15], which guide an applied statistician in 
+the choice between a clustering and a CTRE approach for a particular 
+problem. Moreover, we believe it may be possible to unify the two approaches
+by considering CTREs based on MRPs with a _stationary_, rather than 
+i.i.d., sequence of magnitudes. 
+
+
+Finally, a purely scale-free pattern for event times may be too rigid an 
+assumption for some bursty time series, 
 because often the heavy-tailed character of the inter-arrival time
-distribution does not hold at all time scales; rather, it often applies at 
-short and intermediate time scales, and is truncated or tempered 
-(reverting to an exponential distribution) at 
-very long time scales, see e.g. @MeerschaertRoyQin and @Aban06. 
+distribution does not hold at all time scales; rather, it applies at 
+short and intermediate time scales, and is truncated (or tempered, 
+reverting to an exponential distribution) at 
+very long time scales [see e.g. @MeerschaertRoyQin; and @Aban06]. 
 In such situations, a "tempered" Mittag-Leffler distribution may provide 
 a more realistic fit, which we aim to introduce in follow-up work. 
 
