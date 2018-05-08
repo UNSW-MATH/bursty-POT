@@ -9,12 +9,17 @@ thanks: |
     Katharina Hees was supported by 
     the DAAD co-financed by the German Federal Ministry of Education and 
     Research (BMBF). 
+author: 
+  - Katharina Hees, TU Dortmund
+  - Smarak Nayak, National Australia Bank
+  - Peter Straka, UNSW Sydney
+
 authors: 
   
   
   
 - name: "Katharina Hees"
-  address: University of Dortmund
+  address: TU Dortmund
   email: hees@statistik.uni-dortmund.de
 - name: "Smarak Nayak"
   address: National Australia Bank
@@ -60,6 +65,21 @@ params:
 preamble: |
   \usepackage{amssymb}
 ---
+
+Keywords:
+
+: _heavy tails, renewal process, extreme value theory, peaks over threshold_
+
+Thanks:
+
+: * Peter Straka was supported by the 
+Discovery Early Career Research Award DE160101147 on the Project 
+"Predicting Extremes when Events Occur in Bursts" by the Australian
+Research Council.
+* Katharina Hees was supported by 
+the DAAD co-financed by the German Federal Ministry of Education and 
+Research (BMBF). 
+
 
 ```{r, child="article_springer.Rmd"}
 
