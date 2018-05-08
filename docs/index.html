@@ -9,6 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Katharina Hees, TU Dortmund" />
+<meta name="author" content="Smarak Nayak, National Australia Bank" />
+<meta name="author" content="Peter Straka, UNSW Sydney" />
 
 
 <title>Peaks Over Threshold for Bursty Time Series</title>
@@ -226,6 +229,9 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Peaks Over Threshold for Bursty Time Series</h1>
+<h4 class="author"><em>Katharina Hees, TU Dortmund</em></h4>
+<h4 class="author"><em>Smarak Nayak, National Australia Bank</em></h4>
+<h4 class="author"><em>Peter Straka, UNSW Sydney</em></h4>
 <div class="abstract">
 <p class="abstract">Abstract</p>
 <p>In many complex systems studied in statistical physics, inter-arrival times between events such as solar flares, trades and neuron voltages follow a heavy-tailed distribution. The set of event times is fractal-like, being dense in some time windows and empty in others, a phenomenon which has been dubbed “bursty”.</p>
@@ -235,6 +241,17 @@ This article generalizes the Peaks Over Threshold (POT) model to the setting whe
 </div>
 
 
+<dl>
+<dt>Keywords:</dt>
+<dd><p><em>heavy tails, renewal process, extreme value theory, peaks over threshold</em></p>
+</dd>
+<dt>Thanks:</dt>
+<dd><ul>
+<li>Peter Straka was supported by the Discovery Early Career Research Award DE160101147 on the Project “Predicting Extremes when Events Occur in Bursts” by the Australian Research Council.</li>
+<li>Katharina Hees was supported by the DAAD co-financed by the German Federal Ministry of Education and Research (BMBF).</li>
+</ul>
+</dd>
+</dl>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>Time series displaying temporally inhomogeneous behaviour have received strong interest in the recent statistical physics literature <span class="citation">(Barabási 2005; Oliveira and Barabási 2005; Vasquez et al. 2006; Vazquez et al. 2007; Omi and Shinomoto 2011; Min, Goh, and Vazquez 2011; Karsai et al. 2011; Bagrow and Brockmann 2013)</span>. They have been observed in the context of earthquakes, sunspots, neuronal activity and human communication <span class="citation">(see Karsai et al. 2012; Vajna, Tóth, and Kertész 2013; Meerschaert and Stoev 2008 for a list of references)</span>. Such time series exhibit high activity in some ‘bursty’ intervals, which alternate with other, quiet intervals. Although several mechanisms are plausible explanations for bursty behaviour (most prominently self-exciting point process by <span class="citation">Hawkes (1971)</span>), there seems to be one salient feature which very typically indicates the departure from temporal homogeneity: a heavy-tailed distribution of waiting times <span class="citation">(Vasquez et al. 2006; Karsai et al. 2012; Vajna, Tóth, and Kertész 2013)</span>. As we show below in simulations, a simple renewal process with heavy-tailed waiting times can capture this type of dynamics. For many systems, the renewal property is appropriate; a simple test of the absence of correlations in a succession of waiting times can be undertaken by randomly reshuffling the waiting times <span class="citation">(Karsai et al. 2012)</span>.</p>
@@ -330,7 +347,7 @@ Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top r
 </p>
 </div>
 <p>Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution, and estimate the exponent of the tail function with established methods such as the Hill estimator. The QQ-estimator <span class="citation">(Kratz and Resnick 1996)</span> is closely related to the Hill estimator and fits a least squares line through the logarithms of the ordered statistics (y-axis) and the corresponding quantiles of the exponential distribution (x-axis). The reciprocal slope is returned as the estimate of the tail exponent. For instance, the top-left panel in Figure  shows the (static) QQ-estimator for the magnitudes of the solar flare data, returning a good fit to a Pareto distribution with tail parameter 0.79. The dynamic QQ-estimator plot (top-center panel) plots the tail exponent estimate for the largest values at cutoffs varying up to the 5th order statistic, and the region of stability at 0.8 indicates a recommended estimate.</p>
-<p>However, as described nicely by <span class="citation">Resnick (1997)</span>, the less similar a heavy-tailed distribution is to a Pareto distribution, the less useful a Hill or QQ-Plot estimator becomes. The bottom-left panel of Figure , for instance, shows the static QQ-estimator plot for <span class="math inline">\(2000\)</span> draws from the Mittag-Leffler distribution with tail parameter <span class="math inline">\(0.8\)</span>. The stretched exponential shape means that the Mittag-Leffler distribution has more probability near <span class="math inline">\(0\)</span> than the Pareto distribution, severely biasing the estimator downwards (0.6). Even by looking at different cutoffs via the dynamic QQ-estimator plot (bottom-center panel) one hardly identifies <span class="math inline">\(0.8\)</span> as a clear candidate for a tail parameter estimate.</p>
+<p>However, as described nicely by <span class="citation">Resnick (1997)</span>, the less similar a heavy-tailed distribution is to a Pareto distribution, the less useful a Hill or QQ-Plot estimator becomes. The bottom-left panel of Figure , for instance, shows the static QQ-estimator plot for <span class="math inline">\(2000\)</span> draws from the Mittag-Leffler distribution with tail parameter <span class="math inline">\(0.8\)</span>. The stretched exponential shape means that the Mittag-Leffler distribution has more probability near <span class="math inline">\(0\)</span> than the Pareto distribution, severely biasing the estimator downwards (0.66). Even by looking at different cutoffs via the dynamic QQ-estimator plot (bottom-center panel) one hardly identifies <span class="math inline">\(0.8\)</span> as a clear candidate for a tail parameter estimate.</p>
 <p>QQ-estimators, and the closely related Hill estimator, are hence not suitable to detect a heavy-tailed Mittag-Leffler distribution. Moreover, QQ-estimator plots of exponentially distributed data are virtually indistinguishable from the bottom-left panel. This shows that <em>Mittag-Leffler distributed data may look like exponentially distributed data if examined via a QQ-estimator</em>.</p>
 <p>Hence if there is some prior expectation that the data are drawn from the Mittag-Leffler distribution (as is the the case for threshold exceedance times), then we recommend avoiding QQ-estimators and Hill plots altogether, and instead examining QQ-plots directly, on a logarithmic scale (see Figure , right column). The scale parameter <span class="math inline">\(\sigma\)</span> is irrelevant for a QQ-Plot. The tail parameter <span class="math inline">\(\beta\)</span> can be estimated quickly via the log-moment method by <span class="citation">Cahoy (2013)</span>, or via maximum likelihood. Both estimators are implemented in <code>MittagLeffleR</code> <span class="citation">(Gill and Straka 2017)</span>. Since the exponential distribution is nested in the Mittag-Leffler family of distributions, a standard likelihood ratio test can be performed, with the exponential distribution as a null model against a Mittag-Leffler distribution as the alternative. As an example, the threshold crossing times for the solar flare dataset (Figure , right panel) yield a difference in deviance of <span class="math inline">\(\approx\)</span> 324, which evaluates to a strongly significant <span class="math inline">\(\chi^2_1\)</span> test statistic (p-value = <span class="math inline">\(10^{-72}\)</span>) for the null hypothesis <span class="math inline">\(\beta = 1\)</span>.</p>
 </div>
