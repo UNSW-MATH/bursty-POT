@@ -9,28 +9,25 @@ thanks: |
     Katharina Hees was supported by 
     the DAAD co-financed by the German Federal Ministry of Education and 
     Research (BMBF). 
-   
 authors: 
+  
+  
+  
 - name: "Katharina Hees"
   address: University of Dortmund
   email: hees@statistik.uni-dortmund.de
-  
 - name: "Smarak Nayak"
   address: National Australia Bank
   email: smarak.nayak@nab.com.au
-  
 - name: "Peter Straka*"
   address: UNSW Sydney
   email: p.straka@unsw.edu.au 
-  
 authorrunning: K. Hees, S. Nayak & P. Straka
-
 keywords:
 - heavy tails
 - renewal process
 - extreme value theory
 - peaks over threshold
-
 abstract: |
   In many complex systems studied in statistical physics, 
   inter-arrival times between events such as solar flares, trades and 
@@ -49,17 +46,14 @@ abstract: |
   bursty time series, and 
   show how the memory of the Mittag-Leffler distribution affects 
   the predictive distribution for the time until the next extreme event. 
-
 bibliography: CTRMstats.bib
-
 output: 
+  html_document: default
   rticles::springer_article: 
     fig_caption: yes
-
 params:
   tail: 0.8
   n: 10000
-
 preamble: |
   \usepackage{amssymb}
 ---
@@ -538,8 +532,8 @@ acf(flares_ctre)
 ```
 
 
-```{r flare-diagnostics-2, fig.height=7, fig.cap="Diagnostic plots for the solar flare data: empirical copula and QQ Plot. \\label{fig:flare-diagnostics-2}"}
-par(mfrow = c(2,2))
+```{r flare-diagnostics-2, fig.height=4, fig.cap="Diagnostic plots for the solar flare data: empirical copula and QQ Plot. \\label{fig:flare-diagnostics-2}"}
+par(mfrow = c(1,2))
 empcopula(flares_ctre)
 flares_ctre %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.8, main = "Mittag-Leffler QQ Plot")
 ```
@@ -611,14 +605,14 @@ The closer $\beta$ is to $1$, the more the hazard rate mimics that of an
 exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
 right panel). 
 
-```{r hazard, fig.height=7, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
+```{r hazard, fig.height=4, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
 tail <- 0.7
 scale <- 1
 t_0 <- c(0, 1, 10)
 from <- 0.1
 to <- 100 * scale
 xx <- exp(seq(from = log(from), to = log(to), length.out = 100))
-par(mfrow = c(2,2))
+par(mfrow = c(1,2))
 plot(xx, rep(1, length(xx)), ylim = c(0.001,1), type = 'n', log = 'xy', 
      xlab = 't', ylab = 'p')
 for (k in 1:length(t_0)) {
