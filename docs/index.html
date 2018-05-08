@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Peaks Over Threshold for Bursty Time Series</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+<style type="text/css">
+  p.abstract{
+    text-align: center;
+    font-weight: bold;
+  }
+  div.abstract{
+    margin: auto;
+    width: 90%;
+  }
+</style>
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Peaks Over Threshold for Bursty Time Series</h1>
+<div class="abstract">
+<p class="abstract">Abstract</p>
+<p>In many complex systems studied in statistical physics, inter-arrival times between events such as solar flares, trades and neuron voltages follow a heavy-tailed distribution. The set of event times is fractal-like, being dense in some time windows and empty in others, a phenomenon which has been dubbed “bursty”.</p>
+This article generalizes the Peaks Over Threshold (POT) model to the setting where inter-event times are heavy-tailed. For high thresholds and infinite-mean waiting times, we show that the times between threshold crossings are Mittag-Leffler distributed, and thus form a “fractional Poisson Process” which generalizes the standard Poisson Process. We provide graphical means of estimating model parameters and assessing model fit. Along the way, we apply our inference method to a real-world bursty time series, and show how the memory of the Mittag-Leffler distribution affects the predictive distribution for the time until the next extreme event.
+</div>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Time series displaying temporally inhomogeneous behaviour have received strong interest in the recent statistical physics literature <span class="citation">(Barabási 2005; Oliveira and Barabási 2005; Vasquez et al. 2006; Vazquez et al. 2007; Omi and Shinomoto 2011; Min, Goh, and Vazquez 2011; Karsai et al. 2011; Bagrow and Brockmann 2013)</span>. They have been observed in the context of earthquakes, sunspots, neuronal activity and human communication <span class="citation">(see Karsai et al. 2012; Vajna, Tóth, and Kertész 2013; Meerschaert and Stoev 2008 for a list of references)</span>. Such time series exhibit high activity in some ‘bursty’ intervals, which alternate with other, quiet intervals. Although several mechanisms are plausible explanations for bursty behaviour (most prominently self-exciting point process by <span class="citation">Hawkes (1971)</span>), there seems to be one salient feature which very typically indicates the departure from temporal homogeneity: a heavy-tailed distribution of waiting times <span class="citation">(Vasquez et al. 2006; Karsai et al. 2012; Vajna, Tóth, and Kertész 2013)</span>. As we show below in simulations, a simple renewal process with heavy-tailed waiting times can capture this type of dynamics. For many systems, the renewal property is appropriate; a simple test of the absence of correlations in a succession of waiting times can be undertaken by randomly reshuffling the waiting times <span class="citation">(Karsai et al. 2012)</span>.</p>
+<p>Often a magnitude, or mark can be assigned to each event in the renewal process, such as for earthquakes, solar flares or neuron voltages. The Peaks-Over-Threshold model <span class="citation">(POT, see e.g. Coles 2001)</span> applies a threshold to the magnitudes, and fits a Generalized Pareto distribution to the threshold exceedances. A commonly made assumption in POT models is that times between events are either fixed or light-tailed, and this entails that the threshold crossing times form a Poisson process <span class="citation">(Hsing, Hüsler, and Leadbetter 1988)</span>. Then as one increases the threshold and thus decreases the threshold crossing probability <span class="math inline">\(p\)</span>, the Poisson process is rarefied, i.e. its intensity decreases <em>linearly</em> with <span class="math inline">\(p\)</span> <span class="citation">(see e.g. Beirlant et al. 2006)</span>.</p>
+<p>As will be shown below, in the heavy-tailed waiting time scenario threshold crossing times form a <em>fractional Poisson process</em> <span class="citation">(Laskin 2003; Meerschaert, Nane, and Vellaisamy 2011)</span>, which is a renewal process with Mittag-Leffler distributed waiting times. The family of Mittag-Leffler distributions nests the exponential distribution <span class="citation">(Haubold, Mathai, and Saxena 2011)</span>, and hence the fractional Poisson process generalizes the standard Poisson process. Again as the threshold size increases and the threshold crossing probability <span class="math inline">\(p\)</span> decreases, the fractional Poisson process is rarefied: The scale parameter of the Mittag-Leffler inter-arrival times of threshold crossing times increases, but <em>superlinearly</em>; see the Theorem below.</p>
+<p>Maxima of events which occur according to a renewal process with heavy-tailed waiting times have been studied under the names “Continuous Time Random Maxima process” (CTRM) <span class="citation">(Benson, Schumer, and Meerschaert 2007; Meerschaert and Stoev 2008; Hees and Scheffler 2016, 2017)</span>, “Max-Renewal process” <span class="citation">(Silvestrov 2002; Silvestrov and Teugels 2004; Basrak and Špoljarić 2015)</span>, and “Shock process” <span class="citation">(Esary and Marshall 1973; Shanthikumar and Sumita 1983, 1984, 1985; Anderson 1987; Gut and Hüsler 1999)</span>. The existing literature focuses on probabilistic results surrounding these models. In this work, however, we introduce a method of inference for this type of model, which is seemingly not available in the literature.</p>
+<p>We review the marked renewal process in Section 2, and derive a scaling limit theorem for inter-exceedance times in Section 3. We give a statistical procedure to estimate model parameters via stability plots in Section 5, but to set the stage we first discuss inference for the Mittag-Leffler distribution in Section 4. (A simulation study of the effectiveness of our statistical procedure is given in the appendix.) Diagnostic plots for model criticism are discussed in Section 6. In Section 7, we discuss the memory property of the Mittag-Leffler distribution, and how it affects the predictive distribution for the time until the next threshold crossing event. Section 8 concludes. For all statistical computations we have used R <span class="citation">(R Core Team 2018)</span>. All code and data used for the analysis in this article has been organized into an R package <code>CTRE</code> (<a href="https://github.com/UNSW-MATH/CTRE" class="uri">https://github.com/UNSW-MATH/CTRE</a>). The source code for the figures generated in this manuscript is available online at <a href="https://github.com/UNSW-MATH/bursty-POT" class="uri">https://github.com/UNSW-MATH/bursty-POT</a>.</p>
+</div>
+<div id="continuous-time-random-exceedances-ctre" class="section level1">
+<h1>Continuous Time Random Exceedances (CTRE)</h1>
+<p>As a model for extreme observations, we use a Marked Renewal Process (MRP):</p>
+<dl>
+<dt><strong>Definition (MRP):</strong></dt>
+<dd><p>Let <span class="math inline">\((W,J), (W_1, J_1), (W_2, J_2), \ldots\)</span> be i.i.d. pairs of random variables, where the <span class="math inline">\(W_k &gt; 0\)</span> are interpreted as the <em>waiting times</em> and <span class="math inline">\(J_k \in [x_L, x_R]\)</span> as the <em>event magnitudes</em> (<span class="math inline">\(x_L \in [-\infty, +\infty), x_R \in (-\infty, +\infty]\)</span>). If <span class="math inline">\(W\)</span> and <span class="math inline">\(J\)</span> are independent, the Marked Renewal Process is said to be <em>uncoupled</em>. </p>
+</dd>
+</dl>
+<p>Note that the <span class="math inline">\(k\)</span>-th magnitude <span class="math inline">\(J_k\)</span> occurs at time <span class="math inline">\(T_k = W_1 + \ldots + W_k\)</span>. Based on an MRP, we define the Continuous Time Random Exceedance model (CTRE) as follows:</p>
+<dl>
+<dt><strong>Definition (CTRE):</strong></dt>
+<dd><p>Given a threshold <span class="math inline">\(\ell \in (x_L, x_R)\)</span>, consider the stopping time <span class="math display">\[\tau(\ell) := \min\{k: J_k &gt; \ell\},\quad \ell \in (x_L, x_R).\]</span> Define the pair of random variables <span class="math inline">\((X(\ell), T(\ell))\)</span> via <span class="math display">\[X(\ell) = J_{\tau(\ell)} - \ell, \quad 
+T(\ell) = \sum_{k=1}^{\tau(\ell)} W_k.\]</span> By restarting the MRP at <span class="math inline">\(\tau(\ell)\)</span>, inductively define the two i.i.d. sequences <span class="math inline">\(T(\ell,n)\)</span> and <span class="math inline">\(X(\ell, n)\)</span>, <span class="math inline">\(n \in \mathbb N\)</span>, called the “interarrival times” and the “exceedances”, respectively. The pair sequence <span class="math inline">\((T(\ell, n), W(\ell, n))_{n \in \mathbb N}\)</span> is called a Continuous Time Random Exceedance model (CTRE). If the underlying MRP is uncoupled, then the CTRE is also called uncoupled. </p>
+</dd>
+</dl>
+<div class="figure">
+<img src="index_files/figure-html/thresholdedBursty-1.png" alt="\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\ell$ (dashed line)." width="\textwidth" />
+<p class="caption">
+Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold <span class="math inline">\(\ell\)</span> (dashed line).
+</p>
+</div>
+<p>In this article, we restrict ourselves to the uncoupled case, where the two sequences <span class="math inline">\(X(\ell, n)_{n \in \mathbb N}\)</span> and <span class="math inline">\(T(\ell, n)_{n \in \mathbb N}\)</span> are independent.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Figure  shows a simulated dataset in the top panel, where <span class="math inline">\(W\)</span> has a stable distribution with tail parameter <span class="math inline">\(\beta =\)</span> 0.8 (and skewness <span class="math inline">\(1\)</span> and location <span class="math inline">\(0\)</span>), and where <span class="math inline">\(J\)</span> is from a standard Gumbel distribution. In the bottom panel, we plot a time series of solar flare intensities derived from a NASA dataset <span class="citation">(Dennis et al. 1991)</span><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Clearly, the simulated data exhibit long intervals <em>without any</em> events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and filters them out.</p>
+</div>
+<div id="sec:scaling" class="section level1">
+<h1>Scaling limit of Exceedance Times</h1>
+<p>In this section we state and prove the key theorem, see below. For an accessible introduction to regular variation and stable limit theorems, we recommend the book by <span class="citation">Mark M Meerschaert and Sikorskii (2012)</span>.</p>
+<dl>
+<dt><strong>Theorem:</strong></dt>
+<dd><p>Let the waiting times <span class="math inline">\(J_k\)</span> be in the domain of attraction of a positively skewed sum-stable law with stability parameter <span class="math inline">\(0 &lt; \beta &lt; 1\)</span>; more precisely, <span class="math display">\[\begin{align} \label{eq:stability}
+\frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
+\quad n \to \infty
+\end{align}\]</span> for a function <span class="math inline">\(b(n)\)</span> which is regularly varying at <span class="math inline">\(\infty\)</span> with parameter <span class="math inline">\(1/\beta\)</span>, and where <span class="math inline">\(\mathbf E[\exp(-sD)] = \exp(-s^\beta)\)</span>. Write <span class="math inline">\(p := \mathbf P(J &gt; \ell)\)</span>. Then the weak convergence <span class="math display">\[
+\frac{T(\ell)} {b(1/p)} \to W_\beta \quad \text{ as } \quad \ell \uparrow x_R
+\]</span> holds, where the Mittag-Leffler random variable <span class="math inline">\(W_\beta\)</span> is defined on the positive real numbers via <span class="math display">\[
+\mathbf E[\exp(-sW_\beta)] = \frac{1}{1+s^\beta}.
+\]</span> </p>
+</dd>
+</dl>
+<p>For a scale parameter <span class="math inline">\(\sigma &gt; 0\)</span>, we write <span class="math inline">\({\rm ML}(\beta, \sigma)\)</span> for the distribution of <span class="math inline">\(\sigma W_\beta\)</span>. The Mittag-Leffler distribution with parameter <span class="math inline">\(\beta \in (0,1]\)</span> is a heavy-tailed positive distribution for <span class="math inline">\(\beta &lt; 1\)</span>, with infinite mean. However, as <span class="math inline">\(\beta \uparrow 1\)</span>, <span class="math inline">\({\rm ML}(\beta, \sigma)\)</span> converges weakly to the exponential distribution <span class="math inline">\({\rm Exp}(\sigma)\)</span>. This means that although its moments are all infinite, the Mittag-Leffler distribution may (if <span class="math inline">\(\beta\)</span> is close to 1) be indistinguishable from the exponential distribution, for the purposes of applied statistics. For a detailed reference on the Mittag-Leffler distribution, see e.g. <span class="citation">Haubold, Mathai, and Saxena (2011)</span>, and for algorithms, see e.g. the R package <code>MittagLeffleR</code> <span class="citation">(Gill and Straka 2017)</span>.</p>
+<div id="proof-of-theorem" class="section level4">
+<h4><em>Proof of Theorem:</em></h4>
+<p>We interpret the threshold crossing time <span class="math inline">\(T(\ell)\)</span> as the hitting time of the underlying CTRM (Continuous Time Random Maxima) or “max-renewal process”, and then utilize a result by <span class="citation">Meerschaert and Stoev (2008)</span>. The running maximum process is defined as <span class="math display">\[
+M(c) := J_1 \vee \ldots \vee J_{\lfloor c \rfloor},
+\]</span> and since we assume that the <span class="math inline">\(J_k\)</span> have a continuous distribution, there exist norming functions <span class="math inline">\(a(c)\)</span> and <span class="math inline">\(d(c)\)</span> such that <span class="math display">\[
+\mathbf P\left[ \frac{M(c) - d(c)}{a(c)} \le \ell^* \right] 
+\longrightarrow F(\ell^*), \quad t \to \infty
+\]</span> where <span class="math inline">\(F\)</span> is a generalized extreme value distribution, and <span class="math inline">\(\ell^*\)</span> is any value from the support of <span class="math inline">\(F\)</span>. The CTRM process is then defined via <span class="math display">\[
+V(t) = M(N(t)), \quad t \ge 0
+\]</span> where <span class="math inline">\(N(t)\)</span> is the renewal process associated with the waiting times <span class="math inline">\(W_k\)</span>: <span class="math display">\[
+N(t) = \max\{n: W_1 + \ldots + W_n \le t\}.
+\]</span> Now a key observation is that <span class="math display">\[
+T(\ell) = \inf\{t: V(t) &gt; \ell\}, 
+\]</span> and that <span class="math display">\[
+T(\ell) &gt; t \quad \text{ if and only if } \quad V(t) \le \ell.
+\]</span> By <span class="citation">(Theorem 3.1, Meerschaert and Stoev 2008)</span>, we have the stochastic process convergence <span class="math display">\[
+\frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
+\stackrel{d}{\longrightarrow} Y(t), \quad t &gt; 0.
+\]</span> where <span class="math inline">\(Y(t)\)</span> is a time-changed (“subordinated”) extremal process, and where <span class="math inline">\(\tilde b(c)\)</span> is a regularly varying norming function which is <em>inverse</em> to <span class="math inline">\(b(c)\)</span>, in the sense that <span class="math inline">\(b(\tilde b(c)) \sim c \sim \tilde b(b(c))\)</span>.</p>
+<p>Without loss of generality, we choose <span class="math inline">\(\ell^*\)</span> such that <span class="math inline">\(F(\ell^*) = 1/e\)</span>, and let <span class="math inline">\(\ell = a(\tilde b(c)) \ell^* + d(\tilde b(c))\)</span>. We may then calculate <span class="math display">\[
+\mathbf P\left[ \frac{T(\ell)}{b(1/p)} &gt; t \right]
+= \mathbf P[T(\ell) &gt; b(1/p) t]
+= \mathbf P[V(ct) \le \ell]
+\]</span> where we have substituted <span class="math inline">\(c = b(1/p)\)</span>. Moreover <span class="math display">\[
+\mathbf P[V(ct) \le \ell]
+= \mathbf P\left[ \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
+\le \frac{\ell - d(\tilde b(c))}{a(\tilde b(c))} \right]
+\longrightarrow \mathbf P\left[ Y(t) \le \ell^* \right]
+\]</span> Defining the hitting time of level <span class="math inline">\(\ell^*\)</span> by <span class="math inline">\(Y(t)\)</span> as <span class="math inline">\(\xi_{\ell^*} := \inf\{t: Y(t) &gt; \ell^*\}\)</span>, we then have <span class="math display">\[
+P\left[ Y(t) \le \ell^* \right] = \mathbf P[\xi_{\ell^*} &gt; t] 
+= \mathbf P[(-\log F(\ell^*))^{-1/\beta} X^{1/\beta} D &gt; t]
+\]</span> by <span class="citation">(Proposition 4.2, Meerschaert and Stoev 2008)</span>, where <span class="math inline">\(X\)</span> is an exponential random variable with mean <span class="math inline">\(1\)</span>. Using <span class="citation">(Theorem 19.1, Haubold, Mathai, and Saxena 2011)</span>, we see that <span class="math inline">\(X^{1/\beta} D \sim {\rm ML}(\beta, 1)\)</span>, concluding the proof. </p>
+<dl>
+<dt><strong>Remark:</strong></dt>
+<dd>If <span class="math inline">\(\beta = 1\)</span>, the result of the Theorem above is standard, see e.g. Equation (2.2) in <span class="citation">Gut and Hüsler (1999)</span>.
+</dd>
+</dl>
+</div>
+</div>
+<div id="inference-for-the-mittag-leffler-distribution" class="section level1">
+<h1>Inference for the Mittag-Leffler distribution</h1>
+<div class="figure">
+<img src="index_files/figure-html/fig:QQ-plots-1.png" alt="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\label{fig:QQ-plots}" width="\textwidth" />
+<p class="caption">
+Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.
+</p>
+</div>
+<p>Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution, and estimate the exponent of the tail function with established methods such as the Hill estimator. The QQ-estimator <span class="citation">(Kratz and Resnick 1996)</span> is closely related to the Hill estimator and fits a least squares line through the logarithms of the ordered statistics (y-axis) and the corresponding quantiles of the exponential distribution (x-axis). The reciprocal slope is returned as the estimate of the tail exponent. For instance, the top-left panel in Figure  shows the (static) QQ-estimator for the magnitudes of the solar flare data, returning a good fit to a Pareto distribution with tail parameter 0.79. The dynamic QQ-estimator plot (top-center panel) plots the tail exponent estimate for the largest values at cutoffs varying up to the 5th order statistic, and the region of stability at 0.8 indicates a recommended estimate.</p>
+<p>However, as described nicely by <span class="citation">Resnick (1997)</span>, the less similar a heavy-tailed distribution is to a Pareto distribution, the less useful a Hill or QQ-Plot estimator becomes. The bottom-left panel of Figure , for instance, shows the static QQ-estimator plot for <span class="math inline">\(2000\)</span> draws from the Mittag-Leffler distribution with tail parameter <span class="math inline">\(0.8\)</span>. The stretched exponential shape means that the Mittag-Leffler distribution has more probability near <span class="math inline">\(0\)</span> than the Pareto distribution, severely biasing the estimator downwards (0.6). Even by looking at different cutoffs via the dynamic QQ-estimator plot (bottom-center panel) one hardly identifies <span class="math inline">\(0.8\)</span> as a clear candidate for a tail parameter estimate.</p>
+<p>QQ-estimators, and the closely related Hill estimator, are hence not suitable to detect a heavy-tailed Mittag-Leffler distribution. Moreover, QQ-estimator plots of exponentially distributed data are virtually indistinguishable from the bottom-left panel. This shows that <em>Mittag-Leffler distributed data may look like exponentially distributed data if examined via a QQ-estimator</em>.</p>
+<p>Hence if there is some prior expectation that the data are drawn from the Mittag-Leffler distribution (as is the the case for threshold exceedance times), then we recommend avoiding QQ-estimators and Hill plots altogether, and instead examining QQ-plots directly, on a logarithmic scale (see Figure , right column). The scale parameter <span class="math inline">\(\sigma\)</span> is irrelevant for a QQ-Plot. The tail parameter <span class="math inline">\(\beta\)</span> can be estimated quickly via the log-moment method by <span class="citation">Cahoy (2013)</span>, or via maximum likelihood. Both estimators are implemented in <code>MittagLeffleR</code> <span class="citation">(Gill and Straka 2017)</span>. Since the exponential distribution is nested in the Mittag-Leffler family of distributions, a standard likelihood ratio test can be performed, with the exponential distribution as a null model against a Mittag-Leffler distribution as the alternative. As an example, the threshold crossing times for the solar flare dataset (Figure , right panel) yield a difference in deviance of <span class="math inline">\(\approx\)</span> 324, which evaluates to a strongly significant <span class="math inline">\(\chi^2_1\)</span> test statistic (p-value = <span class="math inline">\(10^{-72}\)</span>) for the null hypothesis <span class="math inline">\(\beta = 1\)</span>.</p>
+</div>
+<div id="inference-on-exceedance-times" class="section level1">
+<h1>Inference on Exceedance times</h1>
+<div class="figure">
+<img src="index_files/figure-html/solar-flare-tail-scale-1.png" alt="\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\beta = 0.85$ and $\sigma_0 = 3 \times 10^7$ seconds $\approx 0.95$ years." width="\textwidth" />
+<p class="caption">
+Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at <span class="math inline">\(\beta = 0.85\)</span> and <span class="math inline">\(\sigma_0 = 3 \times 10^7\)</span> seconds <span class="math inline">\(\approx 0.95\)</span> years.
+</p>
+</div>
+<p>The Theorem in Section  implies that for a high threshold <span class="math inline">\(\ell\)</span> we may approximate the distribution of <span class="math inline">\(T(\ell)\)</span> with an <span class="math inline">\({\rm ML}(\beta, b(1/p))\)</span> distribution, where <span class="math inline">\(b(\,)\)</span> varies regularly at <span class="math inline">\(\infty\)</span> with parameter <span class="math inline">\(1/\beta\)</span>. Building on the POT (Peaks Over Threshold) method, we propose the following estimation procedure for the distribution of <span class="math inline">\(T(\ell)\)</span>:</p>
+<ol style="list-style-type: decimal">
+<li><p>For a range of thresholds <span class="math inline">\(\ell\)</span> near the largest order statistics, extract datasets of exceedance times <span class="math inline">\(\{T(\ell, i)\}_i\)</span>.</p></li>
+<li><p>For each choice of threshold <span class="math inline">\(\ell\)</span>, fit a Mittag-Leffler distribution to the resulting dataset <span class="math inline">\(\{T(\ell, i)\}_i\)</span>. This results in the estimates <span class="math inline">\(\{\hat\beta(\ell)\}_\ell\)</span> and <span class="math inline">\(\{\hat \sigma(\ell)\}_\ell\)</span>.</p></li>
+<li><p>Plot <span class="math inline">\(\ell\)</span> vs. <span class="math inline">\(\hat \beta(\ell)\)</span>. As <span class="math inline">\(\ell\)</span> increases towards <span class="math inline">\(x_R\)</span>, <span class="math inline">\(\hat \beta(\ell)\)</span> <em>stabilizes</em> around a constant <span class="math inline">\(\hat \beta\)</span>. Use <span class="math inline">\(\hat \beta\)</span> as an estimate for the tail parameter <span class="math inline">\(\beta\)</span> of the Mittag-Leffler distribution of exceedance times.</p></li>
+<li><p>Approximate <span class="math inline">\(p \approx |\{k: J_k &gt; \ell\}| / n\)</span>. Recall that <span class="math inline">\(b(c)\)</span> is regularly varying with parameter <span class="math inline">\(1/\beta\)</span>, and hence has the representation <span class="math inline">\(b(c) = L(c) c^{1/\beta}\)</span> for some slowly varying function <span class="math inline">\(L(c)\)</span>. Assuming that the variation of <span class="math inline">\(L(c)\)</span> is negligible, we hence plot <span class="math inline">\(\ell\)</span> vs. <span class="math inline">\(p^{1/\hat \beta} \hat \sigma(\ell)\)</span>. Again as <span class="math inline">\(\ell\)</span> increases towards <span class="math inline">\(x_R\)</span>, <span class="math inline">\(p^{1/\hat \beta} \hat \sigma(\ell)\)</span> is expected to stabilize around a constant <span class="math inline">\(\hat \sigma_0\)</span>. We then use <span class="math inline">\(p^{-1/\hat \beta} \hat \sigma_0\)</span> as an estimate of the scale parameter of the Mittag-Leffler distribution of exceedance times for the level <span class="math inline">\(\ell\)</span>.</p></li>
+</ol>
+<p>The above approach, though theoretically sound, benefits from the following practical adjustments (compare with Figure ):</p>
+<ul>
+<li>We choose <span class="math inline">\(\ell\)</span> from the order statistics, i.e. <span class="math inline">\(\ell\)</span> is the <span class="math inline">\(k\)</span>-th largest of the observations <span class="math inline">\(X_j\)</span>, where <span class="math inline">\(k\)</span> runs from <span class="math inline">\(k_\text{min}, k_\text{min} + 1, \ldots, k_\text{max}\)</span>. The datasets are then of length <span class="math inline">\(k-1\)</span>.</li>
+<li>We use <span class="math inline">\(k\)</span> rather than <span class="math inline">\(\ell\)</span> for the horizontal axis of our plots.</li>
+<li>In Step 4, rather than plotting <span class="math inline">\(p^{1/\hat \beta} \hat \sigma(\ell)\)</span> we plot <span class="math inline">\(k^{1/\hat \beta} \hat \sigma(\ell)\)</span>. This changes <span class="math inline">\(\hat \sigma_0\)</span> by the multiplicative constant <span class="math inline">\(n^{1/\hat \beta}\)</span>, but has the advantage that <span class="math inline">\(\hat \sigma_0\)</span> does not change if one pre-processes the data by removing all observations below a certain threshold.</li>
+</ul>
+<p>The estimates <span class="math inline">\(\hat \beta\)</span> and <span class="math inline">\(\hat \sigma_0\)</span> give an estimate of the distribution of exceedance times, dependent on the threshold <span class="math inline">\(\ell\)</span>: <span class="math display">\[\begin{align*}
+T(\ell) \sim {\rm ML}(\hat \beta, k^{-1/\hat \beta} \hat \sigma_0).
+\end{align*}\]</span> For quick estimates of the Mittag-Leffler parameters we have used the method of log-transformed moments by <span class="citation">Cahoy (2013)</span>. We have verified the validity of our estimation algorithm via simulations, see the appendix.</p>
+</div>
+<div id="checking-model-assumptions" class="section level1">
+<h1>Checking Model Assumptions</h1>
+<div class="figure">
+<img src="index_files/figure-html/flare-diagnostics-1-1.png" alt="Diagnostic plots for the solar flare data: auto-correlation function.\label{fig:flare-diagnostics-1}" width="\textwidth" />
+<p class="caption">
+Diagnostic plots for the solar flare data: auto-correlation function.
+</p>
+</div>
+<div class="figure">
+<img src="index_files/figure-html/flare-diagnostics-2-1.png" alt="Diagnostic plots for the solar flare data: empirical copula and QQ Plot. \label{fig:flare-diagnostics-2}" width="\textwidth" />
+<p class="caption">
+Diagnostic plots for the solar flare data: empirical copula and QQ Plot. 
+</p>
+</div>
+<p>The CTRE model is based on three main assumptions, which are repeated below. For each assumption, we suggest one means of checking if it holds:</p>
+<dl>
+<dt>i.i.d.:</dt>
+<dd>After removing the “noise observations” below the smallest threshold <span class="math inline">\(\ell_0\)</span>, the pair sequence <span class="math inline">\((T(\ell_0, i), X(\ell_0,i))\)</span> is i.i.d. An indication if this is true is given by an auto-correlation plot for the logarithms (to ensure finite moments) of the two time series.
+</dd>
+<dt>Uncoupled:</dt>
+<dd>Each <span class="math inline">\(T(\ell, i)\)</span> is independent of each <span class="math inline">\(X(\ell, i)\)</span>. We propose an empirical copula plot to check for any dependence.
+</dd>
+<dt><span class="math inline">\({\rm ML}(\beta, \sigma)\)</span> distribution of <span class="math inline">\(T(\ell, i)\)</span>:</dt>
+<dd>Apply a cutoff at the lowest threshold <span class="math inline">\(\ell_0\)</span>, extract the threshold crossing times, and create a QQ Plot for the Mittag-Leffler distribution. Use a log-Moment estimate of the tail parameter for the theoretical / population quantiles of the plot.
+</dd>
+</dl>
+<p>Figures  and  show the diagnostic plots for a minimum threshold chosen at the 200th order statistic. There is some residual autocorrelation for the sequence of threshold exceedance times that is not accounted for by the CTRE model. The fit with a Mittag-Leffler distribution (<span class="math inline">\(\beta = 0.8\)</span>) is good, though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot.</p>
+</div>
+<div id="predicting-the-time-of-the-next-threshold-crossing" class="section level1">
+<h1>Predicting the time of the next threshold crossing</h1>
+<p>According to Figure , for a threshold <span class="math inline">\(\ell\)</span> at the <span class="math inline">\(k\)</span>-th order statistic, the fitted threshold exceedance time distribution is <span class="math display">\[
+T_\ell \sim {\rm ML}(\beta, k^{1/\beta} \sigma_0), 
+\]</span> where <span class="math inline">\(\beta = 0.85\)</span> and <span class="math inline">\(\sigma_0 = 3.0 \times 10^7 {\rm sec}\)</span>. Unlike the exponential distribution, the Mittag-Leffler distribution is not memoryless, and the probability density of the time <span class="math inline">\(t\)</span> until the next threshold crossing will depend on the time <span class="math inline">\(t_0\)</span> elapsed since the last threshold crossing. This density equals <span class="math display">\[
+p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{1/\beta} \sigma_0)}{\mathbf P[T_\ell &gt; t_0]}
+\]</span> where <span class="math inline">\(f(\,\cdot\, | \beta, k^{1/\beta} \sigma_0)\)</span> is the probability density of <span class="math inline">\({\rm ML}(\beta, k^{1/\beta} \sigma_0)\)</span>. The more time has passed without a threshold crossing, the more the probability distribution shifts towards larger values for the next crossing (see Figure , left panel). The hazard rate <span class="math display">\[
+h(t) = \frac{f(t| \beta, k^{1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{1/\beta} \sigma_0))\,d\tau}
+\]</span> represents the risk of a threshold crossing per unit time, and is a decreasing function for the Mittag-Leffler distribution. The closer <span class="math inline">\(\beta\)</span> is to <span class="math inline">\(1\)</span>, the more the hazard rate mimics that of an exponential distribution (a constant function, see Figure , right panel).</p>
+<div class="figure">
+<img src="index_files/figure-html/hazard-1.png" alt="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\beta = 0.8$, $\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\beta$.\label{fig:hazard}" width="\textwidth" />
+<p class="caption">
+Left: Conditional distribution of time until next threshold crossing, depending on elapsed time <span class="math inline">\(t_0\)</span> since last crossing (<span class="math inline">\(\beta = 0.8\)</span>, <span class="math inline">\(\sigma_0 = 1\)</span>). Right: Hazard rate depending on tail parameter <span class="math inline">\(\beta\)</span>.
+</p>
+</div>
+<p>It is beyond the scope of the current paper to incorporate parameter uncertainty into our predictive distribution for the next threshold crossing; however, methods as described by <span class="citation">Scarrott and Macdonald (2012)</span> and <span class="citation">Lee, Fan, and Sisson (2015)</span> are likely to extend to our setting.</p>
+</div>
+<div id="discussion-conclusion" class="section level1">
+<h1>Discussion &amp; Conclusion</h1>
+<p>We have extended the POT (Peaks over Threshold) model, a mainstay of extreme value theory, to “bursty” time series, which have been studied intensively in statistical physics. Burstiness is characterized by power-law waiting times between events, and we have shown that the Mittag-Leffler distribution arises naturally as a scaling limit for the inter-exceedance times of high thresholds. Moreover, we have derived the following non-linear scaling behaviour: <span class="math inline">\(\sigma \sim p^{-1/\beta}\)</span>, where <span class="math inline">\(\sigma\)</span> is the scale parameter of the distribution of threshold exceedance times, <span class="math inline">\(p\)</span> is the fraction of magnitudes above the threshold, and <span class="math inline">\(\beta\)</span> the exponent of the power law. This “anomalous” scaling behaviour in the bursty setting entails two phenomena: i) a heavy tail of the interarrival time distribution of threshold crossings (long rests), and ii) a high propensity for more threshold crossing events immediately after each threshold crossing event (bursts). The Mittag-Leffler distribution captures both phenomena, due to its heavy tail as well as its stretched exponential (peaked) asymptotics for small times. It generalizes the exponential distribution, and in the solar flare data example, this generalization is warranted, because the likelihood-ratio test is strongly significant.</p>
+<p>When we introduced the CTRE model, we assumed that all events are i.i.d. This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold <span class="math inline">\(\ell_0\)</span> is discarded for CTREs, and hence need not satisfy the i.i.d. assumption. For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are i.i.d.</p>
+<p>The bursty CTRE approach to model “non-Poissonian” threshold crossing times should be contrasted with the (now standard) approach of clusters of extremes, see e.g. <span class="citation">Ferro and Segers (2003)</span>. In this approach, i.i.d. event sequences of magnitudes are generalized to stationary sequences of event magnitudes (subject to a mixing condition). The two approaches are fundamentally different: A clustering model assumes that each event belongs to one particular (latent) group of events. For bursts, however, the aim is to identify an underlying scale-free pattern in the event dynamics, which is often characteristic of complex systems. It is an interesting open problem to develop quality criteria, based e.g. on measures of surprise <span class="citation">(Lee, Fan, and Sisson 2015)</span>, which guide an applied statistician in the choice between a clustering and a CTRE approach for a particular problem. Moreover, we believe it may be possible to unify the two approaches by considering CTREs based on MRPs with a <em>stationary</em>, rather than i.i.d., sequence of magnitudes.</p>
+<p>Finally, a purely scale-free pattern for event times may be too rigid an assumption for some bursty time series, because often the heavy-tailed character of the inter-arrival time distribution does not hold at all time scales; rather, it applies at short and intermediate time scales, and is truncated (or tempered, reverting to an exponential distribution) at very long time scales <span class="citation">(see e.g. Mark M. Meerschaert, Roy, and Shao 2012; and Aban, Meerschaert, and Panorska 2006)</span>. In such situations, a “tempered” Mittag-Leffler distribution may provide a more realistic fit, which we aim to introduce in follow-up work.</p>
+<div id="acknowledgements" class="section level2 unnumbered">
+<h2>Acknowledgements</h2>
+<p>The authors would like to thank Prof. Peter Scheffler for insights on stochastic process limits for CTRMs, and Gurtek Gill who helped create the MittagLeffleR R-package.</p>
+
+</div>
+</div>
+<div id="validating-our-inference-method-on-simulated-data" class="section level1">
+<h1>Validating our inference method on simulated data</h1>
+<p>To test our inference method via stability plots, we have simulated 10000 independent waiting time and magnitude pairs <span class="math inline">\((W_k, J_k)\)</span> (see upper panel in Figure ). In order to have exact analytical values available for <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma_0\)</span>, a distribution for <span class="math inline">\(W_k\)</span> needs to be chosen for which <span class="math inline">\(b(n)\)</span> from  is known. If we choose <span class="math inline">\(W_k \stackrel{d}{=} D\)</span>, where <span class="math inline">\(D\)</span> is as in , then due to the stability property we have the <em>equality</em> of distribution <span class="math inline">\(W_1 + \ldots + W_n \stackrel{d}{=} b(n) D\)</span>, for <span class="math inline">\(b(n) = n^{1/\beta}\)</span>. Using the parametrisation of <span class="citation">Samorodnitsky and Taqqu (1994)</span>, a few lines of calculation (see e.g. the vignette on parametrisation in <span class="citation">Gill and Straka (2017)</span>) show that <span class="math inline">\(D\)</span> must have the stable distribution <span class="math inline">\(S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)\)</span>, which is implemented in the R package <code>stabledist</code> by <span class="citation">Wuertz, Maechler, and members. (2016)</span>.</p>
+<div class="figure">
+<img src="index_files/figure-html/simulated-example-1.png" alt="Tail and scale estimates for simulated data, with waiting times drawn from the stable distribution $S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$ with $\beta = 0.8$. Dashed lines are 95\% confidence intervals, dotted lines are the known theoretical values ($0.8$ and $10000^{1/0.8}$). \label{fig:sim}" width="\textwidth" />
+<p class="caption">
+Tail and scale estimates for simulated data, with waiting times drawn from the stable distribution <span class="math inline">\(S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)\)</span> with <span class="math inline">\(\beta = 0.8\)</span>. Dashed lines are 95% confidence intervals, dotted lines are the known theoretical values (<span class="math inline">\(0.8\)</span> and <span class="math inline">\(10000^{1/0.8}\)</span>). 
+</p>
+</div>
+<p>By the Theorem, the distribution of <span class="math inline">\(T(\ell)\)</span> is approximately <span class="math display">\[
+{\rm ML}(\beta, p^{-1/\beta}) 
+= {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
+\]</span> which means <span class="math inline">\(\sigma_0 = n^{1/\beta}\)</span>. The distribution of <span class="math inline">\(J_k\)</span> is irrelevant for the inference on <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma_0\)</span> (we have chosen unit exponential random variables). Figure  displays plots of <span class="math inline">\(\hat \beta(\ell)\)</span> and <span class="math inline">\(\hat \sigma(\ell)\)</span> vs. <span class="math inline">\(k\)</span>; recall that <span class="math inline">\(k\)</span> is the index of the order statistics of <span class="math inline">\(J_k\)</span> at which the threshold <span class="math inline">\(\ell\)</span> is placed. Dotted lines show 95% confidence intervals, which are derived from the asymptotic normality of the log-moments estimators <span class="citation">(Cahoy 2013)</span> and the <span class="math inline">\(\delta\)</span>-method <span class="citation">(Gill and Straka 2017)</span>. The dashed lines show the actual values of <span class="math inline">\(\beta\)</span> resp. <span class="math inline">\(\sigma_0\)</span>, showing that our inference method identifies the parameters correctly.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-Aban06">
+<p>Aban, Inmaculada B, Mark M Meerschaert, and Anna K Panorska. 2006. “Parameter Estimation for the Truncated Pareto Distribution.” <em>J. Am. Stat. Assoc.</em> 101 (473):270–77. <a href="https://doi.org/10.1198/016214505000000411" class="uri">https://doi.org/10.1198/016214505000000411</a>.</p>
+</div>
+<div id="ref-Anderson1987">
+<p>Anderson, Kevin K. 1987. “Limit Theorems for General Shock Models with Infinite Mean Intershock Times.” <em>J. Appl. Probab.</em> 24 (2):449–56. <a href="http://www.jstor.org/stable/3214268" class="uri">http://www.jstor.org/stable/3214268</a>.</p>
+</div>
+<div id="ref-Bagrow2013">
+<p>Bagrow, James P., and Dirk Brockmann. 2013. “Natural emergence of clusters and bursts in network evolution.” <em>Phys. Rev. X</em> 3 (2):1–6. <a href="https://doi.org/10.1103/PhysRevX.3.021016" class="uri">https://doi.org/10.1103/PhysRevX.3.021016</a>.</p>
+</div>
+<div id="ref-Barabasi2005">
+<p>Barabási, Albert László. 2005. “The origin of bursts and heavy tails in human dynamics.” <em>Nature</em> 435 (May):207–11. <a href="https://doi.org/10.1038/nature03459" class="uri">https://doi.org/10.1038/nature03459</a>.</p>
+</div>
+<div id="ref-Basrak2014">
+<p>Basrak, Bojan, and Drago Špoljarić. 2015. “Extremes of random variables observed in renewal times.” <em>Stat. Probab. Lett.</em> 97. Elsevier B.V.:216–21. <a href="https://doi.org/10.1016/j.spl.2014.11.025" class="uri">https://doi.org/10.1016/j.spl.2014.11.025</a>.</p>
+</div>
+<div id="ref-beirlantBook">
+<p>Beirlant, Jan, Yuri Goegebeur, Johan Segers, and Jozef Teugels. 2006. <em>Statistics of extremes: theory and applications</em>. John Wiley &amp; Sons.</p>
+</div>
+<div id="ref-Benson2007">
+<p>Benson, David A, Rina Schumer, and Mark M Meerschaert. 2007. “Recurrence of extreme events with power-law interarrival times.” <em>Geophys. Res. Lett.</em> 34 (l16404):DOI:10.1029/2007GL030767. <a href="https://doi.org/10.1029/2007GL030767" class="uri">https://doi.org/10.1029/2007GL030767</a>.</p>
+</div>
+<div id="ref-Cahoy2013">
+<p>Cahoy, Dexter O. 2013. “Estimation of Mittag-Leffler Parameters.” <em>Commun. Stat. - Simul. Comput.</em> 42 (2):303–15. <a href="https://doi.org/10.1080/03610918.2011.640094" class="uri">https://doi.org/10.1080/03610918.2011.640094</a>.</p>
+</div>
+<div id="ref-ColesBook">
+<p>Coles, S. 2001. <em>An Introduction to Statistical Modelling of Extreme Values</em>. London: Springer-Verlag.</p>
+</div>
+<div id="ref-HXRBS">
+<p>Dennis, Brian R, L E Orwig, G S Kennard, G J Labow, R A Schwartz, A R Shaver, and A K Tolbert. 1991. “The complete Hard X Ray Burst Spectrometer event list, 1980-1989.” <a href="https://umbra.nascom.nasa.gov/smm/hxrbs.html" class="uri">https://umbra.nascom.nasa.gov/smm/hxrbs.html</a>.</p>
+</div>
+<div id="ref-Esary1973">
+<p>Esary, J. D., and A. W. Marshall. 1973. “Shock Models and Wear Processes.” <a href="https://doi.org/10.1214/aop/1176996891" class="uri">https://doi.org/10.1214/aop/1176996891</a>.</p>
+</div>
+<div id="ref-ferro2003inference">
+<p>Ferro, Christopher AT, and Johan Segers. 2003. “Inference for Clusters of Extreme Values.” <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 65 (2). Wiley Online Library:545–56.</p>
+</div>
+<div id="ref-MittagLeffleR">
+<p>Gill, Gurtek, and Peter Straka. 2017. <em>MittagLeffleR: Using the Mittag-Leffler Distributions in R</em>. <a href="https://strakaps.github.io/MittagLeffleR/" class="uri">https://strakaps.github.io/MittagLeffleR/</a>.</p>
+</div>
+<div id="ref-Gut1999">
+<p>Gut, Allan, and Jürg Hüsler. 1999. “Extreme Shock Models.” <em>Extremes</em>, no. 1983:295–307. <a href="http://link.springer.com/article/10.1023/A:1009959004020" class="uri">http://link.springer.com/article/10.1023/A:1009959004020</a>.</p>
+</div>
+<div id="ref-Haubold11">
+<p>Haubold, H.J., A. M. Mathai, and R. K. Saxena. 2011. “Mittag-Leffler Functions and Their Applications.” <em>J. Appl. Math.</em> 2011:1–51. <a href="https://doi.org/10.1155/2011/298628" class="uri">https://doi.org/10.1155/2011/298628</a>.</p>
+</div>
+<div id="ref-hawkes1971point">
+<p>Hawkes, Alan G. 1971. “Point spectra of some mutually exciting point processes.” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> JSTOR, 438–43.</p>
+</div>
+<div id="ref-Hees16">
+<p>Hees, Katharina, and Hans-Peter Scheffler. 2016. “On joint sum/max stability and sum/max domains of attraction,” June, 1–31. <a href="http://arxiv.org/abs/1606.03109" class="uri">http://arxiv.org/abs/1606.03109</a>.</p>
+</div>
+<div id="ref-Hees17">
+<p>———. 2017. “Coupled Continuous Time Random Maxima.” <em>Extremes</em>, no. June (September). Extremes:1–24. <a href="https://doi.org/10.1007/s10687-017-0304-6" class="uri">https://doi.org/10.1007/s10687-017-0304-6</a>.</p>
+</div>
+<div id="ref-Hsing88">
+<p>Hsing, T, J Hüsler, and M R Leadbetter. 1988. “On the Exceedance Point Process for a Stationary Sequence” 78:97–112.</p>
+</div>
+<div id="ref-Karsai2012">
+<p>Karsai, Márton, Kimmo Kaski, Albert László Barabási, and János Kertész. 2012. “Universal features of correlated bursty behaviour.” <em>Sci. Rep.</em> 2. <a href="https://doi.org/10.1038/srep00397" class="uri">https://doi.org/10.1038/srep00397</a>.</p>
+</div>
+<div id="ref-Karsai2011">
+<p>Karsai, Márton, M. Kivelä, R. K. Pan, K. Kaski, J. Kertész, Albert László Barabási, and J. Saramäki. 2011. “Small but slow world: How network topology and burstiness slow down spreading.” <em>Phys. Rev. E - Stat. Nonlinear, Soft Matter Phys.</em> 83:1–4. <a href="https://doi.org/10.1103/PhysRevE.83.025102" class="uri">https://doi.org/10.1103/PhysRevE.83.025102</a>.</p>
+</div>
+<div id="ref-Kratz96">
+<p>Kratz, Marie, and Sidney I. Resnick. 1996. “The qq-estimator and heavy tails.” <em>Commun. Stat. Part C Stoch. Model.</em> 12 (4):699–724. <a href="https://doi.org/10.1080/15326349608807407" class="uri">https://doi.org/10.1080/15326349608807407</a>.</p>
+</div>
+<div id="ref-Laskin2003">
+<p>Laskin, Nick. 2003. “Fractional Poisson process.” <em>Commun. Nonlinear Sci. Numer. Simul.</em> 8 (3-4):201–13. <a href="https://doi.org/10.1016/S1007-5704(03)00037-6" class="uri">https://doi.org/10.1016/S1007-5704(03)00037-6</a>.</p>
+</div>
+<div id="ref-Lee15">
+<p>Lee, J., Y. Fan, and S. A. Sisson. 2015. “Bayesian threshold selection for extremal models using measures of surprise.” <em>Comput. Stat. Data Anal.</em> 85. Elsevier B.V.:84–99. <a href="https://doi.org/10.1016/j.csda.2014.12.004" class="uri">https://doi.org/10.1016/j.csda.2014.12.004</a>.</p>
+</div>
+<div id="ref-MeerschaertRoyQin">
+<p>Meerschaert, Mark M., Parthanil Roy, and Qin Shao. 2012. “Parameter estimation for exponentially tempered power law distributions.” <em>Commun. Stat. - Theory Methods</em> 41 (10):1839–56. <a href="https://doi.org/10.1080/03610926.2011.552828" class="uri">https://doi.org/10.1080/03610926.2011.552828</a>.</p>
+</div>
+<div id="ref-Meerschaert2010b">
+<p>Meerschaert, Mark M, Erkan Nane, and P. Vellaisamy. 2011. “The fractional Poisson process and the inverse stable subordinator.” <em>Electron. J. Probab.</em> 16:1600–1620. <a href="https://doi.org/10.1214/EJP.v16-920" class="uri">https://doi.org/10.1214/EJP.v16-920</a>.</p>
+</div>
+<div id="ref-MeerschaertSikorskii">
+<p>Meerschaert, Mark M, and Alla Sikorskii. 2012. <em>Stochastic Models for Fractional Calculus</em>. Vol. 43. Walter de Gruyter.</p>
+</div>
+<div id="ref-MeerschaertStoev08">
+<p>Meerschaert, Mark M, and Stilian A Stoev. 2008. “Extremal limit theorems for observations separated by random power law waiting times.” <em>J. Stat. Plan. Inference</em> 139 (7):2175–88. <a href="https://doi.org/10.1016/j.jspi.2008.10.005" class="uri">https://doi.org/10.1016/j.jspi.2008.10.005</a>.</p>
+</div>
+<div id="ref-Min2010">
+<p>Min, Byungjoon, K. I. Goh, and Alexei Vazquez. 2011. “Spreading dynamics following bursty human activity patterns.” <em>Phys. Rev. E - Stat. Nonlinear, Soft Matter Phys.</em> 83 (3):2–5. <a href="https://doi.org/10.1103/PhysRevE.83.036102" class="uri">https://doi.org/10.1103/PhysRevE.83.036102</a>.</p>
+</div>
+<div id="ref-Oliveira2005">
+<p>Oliveira, J, and Albert László Barabási. 2005. “Darwin and Einstein correspondence patterns.” <em>Nature</em> 437 (October):1251. <a href="https://doi.org/10.0138/4371251a" class="uri">https://doi.org/10.0138/4371251a</a>.</p>
+</div>
+<div id="ref-Omi2011">
+<p>Omi, Takahiro, and Shigeru Shinomoto. 2011. “Optimizing Time Histograms for Non-Poissonian Spike Trains.” <em>Neural Comput.</em> 23 (12):3125–44. <a href="https://doi.org/10.1162/NECO_a_00213" class="uri">https://doi.org/10.1162/NECO_a_00213</a>.</p>
+</div>
+<div id="ref-R">
+<p>R Core Team. 2018. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.</p>
+</div>
+<div id="ref-Resnick97">
+<p>Resnick, Sidney I. 1997. “Heavy tail modeling and teletraffic data.” <em>Ann. Stat.</em> 25 (5):1805–49. <a href="https://doi.org/10.1214/aos/1069362376" class="uri">https://doi.org/10.1214/aos/1069362376</a>.</p>
+</div>
+<div id="ref-SamorodnitskyTaqqu">
+<p>Samorodnitsky, Gennady, and Murad S Taqqu. 1994. <em>Stable Non-Gaussian Random Processes: Stochastic Models with Infinite Variance</em>. Stochastic Modeling. London: Chapman Hall.</p>
+</div>
+<div id="ref-Scarrott12">
+<p>Scarrott, Carl, and Anna Macdonald. 2012. “A REVIEW OF EXTREME VALUE THRESHOLD ESTIMATION AND UNCERTAINTY QUANTIFICATION.” <em>REVSTAT – Stat. J.</em> 10 (1):33–60.</p>
+</div>
+<div id="ref-Sumita1983">
+<p>Shanthikumar, J. George, and Ushio Sumita. 1983. “General shock models associated with correlated renewal sequences.” <em>J. Appl. Probab.</em> 20 (3):600–614. <a href="http://www.jstor.org/stable/3213896" class="uri">http://www.jstor.org/stable/3213896</a>.</p>
+</div>
+<div id="ref-Sumita1984">
+<p>———. 1984. “Distribution Properties of the System Failure Time in a General Shock Model.” <em>Adv. Appl. Probab.</em> 16 (2):363–77. <a href="http://www.jstor.org/stable/1427074" class="uri">http://www.jstor.org/stable/1427074</a>.</p>
+</div>
+<div id="ref-Sumita1985">
+<p>———. 1985. “A class of correlated cumulative shock models.” <em>Adv. Appl. Probab.</em> 17 (2):347–66. <a href="http://www.jstor.org/stable/1427145" class="uri">http://www.jstor.org/stable/1427145</a>.</p>
+</div>
+<div id="ref-Silvestrov2002a">
+<p>Silvestrov, Dmitrii S. 2002. <em>Limit Theorems for Randomly Stopped Stochastic Processes</em>. Springer (Berlin, Heidelberg).</p>
+</div>
+<div id="ref-ST04">
+<p>Silvestrov, Dmitrii S, and Jozef L. Teugels. 2004. “Limit theorems for mixed max-sum processes with renewal stopping.” <em>Ann. Appl. Probab.</em> 14 (4):1838–68. <a href="https://doi.org/10.1214/105051604000000215" class="uri">https://doi.org/10.1214/105051604000000215</a>.</p>
+</div>
+<div id="ref-Vajna2013">
+<p>Vajna, Szabolcs, Bálint Tóth, and János Kertész. 2013. “Modelling bursty time series.” <em>New J. Phys.</em> 15 (10):103023. <a href="https://doi.org/10.1088/1367-2630/15/10/103023" class="uri">https://doi.org/10.1088/1367-2630/15/10/103023</a>.</p>
+</div>
+<div id="ref-Vasquez2006">
+<p>Vasquez, a, J G Oliveira, Z Dezso, K-I Goh, I Kondor, and Albert László Barabási. 2006. “Modeling bursts and heavy tails in human dynamics.” <em>Phys. Rev. E</em> 73:361271–3612718.</p>
+</div>
+<div id="ref-Vazquez2007">
+<p>Vazquez, Alexei, Balázs Rácz, András Lukács, and Albert László Barabási. 2007. “Impact of non-poissonian activity patterns on spreading processes.” <em>Phys. Rev. Lett.</em> 98 (APRIL):1–4. <a href="https://doi.org/10.1103/PhysRevLett.98.158702" class="uri">https://doi.org/10.1103/PhysRevLett.98.158702</a>.</p>
+</div>
+<div id="ref-stabledist">
+<p>Wuertz, Diethelm, Martin Maechler, and Rmetrics core team members. 2016. <em>Stabledist: Stable Distribution Functions</em>. <a href="https://CRAN.R-project.org/package=stabledist" class="uri">https://CRAN.R-project.org/package=stabledist</a>.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>To see why, note that <span class="math inline">\(X(\ell)\)</span> is, in distribution, simply equal to <span class="math inline">\(J | J &gt; \ell\)</span>, independent of any waiting time <span class="math inline">\(W_k\)</span>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>The “complete Hard X Ray Burst Spectrometer event list” is a comprehensive reference for all measurements of the Hard X Ray Burst Spectrometer on NASA’s Solar Maximum Mission from the time of launch on Feb 14, 1980 to the end of the mission in Dec 1989. 12,776 events were detected, with the “vast majority being solar flares”. The list includes the start time, peak time, duration, and peak rate of each event. We have used “start time” as the variable for event times, and “peak rate” as the variable for event magnitudes.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
