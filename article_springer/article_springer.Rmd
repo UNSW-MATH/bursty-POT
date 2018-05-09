@@ -210,7 +210,7 @@ flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data")
 In this article, we restrict ourselves to the uncoupled case, where
 the two sequences $X(\ell, n)_{n \in \mathbb N}$
 and $T(\ell, n)_{n \in \mathbb N}$ are independent.[^1]
-Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top 
+Figure \@ref(fig:thresholdedBursty) shows a simulated dataset in the top 
 panel, where $W$ has a stable distribution with tail parameter 
 $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and 
 where $J$ is from a standard Gumbel distribution. In the bottom panel, 
@@ -391,7 +391,7 @@ least squares line through the logarithms of the ordered statistics
 (y-axis) and the corresponding quantiles of the exponential distribution 
 (x-axis). The reciprocal slope is returned as the estimate of the tail 
 exponent.
-For instance, the top-left panel in Figure \ref{fig:QQ-plots} shows the 
+For instance, the top-left panel in Figure \@ref(fig:QQ-plots) shows the 
 (static) QQ-estimator for the magnitudes of the solar flare data, returning 
 a good fit to a Pareto distribution with tail parameter 
 `r round(flares_exponent, 2)`. The dynamic QQ-estimator plot (top-center panel)
@@ -402,7 +402,7 @@ varying up to the 5th order statistic, and the region of stability at
 However, as described nicely by @Resnick97, the less 
 similar a heavy-tailed distribution is to a Pareto distribution, the less
 useful a Hill or QQ-Plot estimator becomes. 
-The bottom-left panel of Figure \ref{fig:QQ-plots}, for instance, shows the 
+The bottom-left panel of Figure \@ref(fig:QQ-plots), for instance, shows the 
 static QQ-estimator plot for $2000$ draws from the Mittag-Leffler distribution with 
 tail parameter $0.8$. The stretched exponential shape means 
 that the Mittag-Leffler distribution has more probability near $0$ than 
@@ -429,7 +429,7 @@ Mittag-Leffler distribution
 (as is the the case for threshold exceedance times),
 then we recommend avoiding QQ-estimators and Hill plots altogether, 
 and instead examining QQ-plots directly, on a logarithmic scale 
-(see Figure \ref{fig:QQ-plots}, right column).
+(see Figure \@ref(fig:QQ-plots), right column).
 The scale parameter $\sigma$ is irrelevant for a QQ-Plot. 
 The tail parameter $\beta$ can be estimated quickly via the log-moment 
 method by @Cahoy2013, or via maximum likelihood. 
@@ -440,7 +440,7 @@ family of distributions, a standard likelihood ratio test can be
 performed, with the exponential distribution as a null model against 
 a Mittag-Leffler distribution as the alternative. 
 As an example, the threshold crossing times for the solar flare dataset
-(Figure \ref{fig:flare-diagnostics-2}, right panel)
+(Figure \@ref(fig:flare-diagnostics-2), right panel)
 yield a difference in deviance of 
 $\approx$ `r round(2 * (mlmle_out$loglik - mlmle_out$null_loglik))`, 
 which evaluates to a strongly significant $\chi^2_1$ test statistic 
@@ -459,7 +459,7 @@ par(mfrow=c(1,2))
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
 ```
 
-The Theorem in Section \ref{sec:scaling} implies that for a high 
+The Theorem in Section \@ref(sec:scaling) implies that for a high 
 threshold $\ell$ we may 
 approximate the distribution of $T(\ell)$ with an 
 ${\rm ML}(\beta, b(1/p))$ distribution, 
@@ -497,7 +497,7 @@ following estimation procedure for the distribution of $T(\ell)$:
   the level $\ell$. 
 
 The above approach, though theoretically sound, benefits from the following
-practical adjustments (compare with Figure \ref{fig:flares}):
+practical adjustments (compare with Figure \@ref(fig:flares)):
 
 * We choose $\ell$ from the order statistics, i.e. $\ell$ is the $k$-th
   largest of the observations $X_j$, where $k$ runs from 
@@ -563,7 +563,7 @@ ${\rm ML}(\beta, \sigma)$ distribution of $T(\ell, i)$:
   quantiles of the plot.
 
 
-Figures \ref{fig:flare-diagnostics-1} and \ref{fig:flare-diagnostics-2} 
+Figures \@ref(fig:flare-diagnostics-1) and \@ref(fig:flare-diagnostics-2) 
 show the diagnostic plots for a 
 minimum threshold chosen at the 200th order statistic. 
 There is some residual autocorrelation for the sequence of threshold 
@@ -577,7 +577,7 @@ event magnitudes seen in the copula plot.
 
 # Predicting the time of the next threshold crossing
 
-According to Figure \ref{fig:flares}, for a threshold $\ell$ at the $k$-th order 
+According to Figure \@ref(fig:flares), for a threshold $\ell$ at the $k$-th order 
 statistic, the fitted threshold exceedance time distribution is 
 $$
 T_\ell \sim {\rm ML}(\beta, k^{1/\beta} \sigma_0), 
@@ -594,7 +594,7 @@ where $f(\,\cdot\, | \beta, k^{1/\beta} \sigma_0)$ is the probability density of
 ${\rm ML}(\beta, k^{1/\beta} \sigma_0)$. 
 The more time has passed without a threshold crossing, the more the probability 
 distribution shifts towards larger values for the next crossing
-(see Figure \ref{fig:hazard}, left panel). 
+(see Figure \@ref(fig:hazard), left panel). 
 The hazard rate 
 $$
 h(t) = \frac{f(t| \beta, k^{1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{1/\beta} \sigma_0))\,d\tau}
@@ -602,7 +602,7 @@ $$
 represents the risk of a threshold crossing per unit time, and is a 
 decreasing function for the Mittag-Leffler distribution. 
 The closer $\beta$ is to $1$, the more the hazard rate mimics that of an 
-exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
+exponential distribution (a constant function, see Figure \@ref(fig:hazard), 
 right panel). 
 
 ```{r hazard, fig.height=4, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
@@ -724,7 +724,7 @@ the MittagLeffleR R-package.
 To test our inference method via stability plots, we have simulated `r params$n` 
 independent
 waiting time and magnitude pairs $(W_k, J_k)$ (see upper panel in 
-Figure \ref{fig:thresholdedBursty}). In order to have exact 
+Figure \@ref(fig:thresholdedBursty). In order to have exact 
 analytical values available for $\beta$ and $\sigma_0$, a distribution for 
 $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
 If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, 
@@ -759,7 +759,7 @@ which means
 $\sigma_0 = n^{1/\beta}$.
 The distribution of $J_k$ is irrelevant for the inference on $\beta$ and 
 $\sigma_0$ (we have chosen unit exponential random variables). 
-Figure \ref{fig:sim} displays plots of $\hat \beta(\ell)$ and 
+Figure \@ref(fig:sim) displays plots of $\hat \beta(\ell)$ and 
 $\hat \sigma(\ell)$ vs. $k$; recall that $k$ is the index of the order
 statistics of $J_k$ at which the threshold $\ell$ is placed. 
 Dotted lines show 95% confidence intervals, which are derived from the 
