@@ -51,15 +51,9 @@ abstract: |
   show how the memory of the Mittag-Leffler distribution affects 
   the predictive distribution for the time until the next extreme event. 
 bibliography: CTRMstats.bib
-site: bookdown::bookdown_site
 output: 
   bookdown::html_document2: 
-    toc: true
-    toc_float: true
     theme: journal
-    self_contained: true
-output_dir: docs
-output_file: index.html
 params:
   tail: 0.8
   n: 10000
