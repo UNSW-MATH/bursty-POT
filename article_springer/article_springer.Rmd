@@ -248,9 +248,10 @@ recommend the book by @MeerschaertSikorskii.
 : Let the waiting times $J_k$ be in the domain of attraction of a 
 positively skewed sum-stable law with stability parameter $0 < \beta < 1$; 
 more precisely,
-\begin{align} \label{eq:stability}
+\begin{align}
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
 \quad n \to \infty
+(\#eq:stability)
 \end{align}
 for a function $b(n)$ which is regularly varying at $\infty$ with 
 parameter $1/\beta$, and where $\mathbf E[\exp(-sD)] = \exp(-s^\beta)$. 
@@ -726,8 +727,8 @@ independent
 waiting time and magnitude pairs $(W_k, J_k)$ (see upper panel in 
 Figure \@ref(fig:thresholdedBursty). In order to have exact 
 analytical values available for $\beta$ and $\sigma_0$, a distribution for 
-$W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
-If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, 
+$W_k$ needs to be chosen for which $b(n)$ from \@ref(eq:stability) is known. 
+If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \@ref(eq:stability), 
 then due to the stability property we have the *equality* of distribution
 $W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, 
 for $b(n) = n^{1/\beta}$. 
