@@ -279,7 +279,7 @@ For a detailed reference on the Mittag-Leffler distribution, see e.g.
 @Haubold11, and for algorithms, see e.g. the R package `MittagLeffleR`
 [@MittagLeffleR].
 
-#### _Proof of Theorem:_
+#### _Proof of Theorem:_ {-}
 We interpret the threshold crossing time $T(\ell)$ as the hitting time of the 
 underlying CTRM (Continuous Time Random Maxima) or "max-renewal process", 
 and then utilize a result by @MeerschaertStoev08. 
@@ -357,7 +357,7 @@ Equation (2.2) in @Gut1999.
 
 # Inference for the Mittag-Leffler distribution
 
-```{r fig:QQ-plots, fig.cap="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\\label{fig:QQ-plots}", fig.height=5.5, fig.width=7}
+```{r QQ-plots, fig.cap="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\\label{fig:QQ-plots}", fig.height=5.5, fig.width=7}
 par(mfrow = c(2,3))
 
 flare_mags <- flares %>% ctre() %>% thin(k=500) %>% magnitudes()
@@ -453,7 +453,7 @@ hypothesis $\beta = 1$.
 
 # Inference on Exceedance times
 
-```{r solar-flare-tail-scale, message=FALSE, fig.height=4.5, fig.width=8, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$ seconds $\\approx 0.95$ years."}
+```{r flares, message=FALSE, fig.height=4.5, fig.width=8, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$ seconds $\\approx 0.95$ years."}
 thin_flares_ctre <- flares %>% ctre() %>% thin(k = 700)
 par(mfrow=c(1,2))
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
@@ -742,7 +742,7 @@ caption = "Tail and scale estimates for simulated data, with waiting times drawn
 ```
 
 
-```{r simulated-example, message=FALSE, fig.cap=caption}
+```{r sim, message=FALSE, fig.cap=caption}
 k_max <- 500 
 thin_sim_ctre <- thin(ctre = sim_ctre, k = k_max)
 par(mfrow=c(1,2))
