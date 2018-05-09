@@ -58,6 +58,8 @@ output:
     toc_float: true
     theme: journal
     self_contained: true
+output_dir: docs
+output_file: index.html
 params:
   tail: 0.8
   n: 10000
