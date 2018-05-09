@@ -13,7 +13,6 @@ author:
   - Katharina Hees, TU Dortmund
   - Smarak Nayak, National Australia Bank
   - Peter Straka, UNSW Sydney
-
 authors: 
   
   
@@ -52,7 +51,9 @@ abstract: |
   show how the memory of the Mittag-Leffler distribution affects 
   the predictive distribution for the time until the next extreme event. 
 bibliography: CTRMstats.bib
+site: bookdown::bookdown_site
 output: 
+  bookdown::html_document2: default 
   html_document: 
     toc: true
     toc_float: true
