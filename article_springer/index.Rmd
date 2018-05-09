@@ -57,6 +57,7 @@ output:
     toc: true
     toc_float: true
     theme: journal
+    self_contained: true
 params:
   tail: 0.8
   n: 10000
