@@ -54,6 +54,8 @@ bibliography: CTRMstats.bib
 site: bookdown::bookdown_site
 output: 
   bookdown::html_document2: 
+    toc: true
+    toc_float: true
     theme: journal
 params:
   tail: 0.8
