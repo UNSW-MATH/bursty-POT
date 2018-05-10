@@ -57,6 +57,8 @@ output:
     toc: true
     toc_float: true
     theme: readable
+biblio-style: "apalike"
+link-citations: true
 params:
   tail: 0.8
   n: 10000
