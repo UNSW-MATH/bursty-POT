@@ -56,7 +56,7 @@ output:
   bookdown::html_document2: 
     toc: true
     toc_float: true
-    theme: journal
+    theme: readable
 params:
   tail: 0.8
   n: 10000
@@ -78,8 +78,10 @@ Research Council.
 the DAAD co-financed by the German Federal Ministry of Education and 
 Research (BMBF). 
 
+(You can download a [pdf version of this paper](https://arxiv.org/pdf/1802.05218).)
 
 ```{r, child="article_springer.Rmd"}
 
 ```
+
 
