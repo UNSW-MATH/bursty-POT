@@ -581,7 +581,7 @@ event magnitudes seen in the copula plot.
 According to Figure \@ref(fig:flares), for a threshold $\ell$ at the $k$-th order 
 statistic, the fitted threshold exceedance time distribution is 
 $$
-T_\ell \sim {\rm ML}(\beta, k^{1/\beta} \sigma_0), 
+T_\ell \sim {\rm ML}(\beta, k^{-1/\beta} \sigma_0), 
 $$
 where $\beta = 0.85$ and $\sigma_0 = 3.0 \times 10^7 {\rm sec}$. 
 Unlike the exponential distribution, the Mittag-Leffler distribution is not 
@@ -589,7 +589,7 @@ memoryless, and the probability density of the time $t$ until the next threshold
 crossing will depend on the time $t_0$ elapsed since the last threshold crossing.
 This density equals 
 $$
-p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{1/\beta} \sigma_0)}{\mathbf P[T_\ell > t_0]}
+p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{-1/\beta} \sigma_0)}{\mathbf P[T_\ell > t_0]}
 $$
 where $f(\,\cdot\, | \beta, k^{1/\beta} \sigma_0)$ is the probability density of 
 ${\rm ML}(\beta, k^{1/\beta} \sigma_0)$. 
@@ -598,7 +598,7 @@ distribution shifts towards larger values for the next crossing
 (see Figure \@ref(fig:hazard), left panel). 
 The hazard rate 
 $$
-h(t) = \frac{f(t| \beta, k^{1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{1/\beta} \sigma_0))\,d\tau}
+h(t) = \frac{f(t| \beta, k^{1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{-1/\beta} \sigma_0))\,d\tau}
 $$
 represents the risk of a threshold crossing per unit time, and is a 
 decreasing function for the Mittag-Leffler distribution. 
