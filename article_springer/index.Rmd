@@ -80,7 +80,16 @@ Research Council.
 the DAAD co-financed by the German Federal Ministry of Education and 
 Research (BMBF). 
 
-(You can download a [pdf version of this paper](https://arxiv.org/pdf/1802.05218).)
+
+
+Download PDF: 
+
+: [arXiv:1802.05218](https://arxiv.org/pdf/1802.05218)
+
+Cite this article:
+
+: "Peaks Over Threshold for Bursty Time Series". 
+Katharina Hees, Peter Straka, Smarak Nayak (2018). arXiv:1802.05218
 
 ```{r, child="article_springer.Rmd"}
 
