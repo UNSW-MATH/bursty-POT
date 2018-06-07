@@ -366,7 +366,7 @@ Equation (2.2) in @Gut1999.
 ```{r fig:QQ-plots, fig.cap="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\\label{fig:QQ-plots}", fig.height=5.5, fig.width=7}
 par(mfrow = c(2,3))
 
-flare_mags <- flares %>% ctre() %>% thin(k=500) %>% magnitudes()
+flare_mags <- actuar::rpareto(n = 500, shape = 0.8, scale = 1)
 flares_exponent <- flare_mags %>% qqestplot_static()
 
 flare_mags %>% tea::qqestplot(conf.int = TRUE)
