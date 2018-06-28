@@ -39,11 +39,14 @@ abstract: |
   time windows and empty in others, a phenomenon which has been dubbed 
   "bursty". 
   
-  This article generalizes the Peaks Over Threshold (POT) model to the setting 
-  where inter-event times are heavy-tailed. For high thresholds and 
+  This article provides a new model for the threshold inter-exceedance _times_;
+  the threshold exceedances are modeled via the standard 
+  Peaks Over Threshold (POT) method.
+  For high thresholds and 
   infinite-mean waiting times, we show that the times between threshold 
   crossings are Mittag-Leffler distributed, and thus form a "fractional 
-  Poisson Process" which generalizes the standard Poisson Process.
+  Poisson Process" which generalizes the standard Poisson Process of threshold
+  exceedances.
   We provide graphical means of estimating model parameters and assessing 
   model fit. Along the way, we apply our inference method to a real-world
   bursty time series, and 
