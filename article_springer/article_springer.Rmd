@@ -364,7 +364,7 @@ $X^{1/\beta} D \sim {\rm ML}(\beta, 1)$, concluding the proof.
 : If $\beta = 1$, the result of the Theorem above is standard, see e.g. 
 Equation (2.2) in @Gut1999.
 
-# Inference for the Mittag-Leffler distribution
+# Model Choice and inference for the Mittag-Leffler distribution
 
 ```{r fig:QQ-plots, fig.cap="Pareto vs. Mittag-Leffler distribution, both with same tail exponent 0.8. Top row: solar flare magnitudes data, fitting nicely with a Pareto distribution. Bottom row: simulated Mittag-Leffler data. Left column: static QQ-Estimator plots, assessing a fit against the Pareto distribution. Centre column: dynamic QQ-Estimator plots. Right column: a usual QQ-Plot based on Mittag-Leffler quantiles.\\label{fig:QQ-plots}", fig.height=5.5, fig.width=7}
 par(mfrow = c(2,3))
@@ -390,71 +390,68 @@ qqline(ML_data, distribution = function(p) qml(p, 0.8), col = 2)
 
 ```
 
-Since the Mittag-Leffler distribution is heavy-tailed, many researchers 
-would intuitively give the highest importance to the tail behaviour of the 
-distribution, and 
-estimate the exponent of the tail function with established methods such 
-as the Hill estimator. The QQ-estimator [@Kratz96] is closely related to 
-the Hill estimator and fits a 
-least squares line through the logarithms of the ordered statistics 
-(y-axis) and the corresponding quantiles of the exponential distribution 
-(x-axis). The reciprocal slope is returned as the estimate of the tail 
-exponent.
-For instance, the top-left panel in Figure \ref{fig:QQ-plots} shows the 
-(static) QQ-estimator for the magnitudes of the solar flare data, returning 
-a good fit to a Pareto distribution with tail parameter 
-`r round(flares_exponent, 2)`. The dynamic QQ-estimator plot (top-center panel)
-plots the tail exponent estimate for the largest values at cutoffs 
-varying up to the 5th order statistic, and the region of stability at 
-0.8 indicates a recommended estimate.
+Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution, and estimate the exponent of the tail function with established methods such as the Hill estimator. The other option is to use estimators specifically for the tail parameter of a Mittag-Leffler distribution. The first method for parameter estimation was the fractional moment estimator proposed by [@kozubowski2001]. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. [@Cahoy2010] proposed an estimator based on the log-Moments which doesn't need prior knowledge. Furthermore, they showed in a simulation study that he log-Moments estimator outclasses the fractional moment estimator regarding bias and root mean squared error (RMSE). Due to the form of the density function there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` Maximum Likelihood estimation is implemented via numerical optimization. The MLE outperforms the log-ent estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive. In figure XX one can see that both mehtods work quite well even for very low sample sizes.    
 
-However, as described nicely by @Resnick97, the less 
-similar a heavy-tailed distribution is to a Pareto distribution, the less
-useful a Hill or QQ-Plot estimator becomes. 
-The bottom-left panel of Figure \ref{fig:QQ-plots}, for instance, shows the 
-static QQ-estimator plot for $2000$ draws from the Mittag-Leffler distribution with 
-tail parameter $0.8$. The stretched exponential shape means 
-that the Mittag-Leffler distribution has more probability near $0$ than 
-the Pareto distribution, severely biasing the estimator downwards 
-(`r round(ML_exponent, 2)`). 
-Even by looking at different cutoffs via the dynamic QQ-estimator plot 
-(bottom-center panel) one hardly identifies $0.8$ as a clear candidate for 
-a tail parameter estimate.
+```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+knitr::include_graphics("temp.pdf")
+```
+<!-- The QQ-estimator [@Kratz96] is closely related to  -->
+<!-- the Hill estimator and fits a  -->
+<!-- least squares line through the logarithms of the ordered statistics  -->
+<!-- (y-axis) and the corresponding quantiles of the exponential distribution  -->
+<!-- (x-axis). The reciprocal slope is returned as the estimate of the tail  -->
+<!-- exponent. -->
+<!-- For instance, the top-left panel in Figure \ref{fig:QQ-plots} shows the  -->
+<!-- (static) QQ-estimator for the magnitudes of the solar flare data, returning  -->
+<!-- a good fit to a Pareto distribution with tail parameter  -->
+<!-- `r round(flares_exponent, 2)`. The dynamic QQ-estimator plot (top-center panel) -->
+<!-- plots the tail exponent estimate for the largest values at cutoffs  -->
+<!-- varying up to the 5th order statistic, and the region of stability at  -->
+<!-- 0.8 indicates a recommended estimate. -->
 
-QQ-estimators, and the closely related Hill estimator, are hence not 
-suitable to detect a heavy-tailed Mittag-Leffler distribution. Moreover, 
-QQ-estimator plots of exponentially distributed data are virtually 
-indistinguishable from the bottom-left panel. This shows that 
-_Mittag-Leffler distributed data may look like exponentially distributed 
-data if examined via a QQ-estimator_. 
+<!-- However, as described nicely by @Resnick97, the less  -->
+<!-- similar a heavy-tailed distribution is to a Pareto distribution, the less -->
+<!-- useful a Hill or QQ-Plot estimator becomes.  -->
+<!-- The bottom-left panel of Figure \ref{fig:QQ-plots}, for instance, shows the  -->
+<!-- static QQ-estimator plot for $2000$ draws from the Mittag-Leffler distribution with  -->
+<!-- tail parameter $0.8$. The stretched exponential shape means  -->
+<!-- that the Mittag-Leffler distribution has more probability near $0$ than  -->
+<!-- the Pareto distribution, severely biasing the estimator downwards  -->
+<!-- (`r round(ML_exponent, 2)`).  -->
+<!-- Even by looking at different cutoffs via the dynamic QQ-estimator plot  -->
+<!-- (bottom-center panel) one hardly identifies $0.8$ as a clear candidate for  -->
+<!-- a tail parameter estimate. -->
+
+<!-- QQ-estimators, and the closely related Hill estimator, are hence not  -->
+<!-- suitable to detect a heavy-tailed Mittag-Leffler distribution. Moreover,  -->
+<!-- QQ-estimator plots of exponentially distributed data are virtually  -->
+<!-- indistinguishable from the bottom-left panel. This shows that  -->
+<!-- _Mittag-Leffler distributed data may look like exponentially distributed  -->
+<!-- data if examined via a QQ-estimator_.  -->
 
 ```{r likelihood-ratio-test}
 flares_arrivals <- flares %>% ctre() %>% thin(k = 500) %>% interarrival()
 mlmle_out <- mlmle(data = flares_arrivals)
 ```
+<!--Anpassen:
+<!-- Hence if there is some prior expectation that the data are drawn from the  -->
+<!-- Mittag-Leffler distribution -->
+<!-- (as is the the case for threshold exceedance times), -->
+<!-- then we recommend avoiding QQ-estimators and Hill plots altogether,  -->
+<!-- and instead examining QQ-plots directly, on a logarithmic scale  -->
+<!-- (see Figure \ref{fig:QQ-plots}, right column). -->
+<!-- The scale parameter $\sigma$ is irrelevant for a QQ-Plot.  -->
+<!-- The tail parameter $\beta$ can be estimated quickly via the log-moment  -->
+<!-- method by @Cahoy2013, or via maximum likelihood.  -->
+<!-- Both estimators are implemented in `MittagLeffleR`  -->
+<!-- [@MittagLeffleR].  -->
 
-Hence if there is some prior expectation that the data are drawn from the 
-Mittag-Leffler distribution
-(as is the the case for threshold exceedance times),
-then we recommend avoiding QQ-estimators and Hill plots altogether, 
-and instead examining QQ-plots directly, on a logarithmic scale 
-(see Figure \ref{fig:QQ-plots}, right column).
-The scale parameter $\sigma$ is irrelevant for a QQ-Plot. 
-The tail parameter $\beta$ can be estimated quickly via the log-moment 
-method by @Cahoy2013, or via maximum likelihood. 
-Both estimators are implemented in `MittagLeffleR` 
-[@MittagLeffleR]. 
 Since the exponential distribution is nested in the Mittag-Leffler 
-family of distributions, a standard likelihood ratio test can be 
-performed, with the exponential distribution as a null model against 
-a Mittag-Leffler distribution as the alternative. 
-As an example, the threshold crossing times for the solar flare dataset
-(Figure \ref{fig:flare-diagnostics-2}, right panel)
-yield a difference in deviance of 
-$\approx$ `r round(2 * (mlmle_out$loglik - mlmle_out$null_loglik))`, 
-which evaluates to a strongly significant $\chi^2_1$ test statistic 
-(p-value = $10^{`r round(log10(mlmle_out$p_value))`}$) for the null
-hypothesis $\beta = 1$. 
+family of distributions, an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times seems to be a Likelihood ratio test. Although the two models are nested, the assymptotic distribution seems no to be chi-squared since under $H_0$ the paremter $\beta$ of Mittag-Leffler distribution is equal to zreo which is on the boundary of the parameter space $(0,1]$. 
+<!-- Anpassen:
+<!-- As an example, the threshold crossing times for the solar flare dataset -->
+<!-- (Figure \ref{fig:flare-diagnostics-2}, right panel) -->
+<!-- yield .  -->
 
 
 
