@@ -390,10 +390,13 @@ qqline(ML_data, distribution = function(p) qml(p, 0.8), col = 2)
 
 ```
 
-Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution, and estimate the exponent of the tail function with established methods such as the Hill estimator. The other option is to use estimators specifically for the tail parameter of a Mittag-Leffler distribution. The first method for parameter estimation was the fractional moment estimator proposed by [@kozubowski2001]. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. [@Cahoy2010] proposed an estimator based on the log-Moments which doesn't need prior knowledge. Furthermore, they showed in a simulation study that he log-Moments estimator outclasses the fractional moment estimator regarding bias and root mean squared error (RMSE). Due to the form of the density function there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` Maximum Likelihood estimation is implemented via numerical optimization. The MLE outperforms the log-ent estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive. In figure XX one can see that both mehtods work quite well even for very low sample sizes.    
+The first method proposed for parameter estimation of the Mittag-Leffler distribution was the fractional moment estimator by [@kozubowski2001]. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. [@Cahoy2010] proposed an estimator based on the log-Moments which doesn't need prior knowledge. Furthermore, they showed in a simulation study that he log-Moments estimator outclasses the fractional moment estimator regarding bias and root mean squared error (RMSE). Due to the form of the density function there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` Maximum Likelihood estimation is implemented via numerical optimization. The MLE outperforms the log-ent estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive. In figure XX one can see that both mehtods work quite well even for very low sample sizes.    
+Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators such as the Hill estimator. However, these methods are less statistically efficient since they only use a portion of the information contained in the data, as was already mentionded by [@kozubowski2001]. Addtionally they need a specification of a tuning parameter. 
 
-```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
-knitr::include_graphics("temp.pdf")
+In XX we plotted a Hill plot for differet k's where ..... 
+
+```{r pressure, echo=FALSE, fig.cap="MSE for sample sizes n=30, 100, 200 for the tail and scale estimations via log-moments and maximum likelihood estimation", out.width = '100%'}
+knitr::include_graphics("MSE_n25_100_200.pdf")
 ```
 <!-- The QQ-estimator [@Kratz96] is closely related to  -->
 <!-- the Hill estimator and fits a  -->
@@ -446,8 +449,18 @@ mlmle_out <- mlmle(data = flares_arrivals)
 <!-- Both estimators are implemented in `MittagLeffleR`  -->
 <!-- [@MittagLeffleR].  -->
 
-Since the exponential distribution is nested in the Mittag-Leffler 
-family of distributions, an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times seems to be a Likelihood ratio test. Although the two models are nested, the assymptotic distribution seems no to be chi-squared since under $H_0$ the paremter $\beta$ of Mittag-Leffler distribution is equal to zreo which is on the boundary of the parameter space $(0,1]$. 
+Since the exponential distribution is nested in the Mittag-Leffler family of distributions, an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times seems to be a Likelihood ratio test. Although the two models are nested, the assymptotic distribution seems not to be $\chi^2_1$ since under $H_0$ the paremter $\beta$ of Mittag-Leffler distribution is equal to zero which is on the boundary of the parameter space $(0,1]$. 
+
+```{r LRT power, echo=FALSE, fig.cap="Type One error for bootstrapped LRT for different sample sizes", out.width = '100%'}
+knitr::include_graphics("Plots_LRT_boot.pdf")
+```
+
+
+```{r LRT type one error, echo=FALSE, fig.cap="Type One error for bootstrapped LRT for different sample sizes", out.width = '100%'}
+knitr::include_graphics("Plots_LRT_boot_typeOneError.pdf")
+```
+
+
 <!-- Anpassen:
 <!-- As an example, the threshold crossing times for the solar flare dataset -->
 <!-- (Figure \ref{fig:flare-diagnostics-2}, right panel) -->
@@ -650,7 +663,53 @@ uncertainty into our predictive distribution for the next threshold crossing;
 however, methods as described by @Scarrott12 and @Lee15 are likely 
 to extend to our setting. 
 
+# Simulation study
 
+To test our inference method via stability plots, we have simulated `r params$n` 
+independent waiting time and magnitude pairs $(W_k, J_k)$ (see upper panel in 
+Figure \ref{fig:thresholdedBursty}). In order to have exact 
+analytical values available for $\beta$ and $\sigma_0$, a distribution for 
+$W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
+If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, 
+then due to the stability property we have the *equality* of distribution
+$W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, 
+for $b(n) = n^{1/\beta}$. 
+Using the parametrisation of @SamorodnitskyTaqqu, a few lines of 
+calculation (see e.g. the vignette on parametrisation in @MittagLeffleR) 
+show that $D$ must have the stable distribution 
+$S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is 
+implemented in the R package `stabledist` by @stabledist. 
+
+```{r make-caption}
+caption = "Tail and scale estimates for simulated data, with waiting times drawn from the stable distribution $S_\\beta(\\cos(\\pi \\beta/2)^{1/\\beta}, +1, 0)$ with $\\beta = 0.8$. Dashed lines are 95\\% confidence intervals, dotted lines are the known theoretical values ($0.8$ and $10000^{1/0.8}$). \\label{fig:sim}"
+```
+
+
+```{r simulated-example, message=FALSE, fig.cap=caption}
+k_max <- 500 
+thin_sim_ctre <- thin(ctre = sim_ctre, k = k_max)
+par(mfrow=c(1,2))
+MLestimates(ctre = thin_sim_ctre, tail = params$tail, scale = n^(1/params$tail))
+```
+
+By the Theorem, the distribution 
+of $T(\ell)$ is approximately 
+$$
+{\rm ML}(\beta, p^{-1/\beta}) 
+= {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
+$$
+which means 
+$\sigma_0 = n^{1/\beta}$.
+The distribution of $J_k$ is irrelevant for the inference on $\beta$ and 
+$\sigma_0$ (we have chosen unit exponential random variables). 
+Figure \ref{fig:sim} displays plots of $\hat \beta(\ell)$ and 
+$\hat \sigma(\ell)$ vs. $k$; recall that $k$ is the index of the order
+statistics of $J_k$ at which the threshold $\ell$ is placed. 
+Dotted lines show 95% confidence intervals, which are derived from the 
+asymptotic normality of the log-moments estimators [@Cahoy2013] and the $\delta$-method [@MittagLeffleR].
+The dashed lines show the actual values of $\beta$ resp.\ $\sigma_0$, 
+showing that our inference method identifies the 
+parameters correctly. 
 
 # Discussion & Conclusion
 
@@ -722,57 +781,7 @@ The authors would like to thank Prof. Peter Scheffler for insights on
 stochastic process limits for CTRMs, and Gurtek Gill who helped create
 the MittagLeffleR R-package. 
 
-\appendix
 
-
-# Validating our inference method on simulated data
-
-To test our inference method via stability plots, we have simulated `r params$n` 
-independent
-waiting time and magnitude pairs $(W_k, J_k)$ (see upper panel in 
-Figure \ref{fig:thresholdedBursty}). In order to have exact 
-analytical values available for $\beta$ and $\sigma_0$, a distribution for 
-$W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
-If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, 
-then due to the stability property we have the *equality* of distribution
-$W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, 
-for $b(n) = n^{1/\beta}$. 
-Using the parametrisation of @SamorodnitskyTaqqu, a few lines of 
-calculation (see e.g. the vignette on parametrisation in @MittagLeffleR) 
-show that $D$ must have the stable distribution 
-$S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is 
-implemented in the R package `stabledist` by @stabledist. 
-
-```{r make-caption}
-caption = "Tail and scale estimates for simulated data, with waiting times drawn from the stable distribution $S_\\beta(\\cos(\\pi \\beta/2)^{1/\\beta}, +1, 0)$ with $\\beta = 0.8$. Dashed lines are 95\\% confidence intervals, dotted lines are the known theoretical values ($0.8$ and $10000^{1/0.8}$). \\label{fig:sim}"
-```
-
-
-```{r simulated-example, message=FALSE, fig.cap=caption}
-k_max <- 500 
-thin_sim_ctre <- thin(ctre = sim_ctre, k = k_max)
-par(mfrow=c(1,2))
-MLestimates(ctre = thin_sim_ctre, tail = params$tail, scale = n^(1/params$tail))
-```
-
-By the Theorem, the distribution 
-of $T(\ell)$ is approximately 
-$$
-{\rm ML}(\beta, p^{-1/\beta}) 
-= {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
-$$
-which means 
-$\sigma_0 = n^{1/\beta}$.
-The distribution of $J_k$ is irrelevant for the inference on $\beta$ and 
-$\sigma_0$ (we have chosen unit exponential random variables). 
-Figure \ref{fig:sim} displays plots of $\hat \beta(\ell)$ and 
-$\hat \sigma(\ell)$ vs. $k$; recall that $k$ is the index of the order
-statistics of $J_k$ at which the threshold $\ell$ is placed. 
-Dotted lines show 95% confidence intervals, which are derived from the 
-asymptotic normality of the log-moments estimators [@Cahoy2013] and the $\delta$-method [@MittagLeffleR].
-The dashed lines show the actual values of $\beta$ resp.\ $\sigma_0$, 
-showing that our inference method identifies the 
-parameters correctly. 
 
 # References {-}
 
