@@ -337,19 +337,24 @@ Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a d
 
 # Model Choice and inference for the Mittag-Leffler distribution
 
-The classical POT approach is based on the fact, that exceedances above a high threshhold are assymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enogh threshhold. Due to the Theorem in the last Section we know that for high threshholds the times between the exceedances are assymptotically Mittag-Leffler distributed in case of heavy tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we want to have a look at inference for Mittag-Leffler distributions in the folowing. 
+The classical POT approach is based on the fact, that exceedances above a high threshhold are assymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enogh threshhold. Due to the Theorem in the last Section we know that for high threshholds the times between the exceedances are assymptotically Mittag-Leffler distributed in case of heavy tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we want to have a look at inference for Mittag-Leffler distributions in the following. 
 
 The first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by [@kozubowski2001]. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and can get calculated. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. [@Cahoy2010] proposed an estimator based on the log-Moments which doesn't need prior knowledge. Furthermore, they showed in a simulation study that the log-Moment outclasses the fractional moment estimator regarding bias and root mean squared error (RMSE).  
-Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` Maximum Likelihood estimation is implemented via numerical optimization. The MLE outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive and the differences in bias and RMSE between the two methods are very small. In Figure \ref{fig:MSE} one can see that both methods work quite well even for very low sample sizes.    
+Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` Maximum Likelihood estimation is implemented via numerical optimization. The MLE outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive and the differences in bias and RMSE between the two methods are very small. In Figure \ref{fig:MSE}, one can see that both methods work quite well even for very low sample sizes.    
+```{r MSE, echo=FALSE, fig.height=12, fig.cap="\\label{fig:MSE} MSE for sample sizes n=30, 100, 200 for the tail and scale estimations via log-moments and maximum likelihood estimation", out.width = '100%'}
+knitr::include_graphics("MSE_n25_100_200.pdf")
+```
 Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator, which is defined by 
 \begin{align*}
 H_{k,n}= \frac{1}{k} \sum_{i=0}^{k-1} \log \frac{X_{n-i,n}}{X_{n-k,n}}. 
 \end{align*}
-However, these methods are less statistically efficient since they only use a portion of the information contained in the data, as was already mentioned by [@kozubowski2001]. Addtionally, they need a specification of a tuning parameter. In Figure one can see a Hill plot for different $k's$.  
+However, these methods are less statistically efficient since they only use a portion of the information contained in the data, as was already mentioned by [@kozubowski2001]. Additionally, they need a specification of a tuning parameter and the hill estimator only performs well for distributions close to Pareto (see @Resnick97). In Figure \ref{fig:Hillplots} one can see different Hill plots for Mittag-Leffler simulated data with differrent sample sizes and tails. It would be really hard to deduce the correct tail parameter estimates from this plots. 
 
-```{r MSE, echo=FALSE, fig.height=12, fig.cap="\\label{fig:MSE} MSE for sample sizes n=30, 100, 200 for the tail and scale estimations via log-moments and maximum likelihood estimation", out.width = '100%'}
-knitr::include_graphics("MSE_n25_100_200.pdf")
+```{r Hillplots, echo=FALSE, fig.height=12, fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler distributed rv's with tail parameter 0.5 (two plots in the right column) and 0.8 (two plots in the left column) and sample sizes 200 (two plots in the lower row) and 1000 (two plots in the upper row). ", out.width = '100%'}
+knitr::include_graphics("Hillplots.pdf")
 ```
+
+
 
 
 ```{r likelihood-ratio-test}
@@ -358,9 +363,9 @@ mlmle_out <- mlmle(data = flares_arrivals)
 ```
 
 
-Since the exponential distribution is nested in the Mittag-Leffler family of distributions, an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times seems to be a Likelihood ratio test. Although the two models are nested, the assymptotic distribution is not $\chi^2_1$-distributed, the classical Wilks Theorem doesn't apply since under $H_0$ the paremter $\beta$ of Mittag-Leffler distribution is equal to zero which is on the boundary of the parameter space $(0,1]$. We used a bootstrapped likelihood ratio test. In figure XX one can see the power for different tail parameters. As expected the power gets smaller for tail parameters close to one, since the Mittag-Leffler distribution converges for $\beta \rightarrow 1$ to an exponetial distribution. For tail parameters close to one it is hard to differentiate a Mittag-Lefller distribution from a exponential distribution. 
+Since the exponential distribution is nested in the Mittag-Leffler family of distributions, an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times seems to be a Likelihood ratio test. Although the two models are nested, the assymptotic distribution is not $\chi^2_1$-distributed, the classical Theorem of Wilk doesn't apply since under $H_0$ the paremter $\beta$ of Mittag-Leffler distribution is equal to zero and hence lies under $H_0$ on the boundary of the parameter space $(0,1]$. But one can perform a bootstrapped log-likelihood ratio test. In Figure \ref{Fig:LRT} one can see the power for the bootstrapped LRT for Mittag-Leffler distributions with different tail parameters. As expected the power gets smaller for tail parameters close to one, since the Mittag-Leffler distribution converges for $\beta \rightarrow 1$ to an exponential distribution. Hence, for tail parameters close to one it is hard to differentiate a Mittag-Lefller distribution from an exponential. 
 
-```{r LRT power, echo=FALSE, fig.cap="Power for bootstrapped LRT for different sample sizes", out.width = '100%'}
+```{r LRT power, echo=FALSE, fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes", out.width = '100%'}
 knitr::include_graphics("Plots_LRT_boot.pdf")
 ```
 
