@@ -337,10 +337,10 @@ Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a d
 
 # Model Choice and inference for the Mittag-Leffler distribution
 
-The classical POT approach is based on the fact, that exceedances above a high threshhold are assymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enogh threshhold. Due to the Theorem in the last Section we know that for high threshholds the times between the exceedances are assymptotically Mittag-Leffler distributed in case of heavy tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we want to have a look at inference for Mittag-Leffler distributions in the following. 
+The classical peaks over threshold approach is based on the fact, that exceedances above a high threshhold are assymptotically GPD distributed. Hence, a GPD distribution is fitted to the exceedances above a high enough threshhold. Due to the Theorem in the last Section, we know that for high threshholds the times between the exceedances are in case of heavy tailed inter-arrival times assymptotically Mittag-Leffler distributed. Therefore, before talking about inference for the exceedance times in the next section, we want to have a look at inference for Mittag-Leffler distributions in general. 
 
-The first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by [@kozubowski2001]. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and can get calculated. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. [@Cahoy2010] proposed an estimator based on the log-Moments which doesn't need prior knowledge. Furthermore, they showed in a simulation study that the log-Moment outclasses the fractional moment estimator regarding bias and root mean squared error (RMSE).  
-Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` Maximum Likelihood estimation is implemented via numerical optimization. The MLE outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive and the differences in bias and RMSE between the two methods are very small. In Figure \ref{fig:MSE}, one can see that both methods work quite well even for very low sample sizes.    
+The first method proposed in the literature to estimate the parameters of Mittag-Leffler distribution was the fractional moment estimator by [@kozubowski2001]. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and can get calculated by explicit formulas. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. Therefore, [@Cahoy2010] proposed an estimator based on the log-Moments which doesn't need prior knowledge. Furthermore, they showed in a simulation study that the log-Moment outclasses the fractional moment estimator regarding bias and root mean squared error (RMSE).  
+Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` we implemented Maximum Likelihood estimation via an numerical optimization algorithm. The MLE outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive and the differences in bias and RMSE between the two methods are very small. In Figure \ref{fig:MSE}, one can see that both methods work quite well even for very low sample sizes.    
 ```{r MSE, echo=FALSE, fig.height=12, fig.cap="\\label{fig:MSE} MSE for sample sizes n=30, 100, 200 for the tail and scale estimations via log-moments and maximum likelihood estimation", out.width = '100%'}
 knitr::include_graphics("MSE_n25_100_200.pdf")
 ```
@@ -348,18 +348,10 @@ Since the Mittag-Leffler distribution is heavy-tailed, many researchers would in
 \begin{align*}
 H_{k,n}= \frac{1}{k} \sum_{i=0}^{k-1} \log \frac{X_{n-i,n}}{X_{n-k,n}}. 
 \end{align*}
-However, these methods are less statistically efficient since they only use a portion of the information contained in the data, as was already mentioned by [@kozubowski2001]. Additionally, they need a specification of a tuning parameter and the hill estimator only performs well for distributions close to Pareto (see @Resnick97). In Figure \ref{fig:Hillplots} one can see different Hill plots for Mittag-Leffler simulated data with differrent sample sizes and tails. It would be really hard to deduce the correct tail parameter estimates from this plots. 
+However, these methods are less statistically efficient since they only use a portion of the information contained in the data, as was already mentioned by [@kozubowski2001]. Additionally, they need a specification of a tuning parameter and the hill estimator only performs well for distributions close to Pareto (see @Resnick97). In Figure \ref{fig:Hillplots} one can see different Hill plots for Mittag-Leffler simulated data with differrent sample sizes and tails. It would be really hard to deduce the correct tail parameter estimates from these plots. 
 
 ```{r Hillplots, echo=FALSE, fig.height=12, fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler distributed rv's with tail parameter 0.5 (two plots in the right column) and 0.8 (two plots in the left column) and sample sizes 200 (two plots in the lower row) and 1000 (two plots in the upper row). ", out.width = '100%'}
 knitr::include_graphics("Hillplots.pdf")
-```
-
-
-
-
-```{r likelihood-ratio-test}
-flares_arrivals <- flares %>% ctre() %>% thin(k = 500) %>% interarrival()
-mlmle_out <- mlmle(data = flares_arrivals)
 ```
 
 
@@ -448,24 +440,18 @@ $$
 T_\ell \sim {\rm ML}(\beta, k^{1/\beta} \sigma_0), 
 $$
 where $\beta = 0.85$ and $\sigma_0 = 3.0 \times 10^7 {\rm sec}$. 
-Unlike the exponential distribution, the Mittag-Leffler distribution is not 
-memoryless, and the probability density of the time $t$ until the next threshold 
-crossing will depend on the time $t_0$ elapsed since the last threshold crossing.
+Unlike the exponential distribution, the Mittag-Leffler distribution is not memoryless, and the probability density of the time $t$ until the next threshold crossing will depend on the time $t_0$ elapsed since the last threshold crossing.
 This density equals 
 $$
 p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{1/\beta} \sigma_0)}{\mathbf P[T_\ell > t_0]}
 $$
-where $f(\,\cdot\, | \beta, k^{1/\beta} \sigma_0)$ is the probability density of 
-${\rm ML}(\beta, k^{1/\beta} \sigma_0)$. 
-The more time has passed without a threshold crossing, the more the probability 
-distribution shifts towards larger values for the next crossing
-(see Figure \ref{fig:hazard}, left panel). 
-The hazard rate 
+where $f(\,\cdot\, | \beta, k^{1/\beta} \sigma_0)$ is the probability density of ${\rm ML}(\beta, k^{1/\beta} \sigma_0)$. 
+The more time has passed without a threshold crossing, the more the probability distribution shifts towards larger values for the next crossing
+(see Figure \ref{fig:hazard}, left panel). The hazard rate 
 $$
 h(t) = \frac{f(t| \beta, k^{1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{1/\beta} \sigma_0))\,d\tau}
 $$
-represents the risk of a threshold crossing per unit time, and is a 
-decreasing function for the Mittag-Leffler distribution. 
+represents the risk of a threshold crossing per unit time, and is a decreasing function for the Mittag-Leffler distribution. 
 ```{r hazard, fig.height=5, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
 tail <- 0.7
 scale <- 1
@@ -504,27 +490,18 @@ exponential distribution (a constant function, see Figure \ref{fig:hazard},
 right panel). 
 
 
-It is beyond the scope of the current paper to incorporate parameter 
-uncertainty into our predictive distribution for the next threshold crossing; 
-however, methods as described by @Scarrott12 and @Lee15 are likely 
-to extend to our setting. 
-
 # Simulation study
 
-To test our inference method via stability plots, we have simulated 
-independent waiting time and magnitude pairs $(W_k, J_k)$ (see upper panel in 
-Figure \ref{fig:thresholdedBursty}) for three different situations: stable waiting times, Pareto waitings times and Exponential waiting times. In order to have exact 
-analytical values available for $\beta$ and $\sigma_0$, a distribution for 
-$W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
-If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, 
-then due to the stability property we have the *equality* of distribution
-$W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, 
-for $b(n) = n^{1/\beta}$. 
-Using the parametrisation of @SamorodnitskyTaqqu, a few lines of 
-calculation (see e.g. the vignette on parametrisation in @MittagLeffleR) 
-show that $D$ must have the stable distribution 
-$S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is 
-implemented in the R package `stabledist` by @stabledist. 
+To test our inference method, we have simulated independent waiting time and magnitude pairs $(W_k, J_k)$. The distribution of $J_k$ is irrelevant for the inference on $\beta$ and $\sigma_0$ (it just plays a role for the rescaling of $\hat{\sigma}_0$, which gets done to receive an estimate for the scale parameter of the exceedances). Hence we choosed exponential distributed magnitudes in all considered examples. For the waitings times, we choosed a Stable, a Pareto and an Exponential distribution.   
+In order to have exact analytical values available for $\beta$ and $\sigma_0$, a distribution for $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. In our first example, we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, then due to the stability property we have the *equality* of distribution $W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, for $b(n) = n^{1/\beta}$. Using the parametrisation of @SamorodnitskyTaqqu, a few lines of calculation (see e.g. the vignette on parametrisation in @MittagLeffleR) show that $D$ must have the stable distribution $S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is implemented in the R package `stabledist` by @stabledist. If we choose $W_k$ to be Pareto distributed or more precisecly 
+\begin{align*}
+P(W_k>t)= C t^{-\beta}
+\end{align*}
+with $C:=(1/\Gamma(1-\beta))^{1/\beta}$ and $b(n)=n^{1/\beta}$ we get 
+\begin{align*}
+\frac{W_1 + \ldots + W_n}{b(n)} \stackrel{d}{\Rightarrow} D
+\end{align*}
+with $E(\exp(-sD))=\exp(-s^{\beta})$.  
 
 ```{r make-caption}
 caption = "Tail and scale estimates for simulated data, with waiting times drawn from the stable distribution $S_\\beta(\\cos(\\pi \\beta/2)^{1/\\beta}, +1, 0)$ with $\\beta = 0.8$. Dashed lines are 95\\% confidence intervals, dotted lines are the known theoretical values ($0.8$ and $10000^{1/0.8}$). \\label{fig:sim}"
@@ -559,21 +536,9 @@ parameters correctly.
 
 # Data example
 
-The "complete Hard X Ray Burst Spectrometer event list" 
-is a comprehensive reference for all measurements of the Hard X 
-Ray Burst Spectrometer on NASA's Solar Maximum Mission from the time of 
-launch on Feb 14, 1980 to the end of the mission in Dec 1989. 12,776 
-events were detected, with the "vast 
-majority being solar flares". The list includes the start time, peak time, 
-duration, and peak rate of each event. We have used "start time" as the 
-variable for event times, and "peak rate" as the variable for event 
-magnitudes. 
-
-## Checking Model Assumptions 
-
-
-The CTRE model is based on three main assumptions, which are repeated 
-below. For each assumption, we suggest one means of checking if it holds: 
+We now want to apply the proposed method to a real data example, the solar flare data which was already mentioned in Section 1 and can be seen in Figure \ref{fig:thresholdedBursty}. The data were extracted from the "complete Hard X Ray Burst Spectrometer event list", a comprehensive reference for all measurements of the Hard X Ray Burst Spectrometer on NASA's Solar Maximum Mission from the time of launch on Feb 14, 1980 to the end of the mission in Dec 1989. 12,776 events were detected, with the "vast  majority being solar flares". The list includes the start time, peak time, duration, and peak rate of each event. We have used "start time" as the variable for event times, and "peak rate" as the variable for event magnitudes. 
+ 
+Before we apply the POT approach described in Section 5 to the solar flare data, we first have to check if all model assumptions are full-filled. The CTRE model is based on three main assumptions, which are repeated below. For each assumption, we suggest one means of checking if it holds: 
 
 i.i.d.:
 
@@ -600,9 +565,7 @@ ${\rm ML}(\beta, \sigma)$ distribution of $T(\ell, i)$:
   quantiles of the plot.
 
 
-Figures \ref{fig:flare-diagnostics-1} and \ref{fig:flare-diagnostics-2} 
-show the diagnostic plots for a minimum threshold chosen at the 200th order statistic. 
-There is some residual autocorrelation for the sequence of threshold exceedance times that is not accounted for by the CTRE model. The fit with a Mittag-Leffler distribution ($\beta = 0.8$) is good, though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot. 
+Figures \ref{fig:flare-diagnostics-1} and \ref{fig:flare-diagnostics-2} show the diagnostic plots for a minimum threshold chosen at the 200th order statistic. There is some residual autocorrelation for the sequence of threshold exceedance times that is not accounted for by the CTRE model.  
 
 ```{r flare-diagnostics-1, fig.height=7, fig.cap="Diagnostic plots for the solar flare data: auto-correlation function.\\label{fig:flare-diagnostics-1}"}
 flares_ctre <- flares %>% ctre() %>% thin(k = 150)
@@ -613,8 +576,10 @@ acf(flares_ctre)
 ```{r flare-diagnostics-2, fig.height=4.5, fig.width=8, fig.cap="Diagnostic plots for the solar flare data: empirical copula and QQ Plot. \\label{fig:flare-diagnostics-2}"}
 par(mfrow = c(1,2))
 empcopula(flares_ctre)
-flares_ctre %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.8, main = "Mittag-Leffler QQ Plot")
+flares_ctre %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.85, main = "Mittag-Leffler QQ Plot")
 ```
+
+Figure \ref{fig:flares} shows the stability plots for the solar flare data, on the left for the tail parameter and on the right for the scale parameter. The stability plot for the tail stabilizes nicely round about 0.85 (dotted line), while it is a little bit harder to deduce an estimate for the scale parameter. Howerever, the stability plot for the scale parameter seems to stabilize round about $3 \times 10^7$.  
 
 ```{r solar-flare-tail-scale, message=FALSE, fig.height=4.5, fig.width=8, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$ seconds $\\approx 0.95$ years."}
 thin_flares_ctre <- flares %>% ctre() %>% thin(k = 700)
@@ -622,71 +587,62 @@ par(mfrow=c(1,2))
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
 ```
 
+The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good, though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot. We also counduct a bootstrapped LRT for the null hypothesis of exponential distributed inter-arrival times and received a $p$-value of  
+
+```{r likelihood-ratio-test}
+library("MittagLeffleR")
+library("stats")
+
+# ML_LRT_boot<-function(data,signi=0.05,m=1000,n){
+# if(is.null(dim(data))){
+# mle_data<-mlmle(data)                                                   #Calculate loglikelihoods for obserevd data
+# teststat<-2*(mle_data$loglik-mle_data$null_loglik)}                     #Calculate teststatistic for obserevd data
+# else{
+# l<-apply(data,MARGIN=2,FUN=mlmle)                                       #Extension to multivariate datasets for simulation studies
+# teststat<-2*(unlist(lapply(l,"[[",2))-unlist(lapply(l,"[[",3)))
+# }
+# 
+# x<-replicate(m,rexp(n,rate=1))                                          #Sample data under Null
+# l2<-apply(x,MARGIN=2,FUN=mlmle)                                         #Calculate loglikelihoods for each simulated data set
+# test_stat_null<-2*(unlist(lapply(l2,"[[",2))-unlist(lapply(l2,"[[",3))) #Calculate teststatistic for each simulated data set
+# q<-stats::quantile(test_stat_null,probs=1-signi)                               #Calculate 1-signi quantile of simulated distribution of the test statistic
+# #decision<-as.numeric(teststat>q)                                       #Gives One if Hypothesis gets rejected, 0 otherwise
+# f<-function(x,y){
+#   r<-as.numeric(x>y)
+#   return(r)
+# }
+# decision<-mapply(teststat,FUN=f,y=q)
+# decision<-return(decision)
+# }
+# flares_arrivals <- flares %>% ctre() %>% thin(k = 700) %>% interarrival()
+# p_value <- ML_LRT_boot(data=flares_arrivals,n=length(flares_arrivals))
+```
+
 # Discussion & Conclusion
 
-We have extended the POT (Peaks over Threshold) model, a mainstay of 
-extreme value theory, to "bursty" time series, which have been studied 
-intensively in statistical physics. 
-Burstiness is characterized by power-law waiting times between events, 
-and we have shown that the Mittag-Leffler distribution arises naturally 
-as a scaling limit for the inter-exceedance times of high thresholds. 
-Moreover, we have derived the following non-linear scaling behaviour: 
-$\sigma \sim p^{-1/\beta}$, 
-where $\sigma$ is the scale parameter of the distribution of threshold 
-exceedance times, 
-$p$ is the fraction of magnitudes above the threshold, 
-and $\beta$ the exponent of the power law. 
-This "anomalous" scaling behaviour in the bursty setting entails two 
-phenomena: 
+We have extended the POT (Peaks over Threshold) model, a mainstay of extreme value theory, to "bursty" time series, which have been studied 
+intensively in statistical physics. Burstiness is characterized by power-law waiting times between events, and we have shown that the Mittag-Leffler distribution arises naturally as a scaling limit for the inter-exceedance times of high thresholds. Moreover, we have derived the following non-linear scaling behaviour: $\sigma \sim p^{-1/\beta}$, where $\sigma$ is the scale parameter of the distribution of threshold 
+exceedance times, $p$ is the fraction of magnitudes above the threshold, and $\beta$ the exponent of the power law. 
+This "anomalous" scaling behaviour in the bursty setting entails two phenomena: 
 
-i) a heavy tail of the interarrival time distribution of 
-threshold crossings (long rests), and 
+i) a heavy tail of the interarrival time distribution of threshold crossings (long rests), and 
 
-ii) a high propensity for more threshold crossing events immediately after 
-each threshold crossing event (bursts). 
+ii) a high propensity for more threshold crossing events immediately after each threshold crossing event (bursts). 
 
-The Mittag-Leffler distribution captures both phenomena, due to its heavy
-tail as well as its stretched exponential (peaked) asymptotics for small 
-times. 
-It generalizes the exponential distribution, and 
-in the solar flare data example, this generalization 
-is warranted, because the likelihood-ratio test is strongly significant. 
+The Mittag-Leffler distribution captures both phenomena, due to its heavy tail as well as its stretched exponential (peaked) asymptotics for small times. It generalizes the exponential distribution, and in the solar flare data example, this generalization is warranted, because the likelihood-ratio test is strongly significant. 
 
+When we introduced the CTRE model, we assumed that all events are i.i.d. This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the i.i.d. assumption.For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are i.i.d. 
 
-When we introduced the CTRE model, we assumed that all events are i.i.d. 
-This assumption is likely sufficient but not necessary for our limit theorem to hold. 
-Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for 
-CTREs, and hence need not satisfy the i.i.d. assumption.
-For the purposes of statistical inference, we merely require that the 
-inter-threshold-crossing times are i.i.d. 
+The bursty CTRE approach to model "non-Poissonian" threshold crossing times should be contrasted with the (now standard) approach of clusters of extremes, see e.g. @ferro2003inference. In this approach, i.i.d. event sequences of magnitudes are generalized to stationary sequences of
+event magnitudes (subject to a mixing condition). The two approaches are fundamentally different: A clustering model assumes that each event 
+belongs to one particular (latent) group of events. For bursts, however, the aim is to identify an underlying scale-free pattern in the event 
+dynamics, which is often characteristic of complex systems. It is an interesting open problem to develop quality criteria, based
+e.g. on measures of surprise [@Lee15], which guide an applied statistician in the choice between a clustering and a CTRE approach for a particular problem. Moreover, we believe it may be possible to unify the two approaches by considering CTREs based on MRPs with a _stationary_, rather than i.i.d., sequence of magnitudes. 
 
-
-The bursty CTRE approach to model "non-Poissonian" threshold crossing times
-should be contrasted with the (now standard) approach of clusters of 
-extremes, see e.g. @ferro2003inference. In this approach, i.i.d. event 
-sequences of magnitudes are generalized to stationary sequences of
-event magnitudes (subject to a mixing condition). The two approaches are 
-fundamentally different: A clustering model assumes that each event 
-belongs to one particular (latent) group of events. For bursts, however,
-the aim is to identify an underlying scale-free pattern in the event 
-dynamics, which is often characteristic of complex systems.
-It is an interesting open problem to develop quality criteria, based
-e.g. on measures of surprise [@Lee15], which guide an applied statistician in 
-the choice between a clustering and a CTRE approach for a particular 
-problem. Moreover, we believe it may be possible to unify the two approaches
-by considering CTREs based on MRPs with a _stationary_, rather than 
-i.i.d., sequence of magnitudes. 
-
-
-Finally, a purely scale-free pattern for event times may be too rigid an 
-assumption for some bursty time series, 
-because often the heavy-tailed character of the inter-arrival time
-distribution does not hold at all time scales; rather, it applies at 
-short and intermediate time scales, and is truncated (or tempered, 
-reverting to an exponential distribution) at 
-very long time scales [see e.g. @MeerschaertRoyQin; and @Aban06]. 
-In such situations, a "tempered" Mittag-Leffler distribution may provide 
-a more realistic fit, which we aim to introduce in follow-up work. 
+Finally, a purely scale-free pattern for event times may be too rigid as an 
+assumption for some bursty time series, because often the heavy-tailed character of the inter-arrival time
+distribution does not hold at all time scales; rather, it applies at short and intermediate time scales, and is truncated (or tempered, 
+reverting to an exponential distribution) at very long time scales [see e.g. @MeerschaertRoyQin; and @Aban06]. In such situations, a "tempered" Mittag-Leffler distribution may provide a more realistic fit, which we aim to introduce in follow-up work. 
 
 
 # Acknowledgements {-}
