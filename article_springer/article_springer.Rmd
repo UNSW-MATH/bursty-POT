@@ -357,7 +357,7 @@ knitr::include_graphics("Hillplots.pdf")
 
 Since the exponential distribution is nested in the Mittag-Leffler family of distributions, an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times seems to be a Likelihood ratio test. Although the two models are nested, the assymptotic distribution is not $\chi^2_1$-distributed, the classical Theorem of Wilk doesn't apply since under $H_0$ the parameter $\beta$ of the Mittag-Leffler distribution is equal to one and hence lies under $H_0$ on the boundary of the parameter space $(0,1]$. Nonetheless, one can perform a bootstrapped log-likelihood ratio test. In Figure \ref{Fig:LRT} one can see the power for the bootstrapped LRT for Mittag-Leffler distributions with different tail parameters. As expected the power gets smaller for tail parameters close to one, since the Mittag-Leffler distribution converges for $\beta \rightarrow 1$ to an exponential distribution. Consequently, for tail parameters close to one it is hard to differentiate a Mittag-Lefller distribution from an exponential. 
 
-```{r LRT power, echo=FALSE, fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes", out.width = '100%'}
+```{r LRT power, echo=FALSE, fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes", out.width = '90%'}
 knitr::include_graphics("Plots_LRT_boot.pdf")
 ```
 
@@ -443,7 +443,7 @@ $$
 h(t) = \frac{f(t| \beta, k^{-1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{-1/\beta} \sigma_0))\,d\tau}
 $$
 represents the risk of a threshold crossing per unit time, and is a decreasing function for the Mittag-Leffler distribution. 
-```{r hazard, fig.height=5, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
+```{r hazard, fig.height=4, fig.cap="Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$.\\label{fig:hazard}"}
 tail <- 0.7
 scale <- 1
 t_0 <- c(0, 1, 10)
@@ -483,28 +483,18 @@ right panel).
 
 # Simulation study
 
-To test our inference method, we have simulated independent waiting time and magnitude pairs $(W_k, J_k)$. The distribution of $J_k$ is irrelevant for the inference on $\beta$ and $\sigma_0$ (it just plays a role for the rescaling of $\hat{\sigma}_0$, which gets done to receive an estimate for the scale parameter of the exceedances). Hence we choosed exponential distributed magnitudes in all considered examples. For the waitings times, we choosed (i) a Stable, (ii) a Pareto and (iii) an Exponential distribution.   
-In order to have exact analytical values available for $\beta$ and $\sigma_0$, a distribution for $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. In our first example, we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, then due to the stability property we have the *equality* of distribution $W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, for $b(n) = n^{1/\beta}$. Using the parametrisation of @SamorodnitskyTaqqu, a few lines of calculation (see e.g. the vignette on parametrisation in @MittagLeffleR) show that $D$ must have the stable distribution $S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is implemented in the R package `stabledist` by @stabledist. If we choose $W_k$ to be Pareto distributed or more precisecly 
+To test our inference method, we performed a simulation study where we have simulated independent waiting time and magnitude pairs $(W_k, J_k)$. Since the estimation of the parameters of the inter-exceedance times is based on stability plots and is hence rather a graphical estimation procedure, it is difficult to conduct a simulation study. To get an impression of how our estimation procedure performs, we plotted $m=100$ stability plots for each example and calculated for each $k$ the mean value of all estimates. We have chosen (i) a Stable, (ii) a Pareto and (iii) an Exponential distribution for waiting times.  The distribution of $J_k$ is irrelevant for the inference on $\beta$ and $\sigma_0$ (it just plays a role for the rescaling of $\hat{\sigma}_0$, which gets done to receive an estimate for the scale parameter of the exceedances). Hence we have chosen exponential distributed magnitudes in all considered examples.  
+In order to have exact analytical values available for $\beta$ and $\sigma_0$, a distribution for $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. In our first example, we have chosen $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}. Then due to the stability property we have the *equality* of distribution $W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, for $b(n) = n^{1/\beta}$. Using the parametrisation of @SamorodnitskyTaqqu, a few lines of calculation (see e.g. the vignette on parametrisation in @MittagLeffleR) show that $D$ must have the stable distribution $S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is implemented in the R package `stabledist` by @stabledist. In the second examaple we have chosen $W_k$ to be Pareto distributed or more precisecly 
 \begin{align*}
 P(W_k>t)= C t^{-\beta}
 \end{align*}
-with $C:=(1/\Gamma(1-\beta))^{1/\beta}$ and $b(n)=n^{1/\beta}$ we get 
+with $C:=(1/\Gamma(1-\beta))^{1/\beta}$ and $b(n)=n^{1/\beta}$. We then receive
 \begin{align*}
 \frac{W_1 + \ldots + W_n}{b(n)} \stackrel{d}{\Rightarrow} D
 \end{align*}
 with $E(\exp(-sD))=\exp(-s^{\beta})$.  
 
-```{r make-caption}
-caption = "Tail and scale estimates for simulated data, with waiting times drawn from the stable distribution $S_\\beta(\\cos(\\pi \\beta/2)^{1/\\beta}, +1, 0)$ with $\\beta = 0.8$. Dashed lines are 95\\% confidence intervals, dotted lines are the known theoretical values ($0.8$ and $10000^{1/0.8}$). \\label{fig:sim}"
-```
 
-
-```{r simulated-example, message=FALSE, fig.cap=caption}
-k_max <- 500 
-thin_sim_ctre <- thin(ctre = sim_ctre, k = k_max)
-par(mfrow=c(1,2))
-MLestimates(ctre = thin_sim_ctre, tail = params$tail, scale = n^(1/params$tail))
-```
 
 By the Theorem, the distribution 
 of $T(\ell)$ is approximately 
@@ -513,25 +503,21 @@ $$
 = {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
 $$
 which means 
-$\sigma_0 = n^{1/\beta}$.
-The distribution of $J_k$ is irrelevant for the inference on $\beta$ and 
-$\sigma_0$ (we have chosen unit exponential random variables). 
-Figure \ref{fig:sim} displays plots of $\hat \beta(\ell)$ and 
-$\hat \sigma(\ell)$ vs. $k$; recall that $k$ is the index of the order
-statistics of $J_k$ at which the threshold $\ell$ is placed. 
-Dotted lines show 95% confidence intervals, which are derived from the 
-asymptotic normality of the log-moments estimators [@Cahoy2013] and the $\delta$-method [@MittagLeffleR].
-The dashed lines show the actual values of $\beta$ resp.\ $\sigma_0$, 
-showing that our inference method identifies the 
-parameters correctly. 
+$\sigma_0 = n^{1/\beta}$. we have chosen $\beta=1$ in the stable as well in the Pareto case. Figure \ref{Ex1figs} displays plots of $\hat \beta(k)$ vs. $k$ for the first example with stable distributed waiting times. In the left picture we used the log moment estimator, in the middle picture maximum likelihood estimates (both applied to the inter-exceedance times) and for the right picture hill estimators applied to the inter-arrival times. Recall that $k$ is the index of the order statistics of $J_k$ at which the threshold $\ell$ is placed.
 
 ```{r Ex1figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex1figs} Stability Plots for m=100 simulation runs for Example 1 (stable distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Tail08_logMoms.pdf","SimuStudy_StabilityPlots_Tail08_mles.pdf","SimuStudy_StabilityPlots_Tail08_hill.pdf"))
 ```
-
+Figure \ref{Ex2figs} shows the estimates fordifferent $k$'s and for the different estimators for the tail parameter $\beta$. Again one can see, that there is much more variance between the stability plots for the different simulation runs in case of the hill estimator compared to the other two estimators.  
 ```{r Ex2figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex2figs} Stability Plots for m=100 simulation runs for Example 2 (Pareto distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex2_Tail08_logMoms.pdf","SimuStudy_StabilityPlots_Ex2_Tail08_mles.pdf","SimuStudy_StabilityPlots_Ex2_Tail08_hill.pdf"))
 ```
+To show how the different estimates behave in the case that $\beta=1$, hence, the inter-exceedance times are exponetial distributed, we simulated in a last example exponetial distributed waiting times.
+
+```{r Ex3figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex3figs} Stability Plots for m=100 simulation runs for Example 3 (Exponentially distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
+knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex3_logMoms.pdf","SimuStudy_StabilityPlots_Ex3_mles.pdf","SimuStudy_StabilityPlots_Ex3_hill_times.pdf"))
+```
+
 # Data example
 
 We now want to apply the proposed method to a real data example, the solar flare data which was already mentioned in Section 1 and can be seen in Figure \ref{fig:thresholdedBursty}. The data were extracted from the "complete Hard X Ray Burst Spectrometer event list", a comprehensive reference for all measurements of the Hard X Ray Burst Spectrometer on NASA's Solar Maximum Mission from the time of launch on Feb 14, 1980 to the end of the mission in Dec 1989. 12,776 events were detected, with the "vast  majority being solar flares". The list includes the start time, peak time, duration, and peak rate of each event. We have used "start time" as the variable for event times, and "peak rate" as the variable for event magnitudes. 
@@ -577,7 +563,7 @@ empcopula(flares_ctre)
 flares_ctre %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.85, main = "Mittag-Leffler QQ Plot")
 ```
 
-Figure \ref{fig:flares} shows the stability plots for the solar flare data, on the left for the tail parameter and on the right for the scale parameter. The stability plot for the tail stabilizes nicely round about 0.85 (dotted line), while it is a little bit harder to deduce an estimate for the scale parameter. Howerever, the stability plot for the scale parameter seems to stabilize round about $3 \times 10^7$.  
+Figure \ref{fig:flares} shows the stability plots for the solar flare data, on the left for the tail parameter and on the right for the scale parameter. Dotted lines show 95% confidence intervals, which are derived from the asymptotic normality of the log-moments estimators [@Cahoy2013] and the $\delta$-method [@MittagLeffleR, dashed lines show the actual values of $\beta$ resp.\ $\sigma_0$. The stability plot for the tail stabilizes nicely round about 0.85 (dotted line), while it is a little bit harder to deduce an estimate for the scale parameter. Howerever, the stability plot for the scale parameter seems to stabilize round about $3 \times 10^7$.  
 
 ```{r solar-flare-tail-scale, message=FALSE, fig.height=4.5, fig.width=8, fig.cap="\\label{fig:flares}Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$ seconds $\\approx 0.95$ years."}
 thin_flares_ctre <- flares %>% ctre() %>% thin(k = 700)
@@ -585,7 +571,7 @@ par(mfrow=c(1,2))
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
 ```
 
-The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good, though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot. We also counduct a bootstrapped LRT for the null hypothesis of exponential distributed inter-arrival times and received a $p$-value of  
+The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good, though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot. We also counduct a bootstrapped LRT for the null hypothesis of exponential distributed inter-arrival times and received a $p$-value of $p<0.01$. 
 
 ```{r likelihood-ratio-test}
 library("MittagLeffleR")
