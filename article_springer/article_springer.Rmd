@@ -39,7 +39,7 @@ abstract: |
   time windows and empty in others, a phenomenon which has been dubbed 
   "bursty". 
   
-  This article provides a new model for the threshold inter-exceedance _times_;
+  This article proposes a new model for the _inter-exceedance times_ of thresholds;
   the threshold exceedances are modeled via the standard 
   Peaks Over Threshold (POT) method.
   For high thresholds and 
@@ -166,14 +166,14 @@ Mittag-Leffler distribution, and how it affects the predictive distribution
 for the time until the next threshold crossing event. A simulation study of the effectiveness of our statistical procedure is given in Section 7. In Section 8 we apply our method to a real data set. Finally we close with a discussion and conclusion in Section 8.
 For all statistical computations we have used R [@R]. 
 All code and data used for the analysis in this article has been organized into 
-an R package `CTRE` (<https://github.com/UNSW-MATH/CTRE>).
+an R package `CTRE` (<https://github.com/strakaps/CTRE>).
 The source code for the figures generated in this manuscript is 
-available online at <https://github.com/UNSW-MATH/bursty-POT>. 
+available online at <https://github.com/strakaps/bursty-POT>. 
 
 
 # Continuous Time Random Exceedances (CTRE)
 
-In this section we will As a model for extreme observations, we use a Marked Renewal Process (MRP):
+As a model for extreme observations, we use a Marked Renewal Process (MRP):
 
 **Definition (MRP):** 
 
@@ -184,7 +184,7 @@ and $J_k \in [x_L, x_R]$ as the *event magnitudes*
 If $W$ and $J$ are independent, the Marked Renewal Process is said to be *uncoupled*. 
 
 
-Note that the $k$-th magnitude $J_k$ occurs at time
+We assume that the $k$-th magnitude $J_k$ occurs at time
 $T_k = W_1 + \ldots + W_k$. 
 Based on an MRP, we define the Continuous Time Random Exceedance model
 (CTRE) as follows:
@@ -206,7 +206,7 @@ If the underlying MRP is uncoupled, then the CTRE is also called
 uncoupled. 
 
 
-```{r thresholdedBursty, message=FALSE, fig.height=7, fig.width=9, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
+```{r thresholdedBursty, message=FALSE, fig.height=4, fig.width=6, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
 tail <- params$tail
 n <- params$n 
 sigma <- (cos(pi*tail/2))^(1/tail)
@@ -215,14 +215,16 @@ times <- cumsum(stabledist::rstable(n, tail, 1, sigma, pm=1))
 #times<-cumsum(rpareto(n,tail))
 magnitudes <- extRemes::revd(n, scale = 1, shape = 0)
 sim_ctre <- ctre(data.frame(times, magnitudes)) 
-par(mfrow = c(2,1))
-plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
-flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
+par(mfrow = c(2,1)) 
+p1 <- plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
+p2 <- flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
+library(gridExtra)
+grid.arrange(p1, p2, nrow = 2)
 ```
 
-In this article, we restrict ourselves to the uncoupled case, where W and J are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J | J > \ell$, independent of any waiting time $W_k$.  
+In this article, we restrict ourselves to the uncoupled case, where $W$ and $J$ are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J | J > \ell$, independent of any waiting time $W_k$.  
 Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top panel, where $W$ has a stable distribution with tail parameter $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and where $J$ is from a standard Gumbel distribution. In the bottom panel, we plot a time series of solar flare intensities derived from a NASA dataset [@HXRBS] which we will later examine more closely (see Section 8). Clearly, the simulated data exhibit long intervals 
-_without any_ events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and filters them out.
+_without any_ events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have visually similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and discards them.
 
 # Scaling limit of Exceedance Times {#sec:scaling}
 
@@ -337,27 +339,49 @@ Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a d
 
 # Model Choice and inference for the Mittag-Leffler distribution
 
-The classical peaks over threshold approach is based on the fact, that exceedances above a high threshhold are assymptotically GPD distributed. Hence, a GPD distribution is fitted to the exceedances above a high enough threshhold. Due to the Theorem in the last Section, we know that for high threshholds the times between the exceedances are in case of heavy tailed inter-arrival times assymptotically Mittag-Leffler distributed. Therefore, before talking about inference for the exceedance times in the next section, we want to have a look at inference for Mittag-Leffler distributions in general. 
+The classical POT approach is based on the fact that exceedances above a high threshhold are asymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enough threshhold. Due to the Theorem in the last Section we know that for high thresholds the times between exceedances are asymptotically Mittag-Leffler distributed in case of heavy tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we discuss inference for Mittag-Leffler distributions.
 
-The first method proposed in the literature to estimate the parameters of Mittag-Leffler distribution was the fractional moment estimator by [@kozubowski2001]. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and can get calculated by explicit formulas. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. Therefore, [@Cahoy2010] proposed an estimator based on the log-Moments which doesn't need prior knowledge. Furthermore, they showed in a simulation study that the log-Moment outclasses the fractional moment estimator regarding bias and root mean squared error (RMSE).  
-Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the RPackage `MittagLeffleR` we implemented Maximum Likelihood estimation via an numerical optimization algorithm. The MLE outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive and the differences in bias and RMSE between the two methods are very small. In Figure \ref{fig:MSE}, one can see that both methods work quite well even for very low sample sizes.    
+Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-Moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
+
+Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the R Package `MittagLeffleR` [@MittagLeffleR], Maximum Likelihood estimation is implemented via numerical optimization. The MLE slightly outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive. Figure \ref{fig:MSE} shows that both estimators perform well, even for small sample sizes.
+
 ```{r MSE, echo=FALSE, fig.height=12, fig.cap="\\label{fig:MSE} MSE for sample sizes n=30, 100, 200 for the tail and scale estimations via log-moments and maximum likelihood estimation", out.width = '100%'}
 knitr::include_graphics("MSE_n25_100_200.pdf")
 ```
-Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator, which is defined by 
+
+Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator
 \begin{align*}
 H_{k,n}= \frac{1}{k} \sum_{i=0}^{k-1} \log \frac{X_{n-i,n}}{X_{n-k,n}}. 
 \end{align*}
-However, these methods are less statistically efficient since they only use a portion of the information contained in the data, as was already mentioned by [@kozubowski2001]. Additionally, they need a specification of a tuning parameter and the hill estimator only performs well for distributions close to Pareto (see @Resnick97). In Figure \ref{fig:Hillplots} one can see different Hill plots for Mittag-Leffler simulated data with differrent sample sizes and tails. It would be really hard to deduce the correct tail parameter estimates from these plots. 
+However, these methods are statistically less efficient since they only use a portion of the information contained in the data, as mentioned by @kozubowski2001. Moreover, the hill estimator requires a tuning parameter, and only performs reliably well for distributions close to Pareto [see @Resnick97]. Figure \ref{fig:Hillplots} shows Hill plots for Mittag-Leffler simulated data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from these plots is virtually impossible.
 
 ```{r Hillplots, echo=FALSE, fig.height=12, fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler distributed rv's with tail parameter 0.5 (two plots in the right column) and 0.8 (two plots in the left column) and sample sizes 200 (two plots in the lower row) and 1000 (two plots in the upper row). ", out.width = '100%'}
-knitr::include_graphics("Hillplots.pdf")
+# knitr::include_graphics("Hillplots.pdf")
 ```
 
 
 Since the exponential distribution is nested in the Mittag-Leffler family of distributions, an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times seems to be a Likelihood ratio test. Although the two models are nested, the assymptotic distribution is not $\chi^2_1$-distributed, the classical Theorem of Wilk doesn't apply since under $H_0$ the parameter $\beta$ of the Mittag-Leffler distribution is equal to one and hence lies under $H_0$ on the boundary of the parameter space $(0,1]$. Nonetheless, one can perform a bootstrapped log-likelihood ratio test. In Figure \ref{Fig:LRT} one can see the power for the bootstrapped LRT for Mittag-Leffler distributions with different tail parameters. As expected the power gets smaller for tail parameters close to one, since the Mittag-Leffler distribution converges for $\beta \rightarrow 1$ to an exponential distribution. Consequently, for tail parameters close to one it is hard to differentiate a Mittag-Lefller distribution from an exponential. 
 
-```{r LRT power, echo=FALSE, fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes", out.width = '90%'}
+
+```{r likelihood-ratio-test}
+flares_arrivals <- flares %>% ctre() %>% thin(k = 500) %>% interarrival()
+mlmle_out <- mlmle(data = flares_arrivals)
+```
+
+
+Since the exponential distribution is nested in the Mittag-Leffler family of 
+distributions, a Likelihood Ratio Test seems to be an appropriate way to choose 
+between a model with exponential and Mittag-Leffler inter-exceedance times.
+Although the two models are nested, the asymptotic distribution is not 
+$\chi^2_1$-distributed, and Wilk's Theorem does not hold: under $H_0$, the 
+parameter $\beta$ of Mittag-Leffler distribution is equal to $1$, and hence lies
+on the boundary of the parameter space $(0,1]$. 
+Instead, a valid approach is a bootstrapped log-likelihood ratio test 
+(PUT REFERENCE HERE). 
+Figure \ref{Fig:LRT} displays the power for the bootstrapped LRT for Mittag-Leffler distributions with varying tail parameters. As expected, the power decreases for tail parameters close to one, since the Mittag-Leffler distribution converges as $\beta \uparrow 1$ to an exponential distribution; it becomes hard to differentiate a Mittag-Lefller distribution from an exponential. 
+(PUT ALL 4 CURVES INTO ONE PLOT)
+
+```{r LRT power, echo=FALSE, fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes", out.width = '100%'}
 knitr::include_graphics("Plots_LRT_boot.pdf")
 ```
 
@@ -393,7 +417,7 @@ Building on the POT (Peaks Over Threshold) method, we propose the following esti
   parameter of the Mittag-Leffler distribution of exceedance times for
   the level $\ell$. 
 
-The above approach, though theoretically sound, benefits from the following
+The above approach benefits from the following
 practical adjustments (compare with Figure \ref{fig:flares}):
 
 * We choose $\ell$ from the order statistics, i.e. $\ell$ is the $k$-th
@@ -414,10 +438,11 @@ practical adjustments (compare with Figure \ref{fig:flares}):
 The estimates $\hat \beta$ and $\hat \sigma_0$ give an estimate of the 
 distribution of exceedance times, dependent on the threshold $\ell$:
 \begin{align*}
-T(\ell) \sim {\rm ML}(\hat \beta, k^{-1/\hat \beta} \hat \sigma_0).
+T(\ell) \sim {\rm ML}(\hat \beta, k^{-1/\hat \beta} \hat \sigma_0),
 \end{align*}
+where $\ell$ equals the $k$-th order statistic.
 For quick estimates of the Mittag-Leffler parameters we have used 
-the method of log-transformed moments by @Cahoy2013.
+the method of log-transformed moments [@Cahoy2013].
 We have verified the validity of our estimation algorithm  via simulations, 
 see the appendix. 
 
@@ -483,18 +508,33 @@ right panel).
 
 # Simulation study
 
-To test our inference method, we performed a simulation study where we have simulated independent waiting time and magnitude pairs $(W_k, J_k)$. Since the estimation of the parameters of the inter-exceedance times is based on stability plots and is hence rather a graphical estimation procedure, it is difficult to conduct a simulation study. To get an impression of how our estimation procedure performs, we plotted $m=100$ stability plots for each example and calculated for each $k$ the mean value of all estimates. We have chosen (i) a Stable, (ii) a Pareto and (iii) an Exponential distribution for waiting times.  The distribution of $J_k$ is irrelevant for the inference on $\beta$ and $\sigma_0$ (it just plays a role for the rescaling of $\hat{\sigma}_0$, which gets done to receive an estimate for the scale parameter of the exceedances). Hence we have chosen exponential distributed magnitudes in all considered examples.  
-In order to have exact analytical values available for $\beta$ and $\sigma_0$, a distribution for $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. In our first example, we have chosen $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}. Then due to the stability property we have the *equality* of distribution $W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, for $b(n) = n^{1/\beta}$. Using the parametrisation of @SamorodnitskyTaqqu, a few lines of calculation (see e.g. the vignette on parametrisation in @MittagLeffleR) show that $D$ must have the stable distribution $S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is implemented in the R package `stabledist` by @stabledist. In the second examaple we have chosen $W_k$ to be Pareto distributed or more precisecly 
-\begin{align*}
-P(W_k>t)= C t^{-\beta}
-\end{align*}
-with $C:=(1/\Gamma(1-\beta))^{1/\beta}$ and $b(n)=n^{1/\beta}$. We then receive
-\begin{align*}
-\frac{W_1 + \ldots + W_n}{b(n)} \stackrel{d}{\Rightarrow} D
-\end{align*}
-with $E(\exp(-sD))=\exp(-s^{\beta})$.  
+To test our inference method via stability plots, we have simulated 
+independent waiting time and magnitude pairs $(W_k, J_k)$ (see upper panel in 
+Figure \ref{fig:thresholdedBursty}) for three different situations: stable waiting times, Pareto waitings times and Exponential waiting times. In order to have exact 
+analytical values available for $\beta$ and $\sigma_0$, a distribution for 
+$W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
+If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, 
+then due to the stability property we have the *equality* of distribution
+$W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, 
+for $b(n) = n^{1/\beta}$. 
+Using the parametrisation of @SamorodnitskyTaqqu, a few lines of 
+calculation [see e.g. the vignette on parametrisation in @MittagLeffleR]
+show that $D$ must have the stable distribution 
+$S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is 
+implemented in the R package `stabledist` by @stabledist. 
+
+```{r make-caption}
+caption = "Tail and scale estimates for simulated data, with waiting times drawn from the stable distribution $S_\\beta(\\cos(\\pi \\beta/2)^{1/\\beta}, +1, 0)$ with $\\beta = 0.8$. Dashed lines are 95\\% confidence intervals, dotted lines are the known theoretical values ($0.8$ and $10000^{1/0.8}$). \\label{fig:sim}"
+```
 
 
+```{r simulated-example, message=FALSE, warning=FALSE, fig.cap=caption}
+k_max <- 500
+
+thin_sim_ctre <- thin(ctre = sim_ctre, k = k_max)
+# par(mfrow=c(1,2))
+MLestimates(ctre = thin_sim_ctre, tail = params$tail, scale = n^(1/params$tail))
+```
 
 By the Theorem, the distribution 
 of $T(\ell)$ is approximately 
