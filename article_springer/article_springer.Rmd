@@ -206,7 +206,7 @@ If the underlying MRP is uncoupled, then the CTRE is also called
 uncoupled. 
 
 
-```{r thresholdedBursty, message=FALSE, fig.height=4, fig.width=6, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
+```{r thresholdedBursty, message=FALSE, fig.height=3, fig.width=8, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
 tail <- params$tail
 n <- params$n 
 sigma <- (cos(pi*tail/2))^(1/tail)
@@ -215,11 +215,9 @@ times <- cumsum(stabledist::rstable(n, tail, 1, sigma, pm=1))
 #times<-cumsum(rpareto(n,tail))
 magnitudes <- extRemes::revd(n, scale = 1, shape = 0)
 sim_ctre <- ctre(data.frame(times, magnitudes)) 
-par(mfrow = c(2,1)) 
-p1 <- plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
-p2 <- flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
-library(gridExtra)
-grid.arrange(p1, p2, nrow = 2)
+par(mfrow = c(1,2)) 
+p1<-plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
+p2<-flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
 ```
 
 In this article, we restrict ourselves to the uncoupled case, where $W$ and $J$ are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J | J > \ell$, independent of any waiting time $W_k$.  
@@ -355,8 +353,8 @@ H_{k,n}= \frac{1}{k} \sum_{i=0}^{k-1} \log \frac{X_{n-i,n}}{X_{n-k,n}}.
 \end{align*}
 However, these methods are statistically less efficient since they only use a portion of the information contained in the data, as mentioned by @kozubowski2001. Moreover, the hill estimator requires a tuning parameter, and only performs reliably well for distributions close to Pareto [see @Resnick97]. Figure \ref{fig:Hillplots} shows Hill plots for Mittag-Leffler simulated data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from these plots is virtually impossible.
 
-```{r Hillplots, echo=FALSE, fig.height=12, fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler distributed rv's with tail parameter 0.5 (two plots in the right column) and 0.8 (two plots in the left column) and sample sizes 200 (two plots in the lower row) and 1000 (two plots in the upper row). ", out.width = '100%'}
-# knitr::include_graphics("Hillplots.pdf")
+```{r Hillplots, echo=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler distributed rv's with tail parameter 0.5 (two plots in the right column) and 0.8 (two plots in the left column) and sample sizes 200 (two plots in the lower row) and 1000 (two plots in the upper row). ", out.width = '90%'}
+ knitr::include_graphics("Hillplots.pdf")
 ```
 
 
@@ -381,10 +379,10 @@ Instead, a valid approach is a bootstrapped log-likelihood ratio test
 Figure \ref{Fig:LRT} displays the power for the bootstrapped LRT for Mittag-Leffler distributions with varying tail parameters. As expected, the power decreases for tail parameters close to one, since the Mittag-Leffler distribution converges as $\beta \uparrow 1$ to an exponential distribution; it becomes hard to differentiate a Mittag-Lefller distribution from an exponential. 
 (PUT ALL 4 CURVES INTO ONE PLOT)
 
-```{r LRT power, echo=FALSE, fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes", out.width = '100%'}
+
+```{r LRT power, echo=FALSE, fig.align="center", fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes", out.width = '80%'}
 knitr::include_graphics("Plots_LRT_boot.pdf")
 ```
-
 
 # Inference on Exceedance times
 
@@ -528,13 +526,13 @@ caption = "Tail and scale estimates for simulated data, with waiting times drawn
 ```
 
 
-```{r simulated-example, message=FALSE, warning=FALSE, fig.cap=caption}
-k_max <- 500
+<!-- ```{r simulated-example, message=FALSE, warning=FALSE, fig.cap=caption} -->
+<!-- k_max <- 500 -->
 
-thin_sim_ctre <- thin(ctre = sim_ctre, k = k_max)
-# par(mfrow=c(1,2))
-MLestimates(ctre = thin_sim_ctre, tail = params$tail, scale = n^(1/params$tail))
-```
+<!-- thin_sim_ctre <- thin(ctre = sim_ctre, k = k_max) -->
+<!-- # par(mfrow=c(1,2)) -->
+<!-- MLestimates(ctre = thin_sim_ctre, tail = params$tail, scale = n^(1/params$tail)) -->
+<!-- ``` -->
 
 By the Theorem, the distribution 
 of $T(\ell)$ is approximately 
@@ -648,16 +646,15 @@ The authors would like to thank Prof. Peter Scheffler for insights on stochastic
 
 # Appendix {-}
 
-
-```{r Ex1figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex1figsScale} Stability Plots for the scale parameter for Example 1 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '45%'}
+```{r Ex1figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex1figsScale} Stability Plots for the scale parameter for Example 1 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '40%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex1_Scales_logMoms.pdf","SimuStudy_StabilityPlots_Ex1_Scales_mles.pdf"))
 ```
 
-```{r Ex2figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex2figsScale} Stability Plots for the scale parameter m=100 simulation runs for Example 2 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '45%'}
+```{r Ex2figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex2figsScale} Stability Plots for the scale parameter m=100 simulation runs for Example 2 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '40%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex2_Scales_logMoms.pdf","SimuStudy_StabilityPlots_Ex2_Scales_mles.pdf"))
 ```
 
-```{r Ex3figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex3figsScale} Stability Plots for the scale parameter for m=100 simulation runs for Example 3 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '45%'}
+```{r Ex3figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex3figsScale} Stability Plots for the scale parameter for m=100 simulation runs for Example 3 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '40%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex3_Scales_logMoms.pdf","SimuStudy_StabilityPlots_Ex3_Scales_mles.pdf"))
 ```
 \newpage
