@@ -506,7 +506,7 @@ which means
 $\sigma_0 = n^{1/\beta}$. we have chosen $\beta=1$ in the stable as well in the Pareto case. Figure \ref{Ex1figs} displays plots of $\hat \beta(k)$ vs. $k$ for the first example with stable distributed waiting times. In the left picture we used the log moment estimator, in the middle picture maximum likelihood estimates (both applied to the inter-exceedance times) and for the right picture hill estimators applied to the inter-arrival times. Recall that $k$ is the index of the order statistics of $J_k$ at which the threshold $\ell$ is placed.
 
 ```{r Ex1figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex1figs} Stability Plots for m=100 simulation runs for Example 1 (stable distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
-knitr::include_graphics(c("SimuStudy_StabilityPlots_Tail08_logMoms.pdf","SimuStudy_StabilityPlots_Tail08_mles.pdf","SimuStudy_StabilityPlots_Tail08_hill.pdf"))
+knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex1_Tail08_logMoms.pdf","SimuStudy_StabilityPlots_Ex1_Tail08_mles.pdf","SimuStudy_StabilityPlots_Ex1_Tail08_hill.pdf"))
 ```
 Figure \ref{Ex2figs} shows the estimates fordifferent $k$'s and for the different estimators for the tail parameter $\beta$. Again one can see, that there is much more variance between the stability plots for the different simulation runs in case of the hill estimator compared to the other two estimators.  
 ```{r Ex2figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex2figs} Stability Plots for m=100 simulation runs for Example 2 (Pareto distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
@@ -573,34 +573,6 @@ MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
 
 The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good, though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot. We also counduct a bootstrapped LRT for the null hypothesis of exponential distributed inter-arrival times and received a $p$-value of $p<0.01$. 
 
-```{r likelihood-ratio-test}
-library("MittagLeffleR")
-library("stats")
-
-# ML_LRT_boot<-function(data,signi=0.05,m=1000,n){
-# if(is.null(dim(data))){
-# mle_data<-mlmle(data)                                                   #Calculate loglikelihoods for obserevd data
-# teststat<-2*(mle_data$loglik-mle_data$null_loglik)}                     #Calculate teststatistic for obserevd data
-# else{
-# l<-apply(data,MARGIN=2,FUN=mlmle)                                       #Extension to multivariate datasets for simulation studies
-# teststat<-2*(unlist(lapply(l,"[[",2))-unlist(lapply(l,"[[",3)))
-# }
-# 
-# x<-replicate(m,rexp(n,rate=1))                                          #Sample data under Null
-# l2<-apply(x,MARGIN=2,FUN=mlmle)                                         #Calculate loglikelihoods for each simulated data set
-# test_stat_null<-2*(unlist(lapply(l2,"[[",2))-unlist(lapply(l2,"[[",3))) #Calculate teststatistic for each simulated data set
-# q<-stats::quantile(test_stat_null,probs=1-signi)                               #Calculate 1-signi quantile of simulated distribution of the test statistic
-# #decision<-as.numeric(teststat>q)                                       #Gives One if Hypothesis gets rejected, 0 otherwise
-# f<-function(x,y){
-#   r<-as.numeric(x>y)
-#   return(r)
-# }
-# decision<-mapply(teststat,FUN=f,y=q)
-# decision<-return(decision)
-# }
-# flares_arrivals <- flares %>% ctre() %>% thin(k = 700) %>% interarrival()
-# p_value <- ML_LRT_boot(data=flares_arrivals,n=length(flares_arrivals))
-```
 
 # Discussion & Conclusion
 
@@ -628,12 +600,27 @@ assumption for some bursty time series, because often the heavy-tailed character
 distribution does not hold at all time scales; rather, it applies at short and intermediate time scales, and is truncated (or tempered, 
 reverting to an exponential distribution) at very long time scales [see e.g. @MeerschaertRoyQin; and @Aban06]. In such situations, a "tempered" Mittag-Leffler distribution may provide a more realistic fit, which we aim to introduce in follow-up work. 
 
-
 # Acknowledgements {-}
 
 The authors would like to thank Prof. Peter Scheffler for insights on stochastic process limits for CTRMs, Roloand Fried for discussion according the statistical methods and Gurtek Gill who helped create the MittagLeffleR R-package. 
 
+\newpage
 
+# Appendix {-}
+
+
+```{r Ex1figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex1figsScale} Stability Plots for the scale parameter for Example 1 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '45%'}
+knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex1_Scales_logMoms.pdf","SimuStudy_StabilityPlots_Ex1_Scales_mles.pdf"))
+```
+
+```{r Ex2figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex2figsScale} Stability Plots for the scale parameter m=100 simulation runs for Example 2 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '45%'}
+knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex2_Scales_logMoms.pdf","SimuStudy_StabilityPlots_Ex2_Scales_mles.pdf"))
+```
+
+```{r Ex3figsScale, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex3figsScale} Stability Plots for the scale parameter for m=100 simulation runs for Example 3 (stable distributed waiting times, true scale parameter = 1).", fig.show='hold', out.width = '45%'}
+knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex3_Scales_logMoms.pdf","SimuStudy_StabilityPlots_Ex3_Scales_mles.pdf"))
+```
+\newpage
 
 # References {-}
 
