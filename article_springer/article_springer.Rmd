@@ -206,7 +206,8 @@ If the underlying MRP is uncoupled, then the CTRE is also called
 uncoupled. 
 
 
-```{r thresholdedBursty, message=FALSE, fig.height=7, fig.width=9, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
+```{r thresholdedBursty, message=FALSE, fig.height=4, fig.width=6, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
+
 tail <- params$tail
 n <- params$n 
 sigma <- (cos(pi*tail/2))^(1/tail)
@@ -215,14 +216,16 @@ times <- cumsum(stabledist::rstable(n, tail, 1, sigma, pm=1))
 #times<-cumsum(rpareto(n,tail))
 magnitudes <- extRemes::revd(n, scale = 1, shape = 0)
 sim_ctre <- ctre(data.frame(times, magnitudes)) 
-par(mfrow = c(2,1))
-plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
-flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
+par(mfrow = c(2,1)) 
+p1 <- plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
+p2 <- flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
+library(gridExtra)
+grid.arrange(p1, p2, nrow = 2)
 ```
 
-In this article, we restrict ourselves to the uncoupled case, where W and J are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J | J > \ell$, independent of any waiting time $W_k$.  
+In this article, we restrict ourselves to the uncoupled case, where $W$ and $J$ are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J | J > \ell$, independent of any waiting time $W_k$.  
 Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top panel, where $W$ has a stable distribution with tail parameter $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and where $J$ is from a standard Gumbel distribution. In the bottom panel, we plot a time series of solar flare intensities derived from a NASA dataset [@HXRBS] which we will later examine more closely (see Section 8). Clearly, the simulated data exhibit long intervals 
-_without any_ events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and filters them out.
+_without any_ events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have visually similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and discards them.
 
 # Scaling limit of Exceedance Times {#sec:scaling}
 
