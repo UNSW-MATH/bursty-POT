@@ -67,6 +67,7 @@ params:
 preamble: | 
   \usepackage{amssymb}
   \usepackage{natbib}
+  \newtheorem{definition}{Definition}
 
 ---
 
@@ -175,13 +176,14 @@ available online at <https://github.com/strakaps/bursty-POT>.
 
 As a model for extreme observations, we use a Marked Renewal Process (MRP):
 
-**Definition (MRP):** 
-
-: Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random 
-variables, where the $W_k > 0$ are interpreted as the *waiting times* 
-and $J_k \in [x_L, x_R]$ as the *event magnitudes* 
+\begin{definition}[MRP]
+Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random 
+variables, where the $W_k > 0$ are interpreted as the \emph{waiting times}
+and $J_k \in [x_L, x_R]$ as the \emph{event magnitudes}
 ($x_L \in [-\infty, +\infty), x_R \in (-\infty, +\infty]$). 
-If $W$ and $J$ are independent, the Marked Renewal Process is said to be *uncoupled*. 
+If $W$ and $J$ are independent, the Marked Renewal Process is said to be \emph{uncoupled}. 
+\end{definition}
+
 
 
 We assume that the $k$-th magnitude $J_k$ occurs at time
@@ -189,9 +191,8 @@ $T_k = W_1 + \ldots + W_k$.
 Based on an MRP, we define the Continuous Time Random Exceedance model
 (CTRE) as follows:
 
-**Definition (CTRE):** 
-
-: Given a threshold $\ell \in (x_L, x_R)$, 
+\begin{definition}[CTRE]
+Given a threshold $\ell \in (x_L, x_R)$, 
 consider the stopping time 
 $$\tau(\ell) := \min\{k: J_k > \ell\},\quad \ell \in (x_L, x_R).$$
 Define the pair of random variables $(X(\ell), T(\ell))$ via 
@@ -204,7 +205,7 @@ The pair sequence $(T(\ell, n), W(\ell, n))_{n \in \mathbb N}$ is called
 a Continuous Time Random Exceedance model (CTRE). 
 If the underlying MRP is uncoupled, then the CTRE is also called 
 uncoupled. 
-
+\end{definition}
 
 ```{r thresholdedBursty, message=FALSE, fig.height=3, fig.width=8, fig.cap="\\label{fig:thresholdedBursty}Exceedances (red) and Times until Exceedance (durations between blue crosses) for a given threshold $\\ell$ (dashed line)."}
 tail <- params$tail
