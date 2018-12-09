@@ -543,13 +543,22 @@ $$
 = {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
 $$
 which means 
-$\sigma_0 = n^{1/\beta}$. we have chosen $\beta=1$ in the stable as well in the Pareto case. Figure \ref{Ex1figs} displays plots of $\hat \beta(k)$ vs. $k$ for the first example with stable distributed waiting times. In the left picture we used the log moment estimator, in the middle picture maximum likelihood estimates (both applied to the inter-exceedance times) and for the right picture hill estimators applied to the inter-arrival times. Recall that $k$ is the index of the order statistics of $J_k$ at which the threshold $\ell$ is placed.
+$\sigma_0 = n^{1/\beta}$. we have chosen $\beta=1$ in the stable as well in the
+Pareto case. Figure \ref{fig:Ex1figs} displays plots of $\hat \beta(k)$ vs. $k$ for
+the first example with stable distributed waiting times. In the left picture we 
+used the log moment estimator, in the middle picture maximum likelihood estimates 
+(both applied to the inter-exceedance times) and for the right picture hill 
+estimators applied to the inter-arrival times. Recall that $k$ is the index of the 
+order statistics of $J_k$ at which the threshold $\ell$ is placed.
 
-```{r Ex1figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex1figs} Stability Plots for m=100 simulation runs for Example 1 (stable distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
+```{r Ex1figs, echo=FALSE,fig.height=7,fig.cap="\\label{fig:Ex1figs} Stability Plots for m=100 simulation runs for Example 1 (stable distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex1_Tail08_logMoms.pdf","SimuStudy_StabilityPlots_Ex1_Tail08_mles.pdf","SimuStudy_StabilityPlots_Ex1_Tail08_hill.pdf"))
 ```
-Figure \ref{Ex2figs} shows the estimates fordifferent $k$'s and for the different estimators for the tail parameter $\beta$. Again one can see, that there is much more variance between the stability plots for the different simulation runs in case of the hill estimator compared to the other two estimators.  
-```{r Ex2figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex2figs} Stability Plots for m=100 simulation runs for Example 2 (Pareto distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
+Figure \ref{fig:Ex2figs} shows the estimates for different $k$'s and for the
+different estimators for the tail parameter $\beta$. Again one can see that 
+the Hill estimator has a higher variance. 
+
+```{r Ex2figs, echo=FALSE,fig.height=7,fig.cap="\\label{fig:Ex2figs} Stability Plots for m=100 simulation runs for Example 2 (Pareto distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex2_Tail08_logMoms.pdf","SimuStudy_StabilityPlots_Ex2_Tail08_mles.pdf","SimuStudy_StabilityPlots_Ex2_Tail08_hill.pdf"))
 ```
 To show how the different estimates behave in the case that $\beta=1$, hence, the inter-exceedance times are exponetial distributed, we simulated in a last example exponetial distributed waiting times.
