@@ -509,8 +509,9 @@ right panel).
 # Simulation study
 
 To test our inference method via stability plots, we have simulated 
-independent waiting time and magnitude pairs $(W_k, J_k)$ (see upper panel in 
-Figure \ref{fig:thresholdedBursty}) for three different situations: stable waiting times, Pareto waitings times and Exponential waiting times. In order to have exact 
+independent waiting time and magnitude pairs $(W_k, J_k)$ for three different
+situations: stable waiting times, Pareto waitings times and Exponential waiting 
+times. In order to have exact 
 analytical values available for $\beta$ and $\sigma_0$, a distribution for 
 $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
 If we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, 
