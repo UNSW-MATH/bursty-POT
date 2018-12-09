@@ -217,7 +217,9 @@ magnitudes <- extRemes::revd(n, scale = 1, shape = 0)
 sim_ctre <- ctre(data.frame(times, magnitudes)) 
 par(mfrow = c(1,2)) 
 p1<-plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
-p2<-flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
+p2<-flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data")
+library(gridExtra)
+grid.arrange(p1, p2, nrow = 2)
 ```
 
 In this article, we restrict ourselves to the uncoupled case, where $W$ and $J$ are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J | J > \ell$, independent of any waiting time $W_k$.  
@@ -238,7 +240,7 @@ In this section we state and prove the key theorem, see below. For an accessible
 for a function $b(n)$ which is regularly varying at $\infty$ with parameter $1/\beta$, and where $\mathbf E[\exp(-sD)] = \exp(-s^\beta)$. Write $p := \mathbf P(J > \ell)$. Then the weak convergence
 $$
 \frac{T(\ell)} {b(1/p)} \to W_\beta \quad \text{ as } \quad \ell \uparrow x_R
-$$
+$$  
 holds, where the Mittag-Leffler random variable $W_\beta$ is defined on 
 the positive real numbers via 
 $$
