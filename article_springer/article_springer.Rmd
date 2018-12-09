@@ -561,7 +561,9 @@ the Hill estimator has a higher variance.
 ```{r Ex2figs, echo=FALSE,fig.height=7,fig.cap="\\label{fig:Ex2figs} Stability Plots for m=100 simulation runs for Example 2 (Pareto distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex2_Tail08_logMoms.pdf","SimuStudy_StabilityPlots_Ex2_Tail08_mles.pdf","SimuStudy_StabilityPlots_Ex2_Tail08_hill.pdf"))
 ```
-To show how the different estimates behave in the case that $\beta=1$, hence, the inter-exceedance times are exponetial distributed, we simulated in a last example exponetial distributed waiting times.
+To show how the different estimates behave in the case where $\beta=1$
+(the exponential case), we simulated in a last example exponentially distributed
+waiting times.
 
 ```{r Ex3figs, echo=FALSE,fig.height=7,fig.cap="\\label{Fig:Ex3figs} Stability Plots for m=100 simulation runs for Example 3 (Exponentially distributed waiting times, true tail parameter =0.8). The grey lines, the red line and the blue lines are the log Moment, the MLE and the hill estimator, repectively, for different $k$'s on the x-axis. The dark lines in each picture are the means of the concerning estimators for different $k$'s.", fig.show='hold', out.width = '32%'}
 knitr::include_graphics(c("SimuStudy_StabilityPlots_Ex3_logMoms.pdf","SimuStudy_StabilityPlots_Ex3_mles.pdf","SimuStudy_StabilityPlots_Ex3_hill_times.pdf"))
