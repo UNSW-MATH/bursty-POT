@@ -68,6 +68,7 @@ preamble: |
   \usepackage{amssymb}
   \usepackage{natbib}
   \newtheorem{definition}{Definition}
+  \newtheorem{theorem}{Theorem}
 
 ---
 
@@ -231,9 +232,8 @@ _without any_ events, whereas in the real-world dataset events appear continuous
 
 In this section we state and prove the key theorem, see below. For an accessible introduction to regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
 
-**Theorem:** 
-
-: Let the waiting times $J_k$ be in the domain of attraction of a positively skewed sum-stable law with stability parameter $0 < \beta < 1$; more precisely,
+\begin{theorem}
+Let the waiting times $J_k$ be in the domain of attraction of a positively skewed sum-stable law with stability parameter $0 < \beta < 1$; more precisely,
 \begin{align} \label{eq:stability}
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
 \quad n \to \infty
@@ -247,7 +247,7 @@ the positive real numbers via
 $$
 \mathbf E[\exp(-sW_\beta)] = \frac{1}{1+s^\beta}.
 $$ 
-
+\end{theorem}
 
 *Proof of Theorem:* We interpret the threshold crossing time $T(\ell)$ as the hitting time of the 
 underlying CTRM (Continuous Time Random Maxima) or "max-renewal process", 
