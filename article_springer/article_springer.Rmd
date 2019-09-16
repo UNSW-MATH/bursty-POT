@@ -323,7 +323,7 @@ $X^{1/\beta} D \sim {\rm ML}(\beta, 1)$, concluding the proof.
 For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma W_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
 a heavy-tailed positive distribution for $\beta < 1$, with infinite mean. 
 However, as $\beta \uparrow 1$, ${\rm ML}(\beta, \sigma)$ converges 
-weakly to the exponential distribution ${\rm Exp}(\sigma)$ with mean $\sigma$ test.
+weakly to the exponential distribution ${\rm Exp}(\sigma)$ with mean $\sigma$.
 This means that although its moments are all infinite, the Mittag-Leffler
 distribution may (if $\beta$ is close to 1) be indistinguishable from the 
 exponential distribution, for the purposes of applied statistics. 
@@ -338,9 +338,9 @@ For a detailed reference on the Mittag-Leffler distribution, see e.g.
 Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a different choice of scaling constant. 
 
 
-# Model Choice and inference for the Mittag-Leffler distribution
+# Model Choice and inference for the Mittag-Leffler distribution{#sec:ML}
 
-The classical POT approach is based on the fact that exceedances above a high threshhold are asymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enough threshhold. Due to the Theorem in the last Section we know that for high thresholds the times between exceedances are asymptotically Mittag-Leffler distributed in case of heavy tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we discuss inference for Mittag-Leffler distributions.
+The classical POT approach is based on the fact that exceedances above a high threshhold are asymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enough threshhold. Due to the Theorem in the last Section we know that for high thresholds the times between exceedances are asymptotically Mittag-Leffler distributed in case of heavy-tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we discuss inference for Mittag-Leffler distributions.
 
 Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
 
@@ -361,9 +361,9 @@ Since the Mittag-Leffler distribution is heavy-tailed, many researchers would in
 \begin{align}\label{eq:hill}
 H_{k,n}= \frac{1}{k} \sum_{i=0}^{k-1} \log \frac{X_{n-i,n}}{X_{n-k,n}}. 
 \end{align}
-However, these methods are statistically less efficient since they only use a portion of the information contained in the data, as mentioned by @kozubowski2001. Moreover, the hill estimator requires a tuning parameter, and only performs reliably well for distributions close to Pareto [see @Resnick97]. Figure \ref{fig:Hillplots} shows Hill plots for Mittag-Leffler simulated data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from these plots is virtually impossible.
+However, these methods are statistically less efficient since they only use a portion of the information contained in the data, as mentioned by @kozubowski2001. Moreover, the hill estimator requires a tuning parameter, and only performs reliably well for distributions close to Pareto [see @Resnick97]. Figure \ref{fig:Hillplots} shows Hill plots for Mittag-Leffler simulated data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from these plots is virtually impossible. Furthermore the Hill estimator of course completely fails if the inter-arrival times are exponential distributed and not heavy-tailed.
 
-```{r Hillplots, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler data with true tail 0.8 and sample size 200 (left) and 1000 (right). ", out.width = '90%'}
+```{r Hillplots, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler data with true tail 0.8 and sample size 200 (left) and 1000 (right), with number of upper order statics k on which the hill estimator is based on the x-axis. ", out.width = '90%'}
 hill_estim<-function(k,data){
   n<-length(data)
   data<-sort(data)
@@ -466,73 +466,10 @@ where $\ell$ equals the $k$-th order statistic.
 For quick estimates of the Mittag-Leffler parameters we have used 
 the method of log-transformed moments [@Cahoy2013].
 We have verified the validity of our estimation algorithm  via simulations, 
-see the appendix. 
+see Section \ref{Simulationstudy}. 
 
 
-
-# Predicting the time of the next threshold crossing
-
-According to Figure \ref{fig:flares}, for a threshold $\ell$ at the $k$-th order 
-statistic, the fitted threshold exceedance time distribution is 
-$$
-T(\ell) \sim {\rm ML}(\beta, k^{-1/\beta} \sigma_0), 
-$$
-where $\beta = 0.85$ and $\sigma_0 = 3.0 \times 10^7 {\rm sec}$. 
-Unlike the exponential distribution, the Mittag-Leffler distribution is not memoryless, and the probability density of the time $t$ until the next threshold crossing will depend on the time $t_0$ elapsed since the last threshold crossing.
-This density equals 
-$$
-p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{-1/\beta} \sigma_0)}{\mathbf P[T_\ell > t_0]}
-$$
-where $f(\,\cdot\, | \beta, k^{-1/\beta} \sigma_0)$ is the probability density of ${\rm ML}(\beta, k^{-1/\beta} \sigma_0)$. 
-The more time has passed without a threshold crossing, the more the probability distribution shifts towards larger values for the next crossing
-(see Figure \ref{fig:hazard}, left panel). The hazard rate 
-$$
-h(t) = \frac{f(t| \beta, k^{-1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{-1/\beta} \sigma_0))\,d\tau}
-$$
-represents the risk of a threshold crossing per unit time, and is a decreasing function for the Mittag-Leffler distribution. 
-```{r hazard, fig.height=4, fig.cap="\\label{fig:hazard} Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$."}
-tail <- 0.7
-scale <- 1
-t_0 <- c(0, 1, 10)
-from <- 0.1
-to <- 100 * scale
-xx <- exp(seq(from = log(from), to = log(to), length.out = 100))
-par(mfrow = c(1,2))
-df1<-data.frame(x=xx,y=rep(1, length(xx)))
-col<-c("red","blue","darkgreen","black")
-
-plot(xx, rep(1, length(xx)), ylim = c(0.001,1), type = 'n', log = 'xy', 
-     xlab = 't', ylab = 'p')
-for (k in 1:length(t_0)) {
-  cond <- pml(q = t_0[k], tail = tail, scale = scale, lower.tail = FALSE)
-  yy <- dml(x = xx + t_0[k], tail = tail, scale = scale) / cond
-  lines(xx,yy, col = col[k], lty = k+1)
-}
-legend("bottomleft", c("t_0 = 0", "t_0 = 1", "t_0 = 10"), col = c("red","blue","darkgreen"), lty = 2:4)
-
-betas <- c(0.7, 0.8, 0.95, 0.99)
-t_0 <- 1
-
-plot(xx, rep(1, length(xx)), ylim = c(0.001,2), type = 'n', log = 'xy', 
-     xlab = 't', ylab = 'h')
-for (k in 1:length(betas)) {
-  yy <- dml(x = xx, tail = betas[k], scale = scale) / pml(
-    q = xx,
-    tail = betas[k],
-    scale = scale,
-    lower.tail = FALSE
-  )
-  lines(xx,yy, col = col[k], lty = k+1)
-}
-legend("bottomleft", c("beta = 0.7", "beta = 0.8", "beta = 0.95", "beta = 0.99"), col = c("red","blue","darkgreen","black"), lty = 2:5)
-
-```
-The closer $\beta$ is to $1$, the more the hazard rate mimics that of an 
-exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
-right panel). 
-
-
-# Simulation study
+# Simulation study{#Simulationstudy} 
 
 To test our inference method via stability plots, we have simulated 
 independent waiting time and magnitude pairs $(W_k, J_k)$ for waiting times that follow
@@ -561,9 +498,9 @@ $$
 = {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
 $$
 which means 
-$\sigma_0 = n^{1/\beta}$. In the Pareto example we choose $P(W>t)=Ct^{-\beta}$ with $C=(1/\Gamma(1-\beta))^{1/\beta}$. We have chosen $\beta=0.8$ in the stable as well as in the Pareto case. As third example we choose Exponential distributed waiting times with a rate of $1$. Figure \ref{Fig:TailSimu} shows the stability plots for the estimation of the tail parameter. Therefore, $\hat \beta(k)$ vs. $k$ is plotted for each of the $m=100$ simulation runs (grey thin lines). In the left column one can see the estimates based on the log-moment estimator, the stability plots in the middle are based on the maximum-likelihood estimator and on the right hand on the hill estimator. Recall that $k$ is the index of the order statistics of $J_k$ at which the threshold $\ell$ is placed. Note, that the hill estimator is here based on the waiting times, not on the inter-exceedance times, hence the estimation is based on much more data. If one would base the hill-estimation only on the inter-exceedance times, the sample size would be too small and it would be impossible to deduce an estimate for the tail parameter from the plots (compare Figure \ref{fig:Hillplots}). The $k$ on the $x-$axis is in the plots for the hill estimator the $k$ which defines on which orders stats the hill estimator is based on (compare \eqref{eq:hill}). The bigger sample size results in the middle in a lower bias. But, one can also see, that there is much more variance between the stability plots for the different simulation runs in case of the hill estimator compared to the other two estimators. The black line is the mean value of the point estimators for each $k$. However, if one wants to get a single estimate via such a stability plot, it would be much more difficult to deduce it from a hill plot compared to the other two estimators. Another advantage of the other estimators compared to the hill estimator is, that in the case one has exponential weighting times, the log-moment as well as the mle can detect this by getting an estimate round about $1$. The hill estimators is just a tail parameter estimator for Pareto like tails and hence of course fails in case of Exponential inter-exceedance times. Figure \ref{Fig:ScaleSimu} shows the stability plots for the different estimators for the scale parameter. Here of course only for the log-moment (on the right hand)  and the mle (on the left hand), since the hill estimator is just a tail parameter estimate. Here again both estimators show good performance. The stability plots in the mle case are a little bit closer to the true value, therefore, the mle is much more computational intesive. 
+$\sigma_0 = n^{1/\beta}$. In the Pareto example we choose $P(W>t)=Ct^{-\beta}$ with $C=(1/\Gamma(1-\beta))^{1/\beta}$. We have chosen $\beta=0.8$ in the stable as well as in the Pareto case. As third example we choose Exponential distributed waiting times with a rate of $1$. Figure \ref{Fig:TailSimu} shows the stability plots for the estimation of the tail parameter. Therefore, $\hat \beta(k)$ vs. $k$ is plotted for each of the $m=100$ simulation runs (grey thin lines). In the left column one can see the estimates based on the log-moment estimator, the stability plots in the middle are based on the maximum-likelihood estimator and on the right hand on the hill estimator. Recall that $k$ is the index of the order statistics of $J_k$ at which the threshold $\ell$ is placed. Note, that the hill estimator is here based on the waiting times, not on the inter-exceedance times, hence the estimation is based on much more data. If one would base the hill-estimation only on the inter-exceedance times, the sample size would be too small and it would be impossible to deduce an estimate for the tail parameter from the plots (compare Figure \ref{fig:Hillplots}). The $k$ on the $x-$axis is in the plots for the hill estimator the $k$ which defines on which orders stats the hill estimator is based on (compare \eqref{eq:hill}). The bigger sample size results in the middle in a lower bias. But, one can also see, that there is much more variance between the stability plots for the different simulation runs in case of the hill estimator compared to the other two estimators. The black line is the mean value of the point estimators for each $k$. However, if one wants to get a single estimate via such a stability plot, it would be much more difficult to deduce it from a hill plot compared to the other two estimators. In case that one has only thresholded data and hence a much smaller simple size, the hill estimator gets useless (see Section \ref{sec:ML}). Another advantage of the other estimators compared to the hill estimator is, that in the case one has exponential waiting times, the log-moment as well as the mle can detect this by getting an estimate round about $1$. The hill estimators is just a tail parameter estimator for Pareto like tails and hence of course fails in case of Exponential inter-exceedance times. Figure \ref{Fig:ScaleSimu} shows the stability plots for the different estimators for the scale parameter. Here of course only for the log-moment (on the right hand)  and the mle (on the left hand), since the hill estimator is just a tail parameter estimate. Here again both estimators show good performance. The stability plots in the mle case are a little bit closer to the true value, therefore, the mle is much more computational intesive. 
 
-```{r TailSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:TailSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8, Pareto distributed waiting times with tail parameter 0.8 and Exponential distributed waiting times. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter.", fig.show='hold', out.width = '100%'}
+```{r TailSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:TailSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and Exponential distributed waiting times (lower row). Left column: log-moment estimator, middle column: MLE, right column: Hill estimator. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", fig.show='hold', out.width = '100%'}
 
 path<-here::here("article_springer/article_springer_files/Simulation_results")
 files<-list.files(path)
@@ -629,7 +566,7 @@ grid.arrange(logMom_Ex1_tail,mle_Ex1_tail,hill_Ex1_tail,logMom_Ex2_tail,mle_Ex2_
 ```
 
 
-```{r ScaleSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:ScaleSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8, Pareto distributed waiting times with tail parameter 0.8 and Exponential distributed waiting times. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter.", fig.show='hold', out.width = '90%'}
+```{r ScaleSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:ScaleSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and Exponential distributed waiting times (lower row). Left column: log-moment estimator, right column: MLE. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter.", fig.show='hold', out.width = '90%'}
 #Scale Parameter
 
 #Example One
@@ -695,7 +632,7 @@ ${\rm ML}(\beta, \sigma)$ distribution of $T(\ell, i)$:
   quantiles of the plot.
 
 
-Figures \ref{fig:flare-diagnostics-1} and \ref{fig:flare-diagnostics-2} show the diagnostic plots for a minimum threshold chosen at the 200th order statistic. There is some residual autocorrelation for the sequence of threshold exceedance times that is not accounted for by the CTRE model.  
+Figures \ref{fig:flare-diagnostics-1}, \ref{fig:flare-diagnostics-2} and \ref{fig:flare-diagnostics-3} show the diagnostic plots for a minimum threshold chosen at the 200th order statistic. There is some residual autocorrelation for the sequence of threshold exceedance times that is not accounted for by the CTRE model.  
 
 ```{r flare-diagnostics-1, fig.height=7, fig.cap="\\label{fig:flare-diagnostics-1} Diagnostic plots for the solar flare data: auto-correlation function."}
 flares_ctre <- flares %>% ctre() %>% thin(k = 150)
@@ -707,7 +644,7 @@ acf(flares_ctre)
 empcopula(flares_ctre)
 ```
 
-```{r flare-diagnostics-3, fig.height=4.5, fig.width=4.5, fig.align="center",fig.cap="\\label{fig:flare-diagnostics-2} Diagnostic plots for the solar flare data: empirical copula and QQ Plot.",out.width="70%"}
+```{r flare-diagnostics-3, fig.height=4.5, fig.width=4.5, fig.align="center",fig.cap="\\label{fig:flare-diagnostics-3} Diagnostic plots for the solar flare data: empirical copula and QQ Plot.",out.width="70%"}
 flares_ctre %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.85, main = "Mittag-Leffler QQ Plot")
 ```
 
@@ -719,7 +656,68 @@ par(mfrow=c(1,2))
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
 ```
 
-The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good, though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot. We also counduct a bootstrapped LRT for the null hypothesis of exponential distributed inter-arrival times and received a $p$-value of $p<0.01$. 
+The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good (see Figure \ref{fig:flare-diagnostics-3}), though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot (see Figure \ref{fig:flare-diagnostics-2}). We also counduct a bootstrapped LRT for the null hypothesis of exponential distributed inter-arrival times and received a $p$-value of $p<0.01$. 
+
+# Predicting the time of the next threshold crossing
+
+According to Figure \ref{fig:flares}, for a threshold $\ell$ at the $k$-th order 
+statistic, the fitted threshold exceedance time distribution is 
+$$
+T(\ell) \sim {\rm ML}(\beta, k^{-1/\beta} \sigma_0), 
+$$
+where $\beta = 0.85$ and $\sigma_0 = 3.0 \times 10^7 {\rm sec}$. 
+Unlike the exponential distribution, the Mittag-Leffler distribution is not memoryless, and the probability density of the time $t$ until the next threshold crossing will depend on the time $t_0$ elapsed since the last threshold crossing.
+This density equals 
+$$
+p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{-1/\beta} \sigma_0)}{\mathbf P[T_\ell > t_0]}
+$$
+where $f(\,\cdot\, | \beta, k^{-1/\beta} \sigma_0)$ is the probability density of ${\rm ML}(\beta, k^{-1/\beta} \sigma_0)$. 
+The more time has passed without a threshold crossing, the more the probability distribution shifts towards larger values for the next crossing
+(see Figure \ref{fig:hazard}, left panel). The hazard rate 
+$$
+h(t) = \frac{f(t| \beta, k^{-1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k^{-1/\beta} \sigma_0))\,d\tau}
+$$
+represents the risk of a threshold crossing per unit time, and is a decreasing function for the Mittag-Leffler distribution. 
+```{r hazard, fig.height=4, fig.cap="\\label{fig:hazard} Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\\beta = 0.8$, $\\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\\beta$."}
+tail <- 0.7
+scale <- 1
+t_0 <- c(0, 1, 10)
+from <- 0.1
+to <- 100 * scale
+xx <- exp(seq(from = log(from), to = log(to), length.out = 100))
+par(mfrow = c(1,2))
+df1<-data.frame(x=xx,y=rep(1, length(xx)))
+col<-c("red","blue","darkgreen","black")
+
+plot(xx, rep(1, length(xx)), ylim = c(0.001,1), type = 'n', log = 'xy', 
+     xlab = 't', ylab = 'p')
+for (k in 1:length(t_0)) {
+  cond <- pml(q = t_0[k], tail = tail, scale = scale, lower.tail = FALSE)
+  yy <- dml(x = xx + t_0[k], tail = tail, scale = scale) / cond
+  lines(xx,yy, col = col[k], lty = k+1)
+}
+legend("bottomleft", c("t_0 = 0", "t_0 = 1", "t_0 = 10"), col = c("red","blue","darkgreen"), lty = 2:4)
+
+betas <- c(0.7, 0.8, 0.95, 0.99)
+t_0 <- 1
+
+plot(xx, rep(1, length(xx)), ylim = c(0.001,2), type = 'n', log = 'xy', 
+     xlab = 't', ylab = 'h')
+for (k in 1:length(betas)) {
+  yy <- dml(x = xx, tail = betas[k], scale = scale) / pml(
+    q = xx,
+    tail = betas[k],
+    scale = scale,
+    lower.tail = FALSE
+  )
+  lines(xx,yy, col = col[k], lty = k+1)
+}
+legend("bottomleft", c("beta = 0.7", "beta = 0.8", "beta = 0.95", "beta = 0.99"), col = c("red","blue","darkgreen","black"), lty = 2:5)
+
+```
+The closer $\beta$ is to $1$, the more the hazard rate mimics that of an 
+exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
+right panel). 
 
 
 # Discussion & Conclusion
