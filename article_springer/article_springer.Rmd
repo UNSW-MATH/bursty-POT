@@ -22,7 +22,7 @@ author:
   
 - name: "Peter Straka"
   affiliation: c
-  email: "p.straka@unsw.edu.au"
+  email: "straka.ps@gmail.com"
   
 address:
 
@@ -225,23 +225,24 @@ sigma <- (cos(pi*tail/2))^(1/tail)
 times <- cumsum(stabledist::rstable(n, tail, 1, sigma, pm=1))
 magnitudes <- extRemes::revd(n, scale = 1, shape = 0)
 sim_ctre <- ctre(data.frame(times, magnitudes)) 
-p1<-plot(sim_ctre, p = 0.01, main = "Simulated MRP") 
-p2<-flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") 
+p1<-plot(sim_ctre, p = 0.01, main = "Simulated MRP") + 
+  ggtitle("Simulated MRP")
+p2<-flares %>% ctre() %>% plot(p = 0.02, log = 'y', main = "HXRBS data") +
+  ggtitle("HXRBS data")
 grid.arrange(p1,p2)
-
 ```
 
-In this article, we restrict ourselves to the uncoupled case, where $W$ and $J$ are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J | J > \ell$, independent of any waiting time $W_k$.  
+In this article, we restrict ourselves to the uncoupled case, where $W$ and $J$ are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J - \ell | J > \ell$, independent of any waiting time $W_k$.  
 Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top panel, where $W$ has a stable distribution with tail parameter $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and where $J$ is from a standard Gumbel distribution. In the bottom panel, we plot a time series of solar flare intensities derived from a NASA dataset [@HXRBS] which we will later examine more closely (see Section 7). Clearly, the simulated data exhibit long intervals 
 _without any_ events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have visually similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and discards them.
 
 # Scaling limit of Exceedance Times {#sec:scaling}
 
-In this section we state and prove the key theorem, see below. For an accessible introduction to regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
+In this section we state and prove the key theorem. For an accessible introduction to regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
 
 **Theorem:** 
 
-: Let the waiting times $J_k$ be in the domain of attraction of a positively skewed sum-stable law with stability parameter $0 < \beta < 1$; more precisely,
+: Let the waiting times $W_k$ be in the domain of attraction of a positively skewed sum-stable law with stability parameter $0 < \beta < 1$; more precisely,
 \begin{align} \label{eq:stability}
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
 \quad n \to \infty
@@ -298,7 +299,7 @@ $$
 where $Y(t)$ is a time-changed ("subordinated") extremal process, and where 
 $\tilde b(c)$ is a regularly varying norming function which is
 _inverse_ to $b(c)$, in the sense that 
-$b(\tilde b(c)) \sim c \sim \tilde b(b(c))$. 
+$b(\tilde b(c)) \sim c \sim \tilde b(b(c))$ [@BinghamGoldieTeugels]. 
 
 Without loss of generality, we choose $\ell^*$ such that $F(\ell^*) = 1/e$, 
 and let $\ell = a(\tilde b(c)) \ell^* + d(\tilde b(c))$. 
@@ -335,6 +336,10 @@ weakly to the exponential distribution ${\rm Exp}(\sigma)$ with mean $\sigma$.
 This means that although its moments are all infinite, the Mittag-Leffler
 distribution may (if $\beta$ is close to 1) be indistinguishable from the 
 exponential distribution, for the purposes of applied statistics. 
+
+We caution the reader that, somewhat confusingly, there is another distribution
+called the "light-tailed" Mittag-Leffler distribution.  This is in fact the 
+limiting distribution of the renewal process $N(t)$ above (see @limitCTRW). 
 For a detailed reference on the Mittag-Leffler distribution, see e.g. 
 @Haubold11, and for algorithms, see e.g. the R package `MittagLeffleR`
 [@MittagLeffleR].
@@ -345,6 +350,12 @@ For a detailed reference on the Mittag-Leffler distribution, see e.g.
 : If $\beta = 1$, the result of the Theorem above is standard, see e.g. 
 Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a different choice of scaling constant. 
 
+**Remark:**
+
+: When $0 < \beta < 1$, the renewal process $N(t)$ is _not stationary_, 
+and hence the results by @Hsing88 on the exceedances of stationary sequences
+do not apply. 
+
 
 # Model Choice and inference for the Mittag-Leffler distribution{#sec:ML}
 
@@ -352,10 +363,10 @@ The classical POT approach is based on the fact that exceedances above a high th
 
 Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
 
-Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the R Package `MittagLeffleR` [@MittagLeffleR], Maximum Likelihood estimation is implemented via numerical optimization. The MLE slightly outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computational intensive. Figure \ref{fig:MSE} shows that both estimators perform well, even for small sample sizes.
+Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the R Package `MittagLeffleR` [@MittagLeffleR], Maximum Likelihood estimation is implemented via numerical optimization. The MLE slightly outperforms the log-moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computationally intensive. Figure \ref{fig:MSE} shows that both estimators perform well, even for small sample sizes.
 
-```{r MSE, echo=FALSE,warning=FALSE, fig.height=7,fig.width=8,fig.align="center", fig.cap="\\label{fig:MSE} MSE for the estimation of tail (left column) and scale (right column) parameters via log-moment estimator and mle of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one.", out.width = '90%'}
-load(here::here("article_springer\\article_springer_files\\ML_estim_simu","tbl_ges.RData"))
+```{r MSE, echo=FALSE,warning=FALSE, fig.height=7,fig.width=8,fig.align="center", fig.cap="\\label{fig:MSE} MSE for the estimation of tail (left column) and scale (right column) parameters via log-moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one.", out.width = '90%'}
+load(here::here("article_springer", "article_springer_files", "ML_estim_simu","tbl_ges.RData"))
 tbl_ges %>% 
   filter(n == "25" || n == "100" || n=="200") %>%
   filter(true.scale == "1") %>% 
@@ -366,12 +377,12 @@ tbl_ges %>%
 ```
 
 Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator [@hill1975simple] based on the $r+1$ upper order statistics
-\begin{align}\label{eq:hill}
+\begin{align}\label{eq:Hill}
 H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^{-1}, 
 \end{align}
-where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. However, these methods are statistically less efficient since they only use a portion of the information contained in the data, as mentioned by @kozubowski2001. Moreover, the hill estimator requires a tuning parameter, denoted with $r$ in \eqref{eq:hill}. Additionaly, the estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. Figure \ref{fig:Hillplots} shows Hill plots for Mittag-Leffler simulated data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from these plots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the hill estimator, the sample size has to be much larger and one has to choose a large tuning parameter $r$. In case that only events above a high threshold are recorded, even $n=1000$ events are unrealistic. Furthermore the Hill estimator of course completely fails if the inter-arrival times are exponential distributed and not heavy-tailed. We will comeback to the problems with the hill estimtator in Section \ref{Simulationstudy}.
+where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. However, these methods are statistically less efficient since they only use a portion of the information contained in the data, as mentioned by @kozubowski2001. Moreover, the Hill estimator requires a tuning parameter, denoted with $r$ in \eqref{eq:Hill}. Additionaly, the estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. Figure \ref{fig:Hillplots} shows Hill plots for Mittag-Leffler simulated data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from these plots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a large tuning parameter $r$. In case that only events above a high threshold are recorded, even $n=1000$ events are unrealistic. Furthermore the Hill estimator of course completely fails if the inter-arrival times are exponentially distributed and not heavy-tailed. We will come back to the problems with the Hill estimtator in Section \ref{Simulationstudy}.
 
-```{r Hillplots, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler data with true tail 0.8 and sample size 200 (left) and 1000 (right), with number of upper order statics r on which the hill estimator is based on the x-axis. ", out.width = '90%'}
+```{r Hillplots, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler data with true tail 0.8 and sample size 200 (left) and 1000 (right), with number of upper order statics r on which the Hill estimator is based on the x-axis. ", out.width = '90%'}
 hill_estim<-function(k,data){
   n<-length(data)
   data<-sort(data)
@@ -391,10 +402,13 @@ hill_estim_plot<-function(k_min,data,k_max=n,true_tail){
 }
 
 data_ml_1<-rml(n=200,tail=0.8,scale=1)
-p1<-hill_estim_plot(k_min=30,data=data_ml_1,true_tail=0.8)
+p1<-hill_estim_plot(k_min=30,data=data_ml_1,true_tail=0.8) +
+  ggtitle("Hill plot, Mittag-Leffler data, n=200")
 
 data_ml_2<-rml(n=1000,tail=0.8,scale=1)
-p2<-hill_estim_plot(k_min=30,data=data_ml_2,true_tail=0.8)
+p2<-hill_estim_plot(k_min=30,data=data_ml_2,true_tail=0.8) +
+  ggtitle("Hill plot, Mittag-Leffler data, n=1000")
+
 grid.arrange(p1,p2,ncol=2)
 ```
 
@@ -408,16 +422,17 @@ on the boundary of the parameter space $(0,1]$.
 Instead, a valid approach is a bootstrapped Likelihood-ratio test [see e.g. @davison1997bootstrap]. 
 Figure \ref{Fig:LRT} displays the (simulated) power for the bootstrapped LRT for Mittag-Leffler distributions with varying tail parameters based on 1000 simulation runs. As expected, the power decreases for tail parameters close to one, since the Mittag-Leffler distribution converges as $\beta \uparrow 1$ to an exponential distribution; it becomes hard to differentiate a Mittag-Lefller distribution from an exponential. 
 
-```{r LRT_power, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes , varying tails and scale parameter equal to 1.",out.width='90%'}
+```{r LRT_power, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes, varying tails and scale parameter equal to 1.", out.width='90%'}
 load(here::here("article_springer","article_springer_files","ML_LRT_simu","estimates_df_LRT_boot1_01.RData"))
 df_LRT_boot_01 %>% filter(n=="20" || n=="50" || n=="100" || n=="200") %>% ggplot(aes(x=true.tail,y=power)) +  geom_line(aes(y=power,group=factor(n),color=factor(n),linetype=factor(n)),size=0.5)+
   scale_linetype_manual(values = c("solid","dashed","twodash","dotted"),name  ="Sample size")+
    labs(y="Power",x= "True tail parameter")+
-  scale_color_manual(values=c("red", "blue","darkgreen","black"), name  ="Sample size")
+  scale_color_manual(values=c("red", "blue","darkgreen","black"), name  ="Sample size") +
+  ggtitle("Power of Likelihood-Ratio Test")
 ```
 
-# Inference on Exceedance times
 
+# Inference on Exceedance times
 
 The Theorem in Section \ref{sec:scaling} implies that for a high 
 threshold $\ell$ we may approximate the distribution of $T(\ell)$ with an 
@@ -425,59 +440,48 @@ ${\rm ML}(\beta, b(1/p))$ distribution,
 where the function $b(c)$ varies regularly at $\infty$ with parameter $1/\beta$.
 Building on the POT (Peaks-Over-Threshold) method, we propose the following estimation procedure for the distribution of inter-exceedance time $T(\ell)$: 
 
-1. For a range of thresholds $\ell$ near the largest order statistics, extract datasets of exceedance times $\{T(\ell, i)\}_i$.
+1. Extract the $K$ largest order statistics 
+(i.e. the $K$ largest values, where e.g. $K = 300$) 
+$X_{(1)}, \ldots, X_{(K)}$ together with their timestamps $T_{(1)}, \ldots, T_{(K)}$. 
+
+2. Choose e.g. $K_0 = 5$, and for each $k$ ranging from $K_0 +1$ to $K + 1$: 
+    a) extract the set $\mathcal T_k$ of exceedance times of the threshold $X_{(k)}$
+    b) fit a Mittag-Leffler distribution to $\mathcal T_k$, resulting in the parameter
+    estimates $\hat\beta_k$ and $\hat \sigma_k$.
   
-2. For each choice of threshold $\ell$, fit a Mittag-Leffler distribution to the resulting dataset
-  $\{T(\ell, i)\}_i$.  This results in the estimates $\{\hat\beta(\ell)\}_\ell$ and $\{\hat \sigma(\ell)\}_\ell$.
-  
-3. Plot $\ell$ vs.\ $\hat \beta(\ell)$. As $\ell$ increases towards $x_R$, 
-  $\hat \beta(\ell)$ *stabilizes* around a constant $\hat \beta$. Use $\hat \beta$ as an estimate for the tail      parameter $\beta$ of the Mittag-Leffler distribution of exceedance times. 
-  
+3. Plot $k$ vs.\ $\hat \beta_k$. As $k \downarrow K_0$,
+  $\hat \beta_k$ *stabilizes* around a constant $\hat \beta$.
 
-4. Approximate $p \approx |\{k: J_k > \ell\}| / n$. 
-  Recall that $b(c)$ is regularly varying with parameter $1/\beta$, and 
-  hence has the representation $b(c) = L(c) c^{1/\beta}$ for some 
-  slowly varying function $L(c)$. 
-  Assuming that the variation of $L(c)$ is negligible, we hence 
-  plot $\ell$ vs.\ $p^{1/\hat \beta} \hat \sigma(\ell)$. 
-  Again as $\ell$ increases towards $x_R$, 
-  $p^{1/\hat \beta} \hat \sigma(\ell)$ is expected to stabilize around a constant 
-  $\hat \sigma_0$. 
-  We then use $p^{-1/\hat \beta} \hat \sigma_0$ as an estimate of the scale 
-  parameter of the Mittag-Leffler distribution of exceedance times for
-  the level $\ell$. 
+4. Plot $k$ vs.\ $k^{1/\hat \beta} \hat \sigma_k$. 
+  Where the plot stabilizes as $k \downarrow K_0$, define the value 
+  $\hat \sigma_0$.
 
-The above approach benefits from the following
-practical adjustments (compare with Figure \ref{fig:flares}):
+The inferred values $\hat \beta$ and $\hat \sigma_0$ can then be interpreted as follows: 
+Setting the threshold at $X_{(k)}$, the threshold exceedance times follow a 
+Mittag-Leffler distribution with shape parameter $\hat \beta$ and scale parameter
+$\hat \sigma_0 k^{-1/\beta}$. 
 
-* We choose $\ell$ from the order statistics, i.e. $\ell$ is the $k$-th
-  largest of the observations $X_j$, where $k$ runs from 
-  $k_\text{min}, k_\text{min} + 1, \ldots, k_\text{max}$. 
-  The datasets are then of length $k-1$.
-  
-* We use $k$ rather than $\ell$ for the horizontal axis of our plots. 
+To clarify Step 4: Recall that by the theorem, $\sigma_k / b(1/p)$ is expected to stabilize 
+around a constant as $k \downarrow K_0$. Since $b$ is regularly varying with parameter
+$1/\beta$, we have $b(1/p) = p^{-1/\beta} / L(1/p)$ for some slowly varying function $L$. 
+Approximating $p \approx \hat p := k / n$, we have 
+$$\text{const} \approx \sigma_k / b(1/p) = \sigma_k \times p^{1/\beta} L(1/p) \approx \sigma_k \times k^{1/\beta} n^{-1/\beta} L(n/k)$$
+Assuming that the variation of $L(n/k)$ is minor, we can hence see that 
+$\sigma_k k^{1/\beta}$ stabilizes.
 
-* In Step 4, rather than plotting $p^{1/\hat \beta} \hat \sigma(\ell)$
-  we plot $k^{1/\hat \beta} \hat \sigma(\ell)$. This changes 
-  $\hat \sigma_0$ by the multiplicative constant $n^{1/\hat \beta}$, 
-  but has the advantage that
-  $\hat \sigma_0$ does not change if one pre-processes the data by 
-  removing all observations below a certain threshold. 
-
-
-The estimates $\hat \beta$ and $\hat \sigma_0$ give an estimate of the 
-distribution of exceedance times, dependent on the threshold $\ell$:
-\begin{align*}
-T(\ell) \sim {\rm ML}(\hat \beta, k^{-1/\hat \beta} \hat \sigma_0),
-\end{align*}
-where $\ell$ equals the $k$-th order statistic.
-For quick estimates of the Mittag-Leffler parameters we have used 
-the method of log-transformed moments [@Cahoy2013].
+For computationally efficient estimates of the Mittag-Leffler parameters we have used 
+the method of log-transformed moments. This estimation method provides 
+point estimates as well as confidence intervals based on sampling variance [@Cahoy2013], 
+and has been implemented in the R software package
+`MittagLeffleR` [@MittagLeffleR]. The stability plots for $\hat \beta$ and $\hat \sigma_0$
+can be furnished with these confidence intervals, see e.g.\ Figure \ref{fig:flares}, 
+to produce (non-simultaneous) confidence bands. 
+These stability plots were produced with the R package `CTRE` [@CTRE]. 
 We have verified the validity of our estimation algorithm  via simulations, 
 see Section \ref{Simulationstudy}. 
 
 
-# Simulation study{#Simulationstudy} 
+# Simulation Study {#Simulationstudy} 
 
 To test our inference method via stability plots, we have simulated $m=100$ times $n=10000$ independent waiting time and magnitude pairs $(W_k, J_k)$ for waiting times that follow
 
@@ -485,14 +489,16 @@ To test our inference method via stability plots, we have simulated $m=100$ time
 (i) a stable distribution,  
 
 
-(ii) a Pareto distribution and   
+(ii) a Pareto distribution and
 
 
 (iii) an exponential distribution.   
 
 
 
-In order to have exact analytical values available for $\beta$ and $\sigma_0$, a distribution for $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. For (i) we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, then due to the stability property we have the *equality* of distribution
+In order to have exact analytical values available for $\beta$ and $\sigma_0$, a distribution for $W_k$ needs to be chosen for which $b(n)$ from \eqref{eq:stability} is known. 
+
+**Case (i):** For (i) we choose $W_k \stackrel{d}{=} D$, where $D$ is as in \eqref{eq:stability}, then due to the stability property we have the *equality* of distribution
 $W_1 + \ldots + W_n \stackrel{d}{=} b(n) D$, 
 for $b(n) = n^{1/\beta}$. 
 Using the parametrisation of @SamorodnitskyTaqqu, a few lines of 
@@ -505,114 +511,260 @@ $$
 = {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
 $$
 which means 
-$\sigma_0 = n^{1/\beta}$. In the Pareto example we choose $P(W>t)=Ct^{-\beta}$ with $C=(1/\Gamma(1-\beta))^{1/\beta}$. We have chosen $\beta=0.8$ in the stable as well as in the Pareto case. As third example we choose exponential distributed waiting times with a rate of $1$. Figure \ref{Fig:TailSimu} shows the stability plots for the estimation of the tail parameter. Therefore, $\hat \beta(k)$ vs. $k$ is plotted for each of the $m=100$ simulation runs (grey thin lines). In the left column one can see the estimates based on the log-moment estimator, the stability plots in the middle are based on the maximum-likelihood estimator and on the right hand on the hill estimator. Recall that $k$ is the index of the order statistics of $J_k$ at which the threshold $\ell$ is placed. Note, that the hill estimator is here based on the waiting times, not on the inter-exceedance times, hence the estimation is based on much more data. If one would base the hill-estimation only on the inter-exceedance times, the sample size would be too small and it would be impossible to deduce an estimate for the tail parameter from the plots (compare Figure \ref{fig:Hillplots}). The $k$ on the $x-$axis is in the plots for the hill estimator the $r$ which defines on which upper orders stats the hill estimator is based on (compare \eqref{eq:hill}). The bigger sample size results in the middle in a lower bias. But, one can also see, that there is much more variance between the stability plots for the different simulation runs in case of the hill estimator compared to the other two estimators. The black line is the mean value of the point estimators for each $k$ resp. $r$. However, if one wants to get a single estimate via such a stability plot, it would be much more difficult to deduce it from a hill plot compared to the other two estimators. In case that one has only thresholded data and hence a much smaller simple size, the hill estimator gets useless (see Section \ref{sec:ML}). Another advantage of the other estimators compared to the hill estimator is, that in the case one has exponential waiting times, the log-moment as well as the mle can detect this by getting an estimate close to $1$. The hill estimators is just a tail parameter estimator for Pareto like tails and hence of course fails in case of exponential distributed inter-exceedance times. Figure \ref{Fig:ScaleSimu} shows the stability plots for the different estimators for the scale parameter. Here of course only for the log-moment (on the right hand)  and the mle (on the left hand), since the hill estimator is just a tail parameter estimate. Here again both estimators show good performance. The stability plots in the mle case are a little bit closer to the true value, except in the exponetial case. Therefore, the mle is much more computational intensive. 
+$\sigma_0 = n^{1/\beta}$. 
 
-```{r TailSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:TailSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and exponential distributed waiting times (lower row). Left column: log-moment estimator, middle column: MLE, right column: Hill estimator. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", fig.show='hold', out.width = '100%'}
+**Case (ii):** In the Pareto example we choose $P(W>t)=Ct^{-\beta}$ with $C=(1/\Gamma(1-\beta))^{1/\beta}$. We have chosen $\beta=0.8$ in both cases (i) and (ii). 
 
-path<-here::here("article_springer/article_springer_files/Simulation_results")
-files<-list.files(path)
-file_dirs<-paste(path,"/",files,sep="")
-invisible(sapply(file_dirs,FUN=load,envir=.GlobalEnv,verbose=FALSE))
+**Case (iii):** We choose exponentially distributed waiting times with a rate 
+parameter of $1$.
+
+Figure \ref{Fig:TailSimu} shows the graphical "stability plots" for the 
+estimation of the tail parameter, where 
+
++ rows correspond to cases (i), (ii) and (iii), and
++ columns correspond to estimators (log-moment estimator, maximum-likelihood, and Hill estimator). 
+
+We plot the tail parameter estimates $\hat \beta(k)$ against $k$ 
+for each of the $m=100$ simulation runs. 
+Thin grey lines represent individual simulation runs, 
+and the thicker black line is their mean. 
+Recall that $k$ is the index of the order statistics of $J_k$ at which the 
+threshold $\ell$ is placed. 
+Note that the Hill estimator is based on the waiting times, not on the 
+inter-exceedance times, meaning that the estimation is based on more data. 
+If one were to base the Hill-estimation only on the inter-exceedance times, 
+the sample size would be too small and it would be impossible to deduce an 
+estimate for the tail parameter from the plots (compare Figure \ref{fig:Hillplots}). 
+
+In the right-hand Hill-estimator column, the $k$ on the $x$-axis corresponds to
+$r$ from \eqref{eq:Hill}.
+The Hill estimator appears to be nicely unbiased on Pareto data,
+but compared to the other two estimators, it has a higher variance, 
+as can be seen from the wider spread of the simulated curves. 
+This high variance means that that a single estimate is less reliable compared
+to the other two estimators. 
+This effect is amplified if one only has a thresholded, and thus smaller dataset
+available, to the extent that the Hill estimates become severely flawed
+(see Section \ref{sec:ML}). 
+
+Moreover, the bottom in \ref{Fig:TailSimu} shows clearly that the log-moment 
+and maximum-likelihod estimators generalize to the exponential case ($\beta = 1$), 
+whereas the Hill-estimator does not. 
+
+Finally, the performance of Log-Moment and Maximum-Likelihood estimators for the
+scale parameter is shown in figure \ref{Fig:ScaleSimu}. 
+Since there is no Hill-estimate of a scale parameter, there are only two columns. 
+Both estimators show good performance, with a slight advantage for the 
+Maximum-Likelihood estimator. This advantage is paid for by a higher computational 
+cost. 
+
+```{r TailSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:TailSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and exponentially distributed waiting times (lower row). Left column: log-moment estimator, middle column: MLE, right column: Hill estimator. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", fig.show='hold', out.width = '100%'}
+
+path <-
+  here::here("article_springer",
+             "article_springer_files",
+             "Simulation_results")
+files <- list.files(path)
+file_dirs <- paste(path, "/", files, sep = "")
+invisible(sapply(
+  file_dirs,
+  FUN = load,
+  envir = .GlobalEnv,
+  verbose = FALSE
+))
 
 #Tail Parameter
 
 # Example One
 
 #logMoment estimator
-logMom_Ex1_tail<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_tail08_logMoms_Ex1) +
+logMom_Ex1_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_tail08_logMoms_Ex1) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_logMoms_Ex1) + ylab("Estimated tail") + geom_hline(yintercept=0.8, linetype="dashed", color = "red")
+  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_logMoms_Ex1) + 
+  ylab("Estimated tail") + geom_hline(yintercept=0.8, linetype="dashed", color = "red")
 
 #ml estimator
-mle_Ex1_tail<-ggplot() + geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_tail08_mles_Ex1) +
+mle_Ex1_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_tail08_mles_Ex1) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_mles_Ex1) + ylab("Estimated tail") + geom_hline(yintercept=0.8, linetype="dashed", color = "red")
+  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_mles_Ex1) + 
+  ylab("Estimated tail") + 
+  geom_hline(yintercept=0.8, linetype="dashed", color = "red")
 
 #Hill estimator
-hill_Ex1_tail<-ggplot()+ geom_line(data=tbl_estimates_tail08_hill_Ex1,aes(x=k,y=value,group=rep),colour="lightgrey") +
+hill_Ex1_tail <-
+  ggplot() + geom_line(data = tbl_estimates_tail08_hill_Ex1,
+                       aes(x = k, y = value, group = rep),
+                       colour = "lightgrey") +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(data=means.tbl_hill_Ex1,aes(x=k, y=mw),colour="black") + ylab("Estimated tail") +  geom_hline(yintercept=0.8, linetype="dashed", color = "red")+ xlab("r")
+  geom_line(data=means.tbl_hill_Ex1,aes(x=k, y=mw),colour="black") + 
+  ylab("Estimated tail") +
+  geom_hline(yintercept=0.8, linetype="dashed", color = "red")+ xlab("r")
 
 
 #Example Two
 
 #logMoment estimator
-logMom_Ex2_tail<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_Ex2_Pareto_tail08_logMoms) +
+logMom_Ex2_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_Ex2_Pareto_tail08_logMoms) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_logMoms_Ex2) + ylab("Estimated tail") + geom_hline(yintercept=0.8, linetype="dashed", color = "red")
+  geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_logMoms_Ex2) + 
+  ylab("Estimated tail") + 
+  geom_hline(yintercept=0.8, linetype="dashed", color = "red")
 
 #ml estimator
-mle_Ex2_tail<-ggplot() + geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_Ex2_Pareto_tail08_mles) +
+mle_Ex2_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_Ex2_Pareto_tail08_mles) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_mles_Ex2) + ylab("Estimated tail") + geom_hline(yintercept=0.8, linetype="dashed", color = "red")
+  geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_mles_Ex2) + 
+  ylab("Estimated tail") + 
+  geom_hline(yintercept=0.8, linetype="dashed", color = "red")
 
 #Hill estimator
-hill_Ex2_tail<-ggplot() + geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_Ex2_Pareto_tail08_hill_times) +
+hill_Ex2_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_Ex2_Pareto_tail08_hill_times) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_hill_times_Ex2) + ylab("Estimated tail") +  geom_hline(yintercept=0.8, linetype="dashed", color = "red")+ xlab("r")
+  geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_hill_times_Ex2) + 
+  ylab("Estimated tail") +
+  geom_hline(yintercept=0.8, linetype="dashed", color = "red")+ xlab("r")
 
 #Example Three
 
 #logMoment estimator
-logMom_Ex3_tail<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_Example3_Exp_logMoms) +
+logMom_Ex3_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_Example3_Exp_logMoms) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_logMoms_Ex3) + ylab("Estimated tail") + geom_hline(yintercept=1, linetype="dashed", color = "red")
+  geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_logMoms_Ex3) + 
+  ylab("Estimated tail") + 
+  geom_hline(yintercept=1, linetype="dashed", color = "red")
 
 #ml estimator
-mle_Ex3_tail<-ggplot() + geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_Example3_Exp_mles) +
+mle_Ex3_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_Example3_Exp_mles) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_mles_Ex3) + ylab("Estimated tail") + geom_hline(yintercept=1, linetype="dashed", color = "red")
+  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_mles_Ex3) + 
+  ylab("Estimated tail") + 
+  geom_hline(yintercept=1, linetype="dashed", color = "red")
 
 #Hill estimator
-hill_Ex3_tail<-ggplot() + geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_estimates_Example3_Exp_hill_times) +
+hill_Ex3_tail <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_estimates_Example3_Exp_hill_times) +
   coord_cartesian(ylim = c(0.5, 10)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_hill_times_Ex3) + ylab("Estimated tail") + geom_hline(yintercept=1, linetype="dashed", color = "red")+ xlab("r")
+  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_hill_times_Ex3) + 
+  ylab("Estimated tail") + 
+  geom_hline(yintercept=1, linetype="dashed", color = "red")+ xlab("r")
 
-grid.arrange(logMom_Ex1_tail,mle_Ex1_tail,hill_Ex1_tail,logMom_Ex2_tail,mle_Ex2_tail,hill_Ex2_tail,logMom_Ex3_tail,mle_Ex3_tail,hill_Ex3_tail,ncol=3)
+grid.arrange(
+  logMom_Ex1_tail,
+  mle_Ex1_tail,
+  hill_Ex1_tail,
+  logMom_Ex2_tail,
+  mle_Ex2_tail,
+  hill_Ex2_tail,
+  logMom_Ex3_tail,
+  mle_Ex3_tail,
+  hill_Ex3_tail,
+  ncol = 3
+)
 
 ```
 
 
-```{r ScaleSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:ScaleSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and exponential distributed waiting times (lower row). Left column: log-moment estimator, right column: MLE. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter.", fig.show='hold', out.width = '90%'}
+```{r ScaleSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:ScaleSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and exponentially distributed waiting times (lower row). Left column: log-moment estimator, right column: MLE. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter.", fig.show='hold', out.width = '90%'}
 #Scale Parameter
 
 #Example One
-logMom_Ex1_scale<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_scales_logMoms_Ex1) +
+logMom_Ex1_scale <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_scales_logMoms_Ex1) +
   coord_cartesian(ylim = c(0, 2)) +
-  geom_line(aes(x=k, y=mw),colour="black",means.tbl_scales_logMoms_Ex1) + ylab("Estimated scale") + geom_hline(yintercept=1, linetype="dashed", color = "red")
+  geom_line(aes(x = k, y = mw), colour = "black", means.tbl_scales_logMoms_Ex1) + 
+  ylab("Estimated scale") +
+  geom_hline(yintercept=1, linetype="dashed", color = "red")
 
-mle_Ex1_scale<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_scales_mles_Ex1) +
+mle_Ex1_scale <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_scales_mles_Ex1) +
   coord_cartesian(ylim = c(0, 2)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex1) + ylab("Estimated scale") + geom_hline(yintercept=1, linetype="dashed", color = "red")
+  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex1) + 
+  ylab("Estimated scale") +
+  geom_hline(yintercept=1, linetype="dashed", color = "red")
 
 #Example Two
 
-logMom_Ex2_scale<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_scales_logMoms_Ex2) +
+logMom_Ex2_scale <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_scales_logMoms_Ex2) +
   coord_cartesian(ylim = c(0, 2)) +
-  geom_line(aes(x=k, y=mw),colour="black",means.tbl_scales_logMoms_Ex2) + ylab("Estimated scale") + geom_hline(yintercept=1, linetype="dashed", color = "red")
+  geom_line(aes(x=k, y=mw),colour="black",means.tbl_scales_logMoms_Ex2) + 
+  ylab("Estimated scale") + 
+  geom_hline(yintercept=1, linetype="dashed", color = "red")
 
-mle_Ex2_scale<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_scales_mles_Ex2) +
+mle_Ex2_scale <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_scales_mles_Ex2) +
   coord_cartesian(ylim = c(0, 2)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex2) + ylab("Estimated scale") + geom_hline(yintercept=1, linetype="dashed", color = "red")
+  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex2) + 
+  ylab("Estimated scale") + 
+  geom_hline(yintercept=1, linetype="dashed", color = "red")
 
 #Example Three
 
-logMom_Ex3_scale<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_scales_logMoms_Ex3) +
+logMom_Ex3_scale <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_scales_logMoms_Ex3) +
   coord_cartesian(ylim = c(0, 2)) +
-  geom_line(aes(x=k, y=mw),colour="black",means.tbl_scales_logMoms_Ex3) + ylab("Estimated scale") + geom_hline(yintercept=1, linetype="dashed", color = "red") 
+  geom_line(aes(x=k, y=mw),colour="black",means.tbl_scales_logMoms_Ex3) + 
+  ylab("Estimated scale") + 
+  geom_hline(yintercept=1, linetype="dashed", color = "red") 
 
-mle_Ex3_scale<-ggplot()+ geom_line(aes(x=k,y=value,group=rep),colour="lightgrey",data=tbl_scales_mles_Ex3) +
+mle_Ex3_scale <-
+  ggplot() + geom_line(aes(x = k, y = value, group = rep),
+                       colour = "lightgrey",
+                       data = tbl_scales_mles_Ex3) +
   coord_cartesian(ylim = c(0, 2)) +
-  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex3) + ylab("Estimated scale") + geom_hline(yintercept=1, linetype="dashed", color = "red")
+  geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex3) + 
+  ylab("Estimated scale") + 
+  geom_hline(yintercept=1, linetype="dashed", color = "red")
 
-grid.arrange(logMom_Ex1_scale,mle_Ex1_scale,logMom_Ex2_scale,mle_Ex2_scale,logMom_Ex3_scale,mle_Ex3_scale,ncol=2)
+grid.arrange(
+  logMom_Ex1_scale,
+  mle_Ex1_scale,
+  logMom_Ex2_scale,
+  mle_Ex2_scale,
+  logMom_Ex3_scale,
+  mle_Ex3_scale,
+  ncol = 2
+)
 ```
 
 # Data example
 
 We now want to apply the proposed method to a real data example, the solar flare data which was already mentioned in Section 1 and can be seen in Figure \ref{fig:thresholdedBursty}. The data were extracted from the "complete Hard X Ray Burst Spectrometer event list", a comprehensive reference for all measurements of the Hard X Ray Burst Spectrometer on NASA's Solar Maximum Mission from the time of launch on Feb 14, 1980 to the end of the mission in Dec 1989. 12,772 events were detected, with the "vast  majority being solar flares". To assure stationarity and due to missing values during the years 1983 and 1984, we based our analysis just on the year 1982, in which 2,488 events happened. The list includes the start time, peak time, duration, and peak rate of each event. We have used "start time" as the variable for event times, and "peak rate" as the variable for event magnitudes. 
  
-Before we apply the POT approach described in Section 5 to the solar flare data, we first have to check if all model assumptions are full-filled. The CTRE model is based on three main assumptions, which are repeated below. For each assumption, we suggest one means of checking if it holds: 
+Before we apply the POT approach described in Section 5 to the solar flare data, we first have to check if all model assumptions are fulfilled. The CTRE model is based on three main assumptions, which are repeated below. For each assumption, we suggest one means of checking if it holds: 
 
 i.i.d.:
 
@@ -648,27 +800,49 @@ acf(flares_ctre)
 
 
 ```{r flare-diagnostics-2, fig.height=4.5, fig.width=4.5, fig.align="center",fig.cap="\\label{fig:flare-diagnostics-2} Diagnostic plots for the solar flare data: empirical copula.",out.width="70%"}
-empcopula(flares_ctre)
+empcopula(flares_ctre) + ggtitle("Empirical Copula: Exceedance Time vs. Exceedance")
 ```
 
 ```{r flare-diagnostics-3, fig.height=4.5, fig.width=4.5, fig.align="center",fig.cap="\\label{fig:flare-diagnostics-3} Diagnostic plots for the solar flare data: QQ Plot.",out.width="70%"}
-flares_ctre %>% interarrival() %>% mlqqplot(log = 'xy', tail = 0.85, main = "Mittag-Leffler QQ Plot")
+sample_data <- flares_ctre %>% interarrival()
+n <- length(sample_data)
+
+population_data <- MittagLeffleR::qml(p = stats::ppoints(n), tail = tail, 
+  scale = 1)
+
+extRemes::qqplot(x = log(sample_data), y = log(population_data), 
+                 main = "QQ-plot Exceedance Times vs Mittag-Leffler",
+                 xlab = "log Exceedance Times", 
+                 ylab = "log Mittag-Leffler")
 ```
 
-Figure \ref{fig:flares} shows the stability plots for the solar flare data, on the left for the tail parameter and on the right for the scale parameter. Dotted lines show 95% confidence intervals, which are derived from the asymptotic normality of the log-moments estimators [@Cahoy2013] and the $\delta$-method [@MittagLeffleR], dashed lines show the deduced values of $\beta$ resp.\ $\sigma_0$. The stability plot for the tail stabilizes nicely round about 0.85 (dashed line), while it is a little bit harder to deduce an estimate for the scale parameter. Howerever, the stability plot for the scale parameter seems to stabilize round about $3 \times 10^7$ (dashed line).  
+Figure \ref{fig:flares} shows the stability plots for the solar flare data, on the left for the tail parameter and on the right for the scale parameter. The dark grey ranges correspond to 95% confidence intervals, which are derived from the asymptotic normality of the log-moments estimators [@Cahoy2013] and the $\delta$-method [@MittagLeffleR]; dashed lines show the deduced true values of $\beta$ resp.\ $\sigma_0$. The stability plot for the tail stabilizes nicely around 0.85 (dashed line), while 
+the scale parameter stabilizes less obviously near $3 \times 10^7$ (dashed line).
+The growth of the scale parameter for lower threshold appears to be closer to linear in $p$, 
+rather than proportional to $p^{1/0.85}$ as suggested by the Mittag-Leffler
+fits. The reason for this is likely that the overall goodness of fit as 
+compared to an exponential distribution is improved due to the 
+peaked shape of the Mittag-Leffler distribution near $0$,
+rather than its tail behaviour at $\infty$.
+The reported fit should hence come with the caveat that a Mittag-Leffler 
+distribution models exceedance times well only up to certain time-scales. 
+More research is needed into the modelling of scale transitions, where
+inter-exceedance times appear to have different power laws across different 
+time scales.
+
 
 ```{r solar-flare-tail-scale, message=FALSE, fig.height=4.5, fig.width=8, fig.cap="\\label{fig:flares} Stability plots for the tail and scale parameter of the Mittag-Leffler distribution of the Solar Flare dataset. Dotted horizontal lines are at $\\beta = 0.85$ and $\\sigma_0 = 3 \\times 10^7$ seconds $\\approx 0.95$ years."}
 thin_flares_ctre <- flares %>% ctre() %>% thin(k = 700)
-par(mfrow=c(1,2))
+par(mfrow=c(1,2)) 
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7)
 ```
 
-The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good (see Figure \ref{fig:flare-diagnostics-3}), though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot (see Figure \ref{fig:flare-diagnostics-2}). We also counduct a bootstrapped LRT for the null hypothesis of exponential distributed inter-arrival times and received a $p$-value of $p<0.01$. 
+The fit with a Mittag-Leffler distribution ($\beta = 0.85$) is good (see Figure \ref{fig:flare-diagnostics-3}), though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot (see Figure \ref{fig:flare-diagnostics-2}). We also counduct a bootstrapped LRT for the null hypothesis of exponentially distributed inter-arrival times and received a $p$-value of $p<0.01$. 
 
 # Predicting the time of the next threshold crossing
 
 According to Figure \ref{fig:flares}, for a threshold $\ell$ at the $k$-th order 
-statistic, the fitted threshold exceedance time distribution is 
+statistic, the estimated threshold exceedance time distribution is 
 $$
 T(\ell) \sim {\rm ML}(\beta, k^{-1/\beta} \sigma_0), 
 $$
@@ -697,7 +871,7 @@ df1<-data.frame(x=xx,y=rep(1, length(xx)))
 col<-c("red","blue","darkgreen","black")
 
 plot(xx, rep(1, length(xx)), ylim = c(0.001,1), type = 'n', log = 'xy', 
-     xlab = 't', ylab = 'p')
+     xlab = 't', ylab = 'p', main = "Next Threshold Crossing Time")
 for (k in 1:length(t_0)) {
   cond <- pml(q = t_0[k], tail = tail, scale = scale, lower.tail = FALSE)
   yy <- dml(x = xx + t_0[k], tail = tail, scale = scale) / cond
@@ -709,7 +883,7 @@ betas <- c(0.7, 0.8, 0.95, 0.99)
 t_0 <- 1
 
 plot(xx, rep(1, length(xx)), ylim = c(0.001,2), type = 'n', log = 'xy', 
-     xlab = 't', ylab = 'h')
+     xlab = 't', ylab = 'h', main = "Mittag-Leffler Hazard Rate")
 for (k in 1:length(betas)) {
   yy <- dml(x = xx, tail = betas[k], scale = scale) / pml(
     q = xx,
@@ -755,7 +929,7 @@ reverting to an exponential distribution) at very long time scales [see e.g. @Me
 
 # Acknowledgements {-}
 
-The authors would like to thank Prof. Peter Scheffler for insights on stochastic process limits for CTRMs, Prof. Roland Fried for discussion according the statistical methods and Gurtek Gill who helped create the MittagLeffleR R-package. 
+The authors would like to thank Prof. Peter Scheffler for insights on stochastic process limits for CTRMs, Prof. Roland Fried for discussion regarding the statistical methods and Gurtek Gill who helped create the MittagLeffleR R-package. 
 
 
 \newpage
