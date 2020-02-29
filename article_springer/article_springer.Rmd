@@ -68,11 +68,12 @@ abstract: |
   the predictive distribution for the time until the next extreme event. 
 
 bibliography: CTRMstats.bib
-csl: 
+csl: elsevier-harvard.csl
 output: 
-       rticles::elsevier_article:
-                fig_caption: yes
-                number_sections: true
+  rticles::elsevier_article:
+    number_sections: true
+    fig_caption: yes
+
                 
 
 params:
