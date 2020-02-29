@@ -51,6 +51,8 @@
 
 \setcounter{secnumdepth}{5}
 % Pandoc toggle for numbering sections (defaults to be off)
+
+
 % Pandoc header
 
 
@@ -62,17 +64,14 @@
 bursty time series}
     \author[a]{Katharina Hees}
    \ead{hees@statistik.tu-dortmund.de} 
-  
     \author[b]{Smarak Nayak}
    \ead{smarak.nayak@nab.com.au} 
-  
     \author[c]{Peter Straka}
    \ead{p.straka@unsw.edu.au} 
-  
       \address[a]{Department of Statistics, TU Dortmund University, Dortmund, Germany}
     \address[b]{National Australia Bank, Melbourne, Australia}
     \address[c]{School of Mathematics and Statistics, UNSW, Sydney, Australia}
-  
+    
   \begin{abstract}
   In many complex systems studied in statistical physics, inter-arrival
   times between events such as solar flares, trades and neuron voltages
@@ -100,59 +99,57 @@ bursty time series}
 
 Time series displaying temporally inhomogeneous behaviour in terms of
 the occurrence of events have received strong interest in the recent
-statistical physics literature (Barabási 2005; Oliveira and Barabási
-2005; Vasquez et al. 2006; Vazquez et al. 2007; Omi and Shinomoto 2011;
-Min, Goh, and Vazquez 2011; Karsai et al. 2011; Bagrow and Brockmann
-2013). They have been observed in the context of earthquakes, sunspots,
-neuronal activity and human communication (see Karsai et al. 2012;
-Vajna, Tóth, and Kertész 2013; Meerschaert and Stoev 2008 for a list of
-references). Such time series exhibit high activity in some `bursty'
+statistical physics literature (Bagrow and Brockmann, 2013; Barabási,
+2005; Karsai et al., 2011; Min et al., 2011; Oliveira and Barabási,
+2005; Omi and Shinomoto, 2011; Vasquez et al., 2006; Vazquez et al.,
+2007). They have been observed in the context of earthquakes, sunspots,
+neuronal activity and human communication (see Karsai et al., 2012;
+Meerschaert and Stoev, 2008 for a list of references; Vajna et al.,
+2013). Such time series exhibit high activity in some `bursty'
 intervals, which alternate with other, quiet intervals. Although several
 mechanisms are plausible explanations for bursty behaviour (most
 prominently self-exciting point process by Hawkes (1971)), there seems
 to be one salient feature which very typically indicates the departure
 from temporal homogeneity: a heavy-tailed distribution of waiting times
-(Vasquez et al. 2006; Karsai et al. 2012; Vajna, Tóth, and Kertész
-2013). As we show below in simulations, a simple renewal process with
-heavy-tailed waiting times can capture this type of dynamics. For many
-systems, the renewal property is appropriate; a simple test of the
-absence of correlations in a succession of waiting times can be
-undertaken by randomly reshuffling the waiting times (Karsai et al.
-2012).
+(Karsai et al., 2012; Vajna et al., 2013; Vasquez et al., 2006). As we
+show below in simulations, a simple renewal process with heavy-tailed
+waiting times can capture this type of dynamics. For many systems, the
+renewal property is appropriate; a simple test of the absence of
+correlations in a succession of waiting times can be undertaken by
+randomly reshuffling the waiting times (Karsai et al., 2012).
 
 Often a magnitude, or mark can be assigned to each event in the renewal
 process, such as for earthquakes, solar flares or neuron voltages. The
-Peaks-Over-Threshold model (POT, see e.g.~Coles 2001) applies a
+Peaks-Over-Threshold model (POT, see e.g.~Coles, 2001) applies a
 threshold to the magnitudes, and fits a Generalized Pareto distribution
 to the threshold exceedances. A commonly made assumption in POT models
 is that times between events are either fixed or light-tailed, and this
 entails that the threshold crossing times form a Poisson process (``On
-the Exceedance Point Process for a Stationary Sequence'' 1988). Then as
+the Exceedance Point Process for a Stationary Sequence,'' 1988). Then as
 one increases the threshold and thus decreases the threshold crossing
 probability \(p\), the Poisson process is rarefied, i.e.~its intensity
-decreases \emph{linearly} with \(p\) (see e.g.~Beirlant et al. 2006).
+decreases \emph{linearly} with \(p\) (see e.g.~Beirlant et al., 2006).
 
 As will be shown below, in the heavy-tailed waiting time scenario
 threshold crossing times form a \emph{fractional Poisson process}
-(Laskin 2003; Meerschaert, Nane, and Vellaisamy 2011), which is a
-renewal process with Mittag-Leffler distributed waiting times. The
-family of Mittag-Leffler distributions nests the exponential
-distribution (Haubold, Mathai, and Saxena 2011), and hence the
-fractional Poisson process generalizes the standard Poisson process.
-Again as the threshold size increases and the threshold crossing
-probability \(p\) decreases, the fractional Poisson process is rarefied:
-The scale parameter of the Mittag-Leffler inter-arrival times of
-threshold crossing times increases, but \emph{superlinearly}; see the
-Theorem below.
+(Laskin, 2003; Meerschaert et al., 2011), which is a renewal process
+with Mittag-Leffler distributed waiting times. The family of
+Mittag-Leffler distributions nests the exponential distribution (Haubold
+et al., 2011), and hence the fractional Poisson process generalizes the
+standard Poisson process. Again as the threshold size increases and the
+threshold crossing probability \(p\) decreases, the fractional Poisson
+process is rarefied: The scale parameter of the Mittag-Leffler
+inter-arrival times of threshold crossing times increases, but
+\emph{superlinearly}; see the Theorem below.
 
 Maxima of events which occur according to a renewal process with
 heavy-tailed waiting times have been studied under the names
-``Continuous Time Random Maxima process'' (CTRM) (Benson, Schumer, and
-Meerschaert 2007; Meerschaert and Stoev 2008; Hees and Scheffler 2018b,
-2018a), ``Max-Renewal process'' (Silvestrov 2002; Silvestrov and Teugels
-2004; Basrak and Špoljarić 2015), and ``Shock process'' (Esary and
-Marshall 1973; Shanthikumar and Sumita 1983, 1984, 1985; Anderson 1987;
-Gut and Hüsler 1999). The existing literature focuses on probabilistic
+``Continuous Time Random Maxima process'' (CTRM) (Benson et al., 2007;
+Hees and Scheffler, 2018a, 2018b; Meerschaert and Stoev, 2008),
+``Max-Renewal process'' (Basrak and Špoljarić, 2015; Silvestrov, 2002;
+Silvestrov and Teugels, 2004), and ``Shock process'' (Anderson, 1987;
+Esary and Marshall, 1973; Gut and Hüsler, 1999; Shanthikumar and Sumita,
+1985, 1984, 1983). The existing literature focuses on probabilistic
 results surrounding these models. In this work, however, we introduce a
 method of inference for this type of model, which is seemingly not
 available in the literature.
@@ -168,7 +165,7 @@ discuss the memory property of the Mittag-Leffler distribution, and how
 it affects the predictive distribution for the time until the next
 threshold crossing event. Finally we close with a discussion and
 conclusion in Section 9. For all statistical computations we have used R
-(R Core Team 2018). All code and data used for the analysis in this
+(R Core Team, 2018). All code and data used for the analysis in this
 article has been organized into an R package \texttt{CTRE}
 (\url{https://github.com/strakaps/CTRE}). The source code for the
 figures generated in this manuscript is available online at
@@ -230,7 +227,7 @@ panel, where \(W\) has a stable distribution with tail parameter
 \(\beta =\) 0.8 (and skewness \(1\) and location \(0\)), and where \(J\)
 is from a standard Gumbel distribution. In the bottom panel, we plot a
 time series of solar flare intensities derived from a NASA dataset
-(Dennis et al. 1991) which we will later examine more closely (see
+(Dennis et al., 1991) which we will later examine more closely (see
 Section 7). Clearly, the simulated data exhibit long intervals
 \emph{without any} events, whereas in the real-world dataset events
 appear continuously. The threshold exceedances, however, appear to have
@@ -244,7 +241,7 @@ noise and discards them.
 
 In this section we state and prove the key theorem, see below. For an
 accessible introduction to regular variation and stable limit theorems,
-we recommend the book by Mark M Meerschaert and Sikorskii (2012).
+we recommend the book by Meerschaert and Sikorskii (2012).
 
 \begin{description}
 \item[\textbf{Theorem:}]
@@ -285,7 +282,7 @@ N(t) = \max\{n: W_1 + \ldots + W_n \le t\}.
 T(\ell) = \inf\{t: V(t) > \ell\}, 
 \] and that \[
 T(\ell) > t \quad \text{ if and only if } \quad V(t) \le \ell.
-\] By (Theorem 3.1, Meerschaert and Stoev 2008), we have the stochastic
+\] By (Theorem 3.1, Meerschaert and Stoev, 2008), we have the stochastic
 process convergence \[
 \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
 \stackrel{d}{\longrightarrow} Y(t), \quad t > 0.
@@ -310,9 +307,9 @@ Without loss of generality, we choose \(\ell^*\) such that
 \(\xi_{\ell^*} := \inf\{t: Y(t) > \ell^*\}\), we then have \[
 P\left[ Y(t) \le \ell^* \right] = \mathbf P[\xi_{\ell^*} > t] 
 = \mathbf P[(-\log F(\ell^*))^{-1/\beta} X^{1/\beta} D > t]
-\] by (Proposition 4.2, Meerschaert and Stoev 2008), where \(X\) is an
+\] by (Proposition 4.2, Meerschaert and Stoev, 2008), where \(X\) is an
 exponential random variable with mean \(1\). Using (Theorem 19.1,
-Haubold, Mathai, and Saxena 2011), we see that
+Haubold et al., 2011), we see that
 \(X^{1/\beta} D \sim {\rm ML}(\beta, 1)\), concluding the proof. \qed  
 
 For a scale parameter \(\sigma > 0\), we write
@@ -325,9 +322,9 @@ with mean \(\sigma\). This means that although its moments are all
 infinite, the Mittag-Leffler distribution may (if \(\beta\) is close to
 1) be indistinguishable from the exponential distribution, for the
 purposes of applied statistics. For a detailed reference on the
-Mittag-Leffler distribution, see e.g.~ Haubold, Mathai, and Saxena
-(2011), and for algorithms, see e.g.~the R package
-\texttt{MittagLeffleR} (Gill and Straka 2017).
+Mittag-Leffler distribution, see e.g.~ Haubold et al. (2011), and for
+algorithms, see e.g.~the R package \texttt{MittagLeffleR} (Gill and
+Straka, 2017).
 
 \begin{description}
 \item[\textbf{Remark:}]
@@ -355,16 +352,15 @@ Mittag-Leffler distribution parameters was the fractional moment
 estimator by Kozubowski (2001). Unlike the first moments, the fractional
 moments of order \(p\) for \(p<\beta\) exist and are tractable. One
 drawback of this method is that constant priors for the tail parameter
-are needed for the calculation of the estimates. Cahoy, Uchaikin, and
-Woyczynski (2010) proposed a moment estimator of the log-transformed
-data, which does not require any prior. Furthermore, they performed
-simulation studies illustrating that the log-moment outperforms the
-fractional moment estimator with respect to bias and root mean squared
-error (RMSE).
+are needed for the calculation of the estimates. Cahoy et al. (2010)
+proposed a moment estimator of the log-transformed data, which does not
+require any prior. Furthermore, they performed simulation studies
+illustrating that the log-moment outperforms the fractional moment
+estimator with respect to bias and root mean squared error (RMSE).
 
 Due to the form of the density function of a Mittag-Leffler distribution
 there exists no closed form for the Maximum Likelihood estimator (MLE).
-In the R Package \texttt{MittagLeffleR} (Gill and Straka 2017), Maximum
+In the R Package \texttt{MittagLeffleR} (Gill and Straka, 2017), Maximum
 Likelihood estimation is implemented via numerical optimization. The MLE
 slightly outperforms the log-moment estimator regarding bias and RMSE
 for big enough sample sizes, but is extremely computational intensive.
@@ -384,7 +380,7 @@ Since the Mittag-Leffler distribution is heavy-tailed, many researchers
 would intuitively give the highest importance to the tail behaviour of
 the distribution. Of course, one can also use established tail exponent
 estimators for the estimation of the parameter \(\beta\) such as the
-Hill estimator (Hill 1975) based on the \(r+1\) upper order statistics
+Hill estimator (Hill, 1975) based on the \(r+1\) upper order statistics
 \begin{align}\label{eq:hill}
 H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^{-1}, 
 \end{align} where \(X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}\)
@@ -394,7 +390,7 @@ efficient since they only use a portion of the information contained in
 the data, as mentioned by Kozubowski (2001). Moreover, the hill
 estimator requires a tuning parameter, denoted with \(r\) in
 \eqref{eq:hill}. Additionaly, the estimator only performs reliably well
-for distributions close to Pareto (see Resnick 1997). Figure
+for distributions close to Pareto (see Resnick, 1997). Figure
 \ref{fig:Hillplots} shows Hill plots for Mittag-Leffler simulated data,
 with varying sample sizes and tails. To deduce the correct tail
 parameter estimates from these plots is virtually impossible. To
@@ -424,14 +420,13 @@ nested, the asymptotic distribution is not \(\chi^2_1\)-distributed, and
 Wilk's Theorem does not hold: under \(H_0\), the parameter \(\beta\) of
 Mittag-Leffler distribution is equal to \(1\), and hence lies on the
 boundary of the parameter space \((0,1]\). Instead, a valid approach is
-a bootstrapped Likelihood-ratio test (see e.g.~Davison, Hinkley, and
-others 1997). Figure \ref{Fig:LRT} displays the (simulated) power for
-the bootstrapped LRT for Mittag-Leffler distributions with varying tail
-parameters based on 1000 simulation runs. As expected, the power
-decreases for tail parameters close to one, since the Mittag-Leffler
-distribution converges as \(\beta \uparrow 1\) to an exponential
-distribution; it becomes hard to differentiate a Mittag-Lefller
-distribution from an exponential.
+a bootstrapped Likelihood-ratio test (see e.g.~Davison et al., 1997).
+Figure \ref{Fig:LRT} displays the (simulated) power for the bootstrapped
+LRT for Mittag-Leffler distributions with varying tail parameters based
+on 1000 simulation runs. As expected, the power decreases for tail
+parameters close to one, since the Mittag-Leffler distribution converges
+as \(\beta \uparrow 1\) to an exponential distribution; it becomes hard
+to differentiate a Mittag-Lefller distribution from an exponential.
 
 \begin{figure}
 
@@ -511,7 +506,7 @@ the distribution of exceedance times, dependent on the threshold
 T(\ell) \sim {\rm ML}(\hat \beta, k^{-1/\hat \beta} \hat \sigma_0),
 \end{align*} where \(\ell\) equals the \(k\)-th order statistic. For
 quick estimates of the Mittag-Leffler parameters we have used the method
-of log-transformed moments (Cahoy 2013). We have verified the validity
+of log-transformed moments (Cahoy, 2013). We have verified the validity
 of our estimation algorithm via simulations, see Section
 \ref{Simulationstudy}.
 
@@ -540,11 +535,11 @@ then due to the stability property we have the \emph{equality} of
 distribution \(W_1 + \ldots + W_n \stackrel{d}{=} b(n) D\), for
 \(b(n) = n^{1/\beta}\). Using the parametrisation of Samorodnitsky and
 Taqqu (1994), a few lines of calculation (see e.g.~the vignette on
-parametrisation in Gill and Straka 2017) show that \(D\) must have the
+parametrisation in Gill and Straka, 2017) show that \(D\) must have the
 stable distribution \(S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)\),
-which is implemented in the R package \texttt{stabledist} by Wuertz,
-Maechler, and members. (2016). By the Theorem, the distribution of
-\(T(\ell)\) is approximately \[
+which is implemented in the R package \texttt{stabledist} by Wuertz et
+al. (2016). By the Theorem, the distribution of \(T(\ell)\) is
+approximately \[
 {\rm ML}(\beta, p^{-1/\beta}) 
 = {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
 \] which means \(\sigma_0 = n^{1/\beta}\). In the Pareto example we
@@ -679,7 +674,7 @@ Figure \ref{fig:flares} shows the stability plots for the solar flare
 data, on the left for the tail parameter and on the right for the scale
 parameter. Dotted lines show 95\% confidence intervals, which are
 derived from the asymptotic normality of the log-moments estimators
-(Cahoy 2013) and the \(\delta\)-method (Gill and Straka 2017), dashed
+(Cahoy, 2013) and the \(\delta\)-method (Gill and Straka, 2017), dashed
 lines show the deduced values of \(\beta\) resp.~\(\sigma_0\). The
 stability plot for the tail stabilizes nicely round about 0.85 (dashed
 line), while it is a little bit harder to deduce an estimate for the
@@ -779,7 +774,7 @@ belongs to one particular (latent) group of events. For bursts, however,
 the aim is to identify an underlying scale-free pattern in the event
 dynamics, which is often characteristic of complex systems. It is an
 interesting open problem to develop quality criteria, based e.g.~on
-measures of surprise (Lee, Fan, and Sisson 2015), which guide an applied
+measures of surprise (Lee et al., 2015), which guide an applied
 statistician in the choice between a clustering and a CTRE approach for
 a particular problem. Moreover, we believe it may be possible to unify
 the two approaches by considering CTREs based on MRPs with a
@@ -790,10 +785,10 @@ an assumption for some bursty time series, because often the
 heavy-tailed character of the inter-arrival time distribution does not
 hold at all time scales; rather, it applies at short and intermediate
 time scales, and is truncated (or tempered, reverting to an exponential
-distribution) at very long time scales (see e.g.~Mark M. Meerschaert,
-Roy, and Shao 2012; and Aban, Meerschaert, and Panorska 2006). In such
-situations, a ``tempered'' Mittag-Leffler distribution may provide a
-more realistic fit, which we aim to introduce in follow-up work.
+distribution) at very long time scales (see e.g.~Meerschaert et al.,
+2012; and Aban et al., 2006). In such situations, a ``tempered''
+Mittag-Leffler distribution may provide a more realistic fit, which we
+aim to introduce in follow-up work.
 
 \hypertarget{acknowledgements}{%
 \section*{Acknowledgements}\label{acknowledgements}}
@@ -812,239 +807,227 @@ MittagLeffleR R-package.
 
 \hypertarget{refs}{}
 \leavevmode\hypertarget{ref-Aban06}{}%
-Aban, Inmaculada B, Mark M Meerschaert, and Anna K Panorska. 2006.
-``Parameter Estimation for the Truncated Pareto Distribution.'' \emph{J.
-Am. Stat. Assoc.} 101 (473): 270--77.
-\url{https://doi.org/10.1198/016214505000000411}.
+Aban, I.B., Meerschaert, M.M., Panorska, A.K., 2006. Parameter
+estimation for the truncated pareto distribution. J. Am. Stat. Assoc.
+101, 270--277.
+doi:\href{https://doi.org/10.1198/016214505000000411}{10.1198/016214505000000411}
 
 \leavevmode\hypertarget{ref-Anderson1987}{}%
-Anderson, Kevin K. 1987. ``Limit Theorems for General Shock Models with
-Infinite Mean Intershock Times.'' \emph{J. Appl. Probab.} 24 (2):
-449--56. \url{http://www.jstor.org/stable/3214268}.
+Anderson, K.K., 1987. Limit Theorems for General Shock Models with
+Infinite Mean Intershock Times. J. Appl. Probab. 24, 449--456.
 
 \leavevmode\hypertarget{ref-Bagrow2013}{}%
-Bagrow, James P., and Dirk Brockmann. 2013. ``Natural emergence of
-clusters and bursts in network evolution.'' \emph{Phys. Rev. X} 3 (2):
-1--6. \url{https://doi.org/10.1103/PhysRevX.3.021016}.
+Bagrow, J.P., Brockmann, D., 2013. Natural emergence of clusters and
+bursts in network evolution. Phys. Rev. X 3, 1--6.
+doi:\href{https://doi.org/10.1103/PhysRevX.3.021016}{10.1103/PhysRevX.3.021016}
 
 \leavevmode\hypertarget{ref-Barabasi2005}{}%
-Barabási, Albert László. 2005. ``The origin of bursts and heavy tails in
-human dynamics.'' \emph{Nature} 435 (May): 207--11.
-\url{https://doi.org/10.1038/nature03459}.
+Barabási, A.L., 2005. The origin of bursts and heavy tails in human
+dynamics. Nature 435, 207--211.
+doi:\href{https://doi.org/10.1038/nature03459}{10.1038/nature03459}
 
 \leavevmode\hypertarget{ref-Basrak2014}{}%
-Basrak, Bojan, and Drago Špoljarić. 2015. ``Extremes of random variables
-observed in renewal times.'' \emph{Stat. Probab. Lett.} 97: 216--21.
-\url{https://doi.org/10.1016/j.spl.2014.11.025}.
+Basrak, B., Špoljarić, D., 2015. Extremes of random variables observed
+in renewal times. Stat. Probab. Lett. 97, 216--221.
+doi:\href{https://doi.org/10.1016/j.spl.2014.11.025}{10.1016/j.spl.2014.11.025}
 
 \leavevmode\hypertarget{ref-beirlantBook}{}%
-Beirlant, Jan, Yuri Goegebeur, Johan Segers, and Jozef Teugels. 2006.
-\emph{Statistics of extremes: theory and applications}. John Wiley \&
-Sons.
+Beirlant, J., Goegebeur, Y., Segers, J., Teugels, J., 2006. Statistics
+of extremes: theory and applications. John Wiley \& Sons.
 
 \leavevmode\hypertarget{ref-Benson2007}{}%
-Benson, David A, Rina Schumer, and Mark M Meerschaert. 2007.
-``Recurrence of extreme events with power-law interarrival times.''
-\emph{Geophys. Res. Lett.} 34 (l16404): DOI:10.1029/2007GL030767.
-\url{https://doi.org/10.1029/2007GL030767}.
+Benson, D.A., Schumer, R., Meerschaert, M.M., 2007. Recurrence of
+extreme events with power-law interarrival times. Geophys. Res. Lett.
+34, DOI:10.1029/2007GL030767.
+doi:\href{https://doi.org/10.1029/2007GL030767}{10.1029/2007GL030767}
 
 \leavevmode\hypertarget{ref-Cahoy2013}{}%
-Cahoy, Dexter O. 2013. ``Estimation of Mittag-Leffler Parameters.''
-\emph{Commun. Stat. - Simul. Comput.} 42 (2): 303--15.
-\url{https://doi.org/10.1080/03610918.2011.640094}.
+Cahoy, D.O., 2013. Estimation of Mittag-Leffler Parameters. Commun.
+Stat. - Simul. Comput. 42, 303--315.
+doi:\href{https://doi.org/10.1080/03610918.2011.640094}{10.1080/03610918.2011.640094}
 
 \leavevmode\hypertarget{ref-Cahoy2010}{}%
-Cahoy, Dexter O, Vladimir V. Uchaikin, and Wojbor A. Woyczynski. 2010.
-``Parameter estimation for fractional Poisson processes.'' \emph{J.
-Stat. Plan. Inference} 140 (11): 3106--20.
-\url{https://doi.org/10.1016/j.jspi.2010.04.016}.
+Cahoy, D.O., Uchaikin, V.V., Woyczynski, W.A., 2010. Parameter
+estimation for fractional Poisson processes. J. Stat. Plan. Inference
+140, 3106--3120.
+doi:\href{https://doi.org/10.1016/j.jspi.2010.04.016}{10.1016/j.jspi.2010.04.016}
 
 \leavevmode\hypertarget{ref-ColesBook}{}%
-Coles, S. 2001. \emph{An Introduction to Statistical Modelling of
-Extreme Values}. London: Springer-Verlag.
+Coles, S., 2001. An Introduction to Statistical Modelling of Extreme
+Values. Springer-Verlag, London.
 
 \leavevmode\hypertarget{ref-davison1997bootstrap}{}%
-Davison, Anthony Christopher, David Victor Hinkley, and others. 1997.
-\emph{Bootstrap Methods and Their Application}. Vol. 1. Cambridge
-university press.
+Davison, A.C., Hinkley, D.V., others, 1997. Bootstrap methods and their
+application. Cambridge university press.
 
 \leavevmode\hypertarget{ref-HXRBS}{}%
-Dennis, Brian R, L E Orwig, G S Kennard, G J Labow, R A Schwartz, A R
-Shaver, and A K Tolbert. 1991. ``The complete Hard X Ray Burst
-Spectrometer event list, 1980-1989.''
-\url{https://umbra.nascom.nasa.gov/smm/hxrbs.html}.
+Dennis, B.R., Orwig, L.E., Kennard, G.S., Labow, G.J., Schwartz, R.A.,
+Shaver, A.R., Tolbert, A.K., 1991. The complete Hard X Ray Burst
+Spectrometer event list, 1980-1989.
 
 \leavevmode\hypertarget{ref-Esary1973}{}%
-Esary, J. D., and A. W. Marshall. 1973. ``Shock Models and Wear
-Processes.'' \url{https://doi.org/10.1214/aop/1176996891}.
+Esary, J.D., Marshall, A.W., 1973. Shock Models and Wear Processes.
+doi:\href{https://doi.org/10.1214/aop/1176996891}{10.1214/aop/1176996891}
 
 \leavevmode\hypertarget{ref-ferro2003inference}{}%
-Ferro, Christopher AT, and Johan Segers. 2003. ``Inference for Clusters
-of Extreme Values.'' \emph{Journal of the Royal Statistical Society:
-Series B (Statistical Methodology)} 65 (2): 545--56.
+Ferro, C.A., Segers, J., 2003. Inference for clusters of extreme values.
+Journal of the Royal Statistical Society: Series B (Statistical
+Methodology) 65, 545--556.
 
 \leavevmode\hypertarget{ref-MittagLeffleR}{}%
-Gill, Gurtek, and Peter Straka. 2017. \emph{MittagLeffleR: Using the
-Mittag-Leffler Distributions in R}.
-\url{https://strakaps.github.io/MittagLeffleR/}.
+Gill, G., Straka, P., 2017. MittagLeffleR: Using the mittag-leffler
+distributions in r.
 
 \leavevmode\hypertarget{ref-Gut1999}{}%
-Gut, Allan, and Jürg Hüsler. 1999. ``Extreme Shock Models.''
-\emph{Extremes}, no. 1983: 295--307.
-\url{http://link.springer.com/article/10.1023/A:1009959004020}.
+Gut, A., Hüsler, J., 1999. Extreme Shock Models. Extremes 295--307.
 
 \leavevmode\hypertarget{ref-Haubold11}{}%
-Haubold, H. J., A. M. Mathai, and R. K. Saxena. 2011. ``Mittag-Leffler
-Functions and Their Applications.'' \emph{J. Appl. Math.} 2011: 1--51.
-\url{https://doi.org/10.1155/2011/298628}.
+Haubold, H.J., Mathai, A.M., Saxena, R.K., 2011. Mittag-Leffler
+Functions and Their Applications. J. Appl. Math. 2011, 1--51.
+doi:\href{https://doi.org/10.1155/2011/298628}{10.1155/2011/298628}
 
 \leavevmode\hypertarget{ref-hawkes1971point}{}%
-Hawkes, Alan G. 1971. ``Point spectra of some mutually exciting point
-processes.'' \emph{J. R. Stat. Soc. Ser. B Stat. Methodol.}, 438--43.
-
-\leavevmode\hypertarget{ref-hees2017coupled}{}%
-Hees, Katharina, and Hans-Peter Scheffler. 2018a. ``Coupled Continuous
-Time Random Maxima.'' \emph{Extremes} 21 (2).
+Hawkes, A.G., 1971. Point spectra of some mutually exciting point
+processes. J. R. Stat. Soc. Ser. B Stat. Methodol. 438--443.
 
 \leavevmode\hypertarget{ref-hees2016joint}{}%
----------. 2018b. ``On Joint Sum/Max Stability and Sum/Max Domains of
-Attraction.'' \emph{Probability and Mathematical Statistics} 38 (1).
+Hees, K., Scheffler, H.-P., 2018a. On joint sum/max stability and
+sum/max domains of attraction. Probability and Mathematical Statistics
+38.
+
+\leavevmode\hypertarget{ref-hees2017coupled}{}%
+Hees, K., Scheffler, H.-P., 2018b. Coupled continuous time random
+maxima. Extremes 21.
 
 \leavevmode\hypertarget{ref-hill1975simple}{}%
-Hill, Bruce M. 1975. ``A Simple General Approach to Inference About the
-Tail of a Distribution.'' \emph{The Annals of Statistics}, 1163--74.
+Hill, B.M., 1975. A simple general approach to inference about the tail
+of a distribution. The annals of statistics 1163--1174.
 
 \leavevmode\hypertarget{ref-Karsai2012}{}%
-Karsai, Márton, Kimmo Kaski, Albert László Barabási, and János Kertész.
-2012. ``Universal features of correlated bursty behaviour.'' \emph{Sci.
-Rep.} 2. \url{https://doi.org/10.1038/srep00397}.
+Karsai, M., Kaski, K., Barabási, A.L., Kertész, J., 2012. Universal
+features of correlated bursty behaviour. Sci. Rep. 2.
+doi:\href{https://doi.org/10.1038/srep00397}{10.1038/srep00397}
 
 \leavevmode\hypertarget{ref-Karsai2011}{}%
-Karsai, Márton, M. Kivelä, R. K. Pan, K. Kaski, J. Kertész, Albert
-László Barabási, and J. Saramäki. 2011. ``Small but slow world: How
-network topology and burstiness slow down spreading.'' \emph{Phys. Rev.
-E - Stat. Nonlinear, Soft Matter Phys.} 83: 1--4.
-\url{https://doi.org/10.1103/PhysRevE.83.025102}.
+Karsai, M., Kivelä, M., Pan, R.K., Kaski, K., Kertész, J., Barabási,
+A.L., Saramäki, J., 2011. Small but slow world: How network topology and
+burstiness slow down spreading. Phys. Rev. E - Stat. Nonlinear, Soft
+Matter Phys. 83, 1--4.
+doi:\href{https://doi.org/10.1103/PhysRevE.83.025102}{10.1103/PhysRevE.83.025102}
 
 \leavevmode\hypertarget{ref-kozubowski2001}{}%
-Kozubowski, Tomasz J. 2001. ``Fractional Moment Estimation of Linnik and
-Mittag-Leffler Parameters.'' \emph{Mathematical and Computer Modelling}
-34 (9-11): 1023--35.
+Kozubowski, T.J., 2001. Fractional moment estimation of linnik and
+mittag-leffler parameters. Mathematical and computer modelling 34,
+1023--1035.
 
 \leavevmode\hypertarget{ref-Laskin2003}{}%
-Laskin, Nick. 2003. ``Fractional Poisson process.'' \emph{Commun.
-Nonlinear Sci. Numer. Simul.} 8 (3-4): 201--13.
-\url{https://doi.org/10.1016/S1007-5704(03)00037-6}.
+Laskin, N., 2003. Fractional Poisson process. Commun. Nonlinear Sci.
+Numer. Simul. 8, 201--213.
+doi:\href{https://doi.org/10.1016/S1007-5704(03)00037-6}{10.1016/S1007-5704(03)00037-6}
 
 \leavevmode\hypertarget{ref-Lee15}{}%
-Lee, J., Y. Fan, and S. A. Sisson. 2015. ``Bayesian threshold selection
-for extremal models using measures of surprise.'' \emph{Comput. Stat.
-Data Anal.} 85: 84--99.
-\url{https://doi.org/10.1016/j.csda.2014.12.004}.
+Lee, J., Fan, Y., Sisson, S.A., 2015. Bayesian threshold selection for
+extremal models using measures of surprise. Comput. Stat. Data Anal. 85,
+84--99.
+doi:\href{https://doi.org/10.1016/j.csda.2014.12.004}{10.1016/j.csda.2014.12.004}
 
 \leavevmode\hypertarget{ref-Meerschaert2010b}{}%
-Meerschaert, Mark M, Erkan Nane, and P. Vellaisamy. 2011. ``The
-fractional Poisson process and the inverse stable subordinator.''
-\emph{Electron. J. Probab.} 16: 1600--1620.
-\url{https://doi.org/10.1214/EJP.v16-920}.
+Meerschaert, M.M., Nane, E., Vellaisamy, P., 2011. The fractional
+Poisson process and the inverse stable subordinator. Electron. J.
+Probab. 16, 1600--1620.
+doi:\href{https://doi.org/10.1214/EJP.v16-920}{10.1214/EJP.v16-920}
 
 \leavevmode\hypertarget{ref-MeerschaertRoyQin}{}%
-Meerschaert, Mark M., Parthanil Roy, and Qin Shao. 2012. ``Parameter
-estimation for exponentially tempered power law distributions.''
-\emph{Commun. Stat. - Theory Methods} 41 (10): 1839--56.
-\url{https://doi.org/10.1080/03610926.2011.552828}.
+Meerschaert, M.M., Roy, P., Shao, Q., 2012. Parameter estimation for
+exponentially tempered power law distributions. Commun. Stat. - Theory
+Methods 41, 1839--1856.
+doi:\href{https://doi.org/10.1080/03610926.2011.552828}{10.1080/03610926.2011.552828}
 
 \leavevmode\hypertarget{ref-MeerschaertSikorskii}{}%
-Meerschaert, Mark M, and Alla Sikorskii. 2012. \emph{Stochastic Models
-for Fractional Calculus}. Vol. 43. Walter de Gruyter.
+Meerschaert, M.M., Sikorskii, A., 2012. Stochastic models for fractional
+calculus. Walter de Gruyter.
 
 \leavevmode\hypertarget{ref-MeerschaertStoev08}{}%
-Meerschaert, Mark M, and Stilian A Stoev. 2008. ``Extremal limit
-theorems for observations separated by random power law waiting times.''
-\emph{J. Stat. Plan. Inference} 139 (7): 2175--88.
-\url{https://doi.org/10.1016/j.jspi.2008.10.005}.
+Meerschaert, M.M., Stoev, S.A., 2008. Extremal limit theorems for
+observations separated by random power law waiting times. J. Stat. Plan.
+Inference 139, 2175--2188.
+doi:\href{https://doi.org/10.1016/j.jspi.2008.10.005}{10.1016/j.jspi.2008.10.005}
 
 \leavevmode\hypertarget{ref-Min2010}{}%
-Min, Byungjoon, K. I. Goh, and Alexei Vazquez. 2011. ``Spreading
-dynamics following bursty human activity patterns.'' \emph{Phys. Rev. E
-- Stat. Nonlinear, Soft Matter Phys.} 83 (3): 2--5.
-\url{https://doi.org/10.1103/PhysRevE.83.036102}.
+Min, B., Goh, K.I., Vazquez, A., 2011. Spreading dynamics following
+bursty human activity patterns. Phys. Rev. E - Stat. Nonlinear, Soft
+Matter Phys. 83, 2--5.
+doi:\href{https://doi.org/10.1103/PhysRevE.83.036102}{10.1103/PhysRevE.83.036102}
 
 \leavevmode\hypertarget{ref-Oliveira2005}{}%
-Oliveira, J, and Albert László Barabási. 2005. ``Darwin and Einstein
-correspondence patterns.'' \emph{Nature} 437 (October): 1251.
-\url{https://doi.org/10.0138/4371251a}.
+Oliveira, J., Barabási, A.L., 2005. Darwin and Einstein correspondence
+patterns. Nature 437, 1251.
+doi:\href{https://doi.org/10.0138/4371251a}{10.0138/4371251a}
 
 \leavevmode\hypertarget{ref-Omi2011}{}%
-Omi, Takahiro, and Shigeru Shinomoto. 2011. ``Optimizing Time Histograms
-for Non-Poissonian Spike Trains.'' \emph{Neural Comput.} 23 (12):
-3125--44. \url{https://doi.org/10.1162/NECO_a_00213}.
+Omi, T., Shinomoto, S., 2011. Optimizing Time Histograms for
+Non-Poissonian Spike Trains. Neural Comput. 23, 3125--3144.
+doi:\href{https://doi.org/10.1162/NECO_a_00213}{10.1162/NECO\_a\_00213}
 
 \leavevmode\hypertarget{ref-Hsing88}{}%
-``On the Exceedance Point Process for a Stationary Sequence.'' 1988 78:
+On the Exceedance Point Process for a Stationary Sequence, 1988. 78,
 97--112.
 
 \leavevmode\hypertarget{ref-R}{}%
-R Core Team. 2018. \emph{R: A Language and Environment for Statistical
-Computing}. Vienna, Austria: R Foundation for Statistical Computing.
-\url{https://www.R-project.org/}.
+R Core Team, 2018. R: A language and environment for statistical
+computing. R Foundation for Statistical Computing, Vienna, Austria.
 
 \leavevmode\hypertarget{ref-Resnick97}{}%
-Resnick, Sidney I. 1997. ``Heavy tail modeling and teletraffic data.''
-\emph{Ann. Stat.} 25 (5): 1805--49.
-\url{https://doi.org/10.1214/aos/1069362376}.
+Resnick, S.I., 1997. Heavy tail modeling and teletraffic data. Ann.
+Stat. 25, 1805--1849.
+doi:\href{https://doi.org/10.1214/aos/1069362376}{10.1214/aos/1069362376}
 
 \leavevmode\hypertarget{ref-SamorodnitskyTaqqu}{}%
-Samorodnitsky, Gennady, and Murad S Taqqu. 1994. \emph{Stable
-Non-Gaussian Random Processes: Stochastic Models with Infinite
-Variance}. Stochastic Modeling. London: Chapman Hall.
+Samorodnitsky, G., Taqqu, M.S., 1994. Stable Non-Gaussian Random
+Processes: Stochastic Models with Infinite Variance, Stochastic
+modeling. Chapman Hall, London.
 
 \leavevmode\hypertarget{ref-Sumita1983}{}%
-Shanthikumar, J. George, and Ushio Sumita. 1983. ``General shock models
-associated with correlated renewal sequences.'' \emph{J. Appl. Probab.}
-20 (3): 600--614. \url{http://www.jstor.org/stable/3213896}.
+Shanthikumar, J.G., Sumita, U., 1983. General shock models associated
+with correlated renewal sequences. J. Appl. Probab. 20, 600--614.
 
 \leavevmode\hypertarget{ref-Sumita1984}{}%
----------. 1984. ``Distribution Properties of the System Failure Time in
-a General Shock Model.'' \emph{Adv. Appl. Probab.} 16 (2): 363--77.
-\url{http://www.jstor.org/stable/1427074}.
+Shanthikumar, J.G., Sumita, U., 1984. Distribution Properties of the
+System Failure Time in a General Shock Model. Adv. Appl. Probab. 16,
+363--377.
 
 \leavevmode\hypertarget{ref-Sumita1985}{}%
----------. 1985. ``A class of correlated cumulative shock models.''
-\emph{Adv. Appl. Probab.} 17 (2): 347--66.
-\url{http://www.jstor.org/stable/1427145}.
+Shanthikumar, J.G., Sumita, U., 1985. A class of correlated cumulative
+shock models. Adv. Appl. Probab. 17, 347--366.
 
 \leavevmode\hypertarget{ref-Silvestrov2002a}{}%
-Silvestrov, Dmitrii S. 2002. \emph{Limit Theorems for Randomly Stopped
-Stochastic Processes}. Springer (Berlin, Heidelberg).
+Silvestrov, D.S., 2002. Limit Theorems for Randomly Stopped Stochastic
+Processes. Springer (Berlin, Heidelberg).
 
 \leavevmode\hypertarget{ref-ST04}{}%
-Silvestrov, Dmitrii S, and Jozef L. Teugels. 2004. ``Limit theorems for
-mixed max-sum processes with renewal stopping.'' \emph{Ann. Appl.
-Probab.} 14 (4): 1838--68.
-\url{https://doi.org/10.1214/105051604000000215}.
+Silvestrov, D.S., Teugels, J.L., 2004. Limit theorems for mixed max-sum
+processes with renewal stopping. Ann. Appl. Probab. 14, 1838--1868.
+doi:\href{https://doi.org/10.1214/105051604000000215}{10.1214/105051604000000215}
 
 \leavevmode\hypertarget{ref-Vajna2013}{}%
-Vajna, Szabolcs, Bálint Tóth, and János Kertész. 2013. ``Modelling
-bursty time series.'' \emph{New J. Phys.} 15 (10): 103023.
-\url{https://doi.org/10.1088/1367-2630/15/10/103023}.
+Vajna, S., Tóth, B., Kertész, J., 2013. Modelling bursty time series.
+New J. Phys. 15, 103023.
+doi:\href{https://doi.org/10.1088/1367-2630/15/10/103023}{10.1088/1367-2630/15/10/103023}
 
 \leavevmode\hypertarget{ref-Vasquez2006}{}%
-Vasquez, a, J G Oliveira, Z Dezso, K-I Goh, I Kondor, and Albert László
-Barabási. 2006. ``Modeling bursts and heavy tails in human dynamics.''
-\emph{Phys. Rev. E} 73: 361271--3612718.
-\url{http://arxiv.org/abs/0510117v1}.
+Vasquez, a, Oliveira, J.G., Dezso, Z., Goh, K.-I., Kondor, I., Barabási,
+A.L., 2006. Modeling bursts and heavy tails in human dynamics. Phys.
+Rev. E 73, 361271--3612718.
 
 \leavevmode\hypertarget{ref-Vazquez2007}{}%
-Vazquez, Alexei, Balázs Rácz, András Lukács, and Albert László Barabási.
-2007. ``Impact of non-poissonian activity patterns on spreading
-processes.'' \emph{Phys. Rev. Lett.} 98 (APRIL): 1--4.
-\url{https://doi.org/10.1103/PhysRevLett.98.158702}.
+Vazquez, A., Rácz, B., Lukács, A., Barabási, A.L., 2007. Impact of
+non-poissonian activity patterns on spreading processes. Phys. Rev.
+Lett. 98, 1--4.
+doi:\href{https://doi.org/10.1103/PhysRevLett.98.158702}{10.1103/PhysRevLett.98.158702}
 
 \leavevmode\hypertarget{ref-stabledist}{}%
-Wuertz, Diethelm, Martin Maechler, and Rmetrics core team members. 2016.
-\emph{Stabledist: Stable Distribution Functions}.
-\url{https://CRAN.R-project.org/package=stabledist}.
+Wuertz, D., Maechler, M., members., R. core team, 2016. Stabledist:
+Stable distribution functions.
 
 
 \end{document}

@@ -12,9 +12,9 @@ library(ggplot2)
 
 plan(multiprocess)
 
-tails <- seq(0.2,0.9,0.1)
-scales <- c(0.1,1,10)
-ns <- seq(25,200,25)
+tails <-0.2# c(0.2,0.8) #seq(0.2,0.9,0.1)
+scales <- 1 #c(0.1,1,10)
+ns <-25# seq(25,200,25)
 m<-1000
 
 pb <- progress_bar$new(total = length(tails)*length(scales)*length(ns), format = "[:bar] tail: :tail, scale: :scale, n: :n")
