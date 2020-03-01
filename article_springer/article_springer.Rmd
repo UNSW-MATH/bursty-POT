@@ -273,7 +273,7 @@ and since we assume that the $J_k$ have a continuous distribution, there exist
 norming functions $a(c)$ and $d(c)$ such that 
 $$
 \mathbf P\left[ \frac{M(c) - d(c)}{a(c)} \le \ell^* \right] 
-\longrightarrow F(\ell^*), \quad t \to \infty
+\longrightarrow F(\ell^*), \quad c \to \infty
 $$
 where $F$ is a generalized extreme value distribution, and $\ell^*$ is any 
 value from the support of $F$. 
@@ -291,16 +291,20 @@ $$
 T(\ell) = \inf\{t: V(t) > \ell\}, 
 $$
 and that 
-$$
-T(\ell) > t \quad \text{ if and only if } \quad V(t) \le \ell.
-$$
+
+\begin{align}
+T(\ell) > t \quad \text{ if and only if } \quad V(t) \le \ell. \label{inverserelat}
+\end{align}
+
 By [Theorem 3.1, @MeerschaertStoev08], we have the stochastic process 
 convergence 
-$$
+
+\begin{align}
 \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
-\stackrel{d}{\longrightarrow} Y(t), \quad t > 0.
-$$
-where $Y(t)$ is a time-changed ("subordinated") extremal process, and where 
+\stackrel{d}{\longrightarrow} Y(t),  \quad c \to \infty, \label{TheoMS}
+\end{align}
+
+for $t > 0$, where $Y(t)$ is a time-changed ("subordinated") extremal process, and where 
 $\tilde b(c)$ is a regularly varying norming function which is
 _inverse_ to $b(c)$, in the sense that 
 $b(\tilde b(c)) \sim c \sim \tilde b(b(c))$ [@BinghamGoldieTeugels]. 
@@ -313,14 +317,14 @@ $$
 = \mathbf P[T(\ell) > b(1/p_{\ell}) t]
 = \mathbf P[V(ct) \le \ell]
 $$
-where we have substituted $c = b(1/p_{\ell})$. Moreover 
+where we have substituted $c = b(1/p_{\ell})$ and used \eqref{inverserelat}. Moreover, we receive due to the convergence in \eqref{TheoMS}
 $$
 \mathbf P[V(ct) \le \ell]
 = \mathbf P\left[ \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
 \le \frac{\ell - d(\tilde b(c))}{a(\tilde b(c))} \right]
-\longrightarrow \mathbf P\left[ Y(t) \le \ell^* \right]
+\longrightarrow \mathbf P\left[ Y(t) \le \ell^* \right] ,  \quad c \to \infty,
 $$
-Defining the hitting time of level $\ell^*$ by $Y(t)$ as 
+for $t>0$. Defining the hitting time of level $\ell^*$ by $Y(t)$ as 
 $\xi_{\ell^*} := \inf\{t: Y(t) > \ell^*\}$,
 we then have 
 $$
@@ -446,19 +450,16 @@ Building on the POT (Peaks-Over-Threshold) method, we propose the following esti
 
 1. Extract the $K$ largest order statistics 
 (i.e. the $K$ largest values, where e.g. $K = 300$) 
-$X_{(1)}, \ldots, X_{(K)}$ together with their timestamps $T_{(1)}, \ldots, T_{(K)}$. 
+$X_{(1)}, \ldots, X_{(K)}$ together with their timestamps $T_{(1)}, \ldots, T_{(K-1)}$. 
 
 2. Choose e.g. $K_0 = 5$, and for each $k$ ranging from $K_0 +1$ to $K + 1$: 
-    a) extract the set $\mathcal T_k$ of exceedance times of the threshold $X_{(k)}$
+    a) extract the set $\mathcal T_k$ of exceedance times of between the magnitudes exceeding the threshold $X_{(k)}$
     b) fit a Mittag-Leffler distribution to $\mathcal T_k$, resulting in the parameter
     estimates $\hat\beta_k$ and $\hat \sigma_k$.
   
-3. Plot $k$ vs.\ $\hat \beta_k$. As $k \downarrow K_0$,
-  $\hat \beta_k$ *stabilizes* around a constant $\hat \beta$.
+3. Plot $k$ vs.\ $\hat \beta_k$. To the right, as $k \downarrow K_0$, the asymptotics are off and bias is high. To the left (high threshold), data are scarce and variance is high. Choose a region of *stability* in the middle for a parameter estimate $\hat \beta$.
 
-4. Plot $k$ vs.\ $k^{1/\hat \beta} \hat \sigma_k$. 
-  Where the plot stabilizes as $k \downarrow K_0$, define the value 
-  $\hat \sigma_0$.
+4. Plot $k$ vs.\ $k^{1/\hat \beta} \hat \sigma_k$. Again, choose a region of *stability* as $k$ gets smaller and define $\hat \sigma_0$.
 
 The inferred values $\hat \beta$ and $\hat \sigma_0$ can then be interpreted as follows: 
 Setting the threshold at $X_{(k)}$, the threshold exceedance times follow a 
@@ -676,18 +677,11 @@ hill_Ex3_tail <-
   geom_hline(yintercept=1, linetype="dashed", color = "red")+ xlab("r")
 
 grid.arrange(
-  logMom_Ex1_tail,
-  mle_Ex1_tail,
-  hill_Ex1_tail,
-  logMom_Ex2_tail,
-  mle_Ex2_tail,
-  hill_Ex2_tail,
-  logMom_Ex3_tail,
-  mle_Ex3_tail,
-  hill_Ex3_tail,
-  ncol = 3
+  arrangeGrob(logMom_Ex1_tail,logMom_Ex2_tail,logMom_Ex3_tail,top="log-Moment"),
+  arrangeGrob(mle_Ex1_tail, mle_Ex2_tail, mle_Ex3_tail,top="MLE"),
+  arrangeGrob(hill_Ex1_tail,hill_Ex2_tail,hill_Ex3_tail,top="Hill"),
+  ncol=3
 )
-
 ```
 
 
@@ -754,12 +748,8 @@ mle_Ex3_scale <-
   geom_hline(yintercept=1, linetype="dashed", color = "red")
 
 grid.arrange(
-  logMom_Ex1_scale,
-  mle_Ex1_scale,
-  logMom_Ex2_scale,
-  mle_Ex2_scale,
-  logMom_Ex3_scale,
-  mle_Ex3_scale,
+  arrangeGrob(logMom_Ex1_scale,logMom_Ex2_scale,logMom_Ex3_scale,top="log-Mom"),
+  arrangeGrob(mle_Ex1_scale,mle_Ex2_scale,mle_Ex3_scale,top="MLE"),
   ncol = 2
 )
 ```

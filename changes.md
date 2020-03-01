@@ -72,7 +72,7 @@ In the last paragraph of Section 5, we have included pointers to the literature 
 12. fixed
 13. fixed
 14. fixed
-15. KATHI TO DO
+15. We reformulated the whole part and added titles. 
 16. fixed
 17. no longer applies
 18. fixed
@@ -135,13 +135,16 @@ P.5. In the proof you use the fact that $J_k$ have continuous distribution, but 
 
 > Thank you. We added an assumption accordingly. 
 
-
 P.5. You should be careful about which parameter tends to infinity in
 your limiting relations, it seems that $c \rightarrow \infty$ is missing at several places, and $t \rightarrow \infty$ appears instead at one point.
+
+> We fixed this. 
 
 P.5. You seem to to assume that your $l$ grows at a very precise rate - could this be a problem?
 
 P.6. The last two lines of the proof need more explanation, I think.
+
+> We added some more explanation to the last two lines. 
 
 P.6. threshold
 
@@ -156,14 +159,20 @@ P.7. the Hill or hill estimator?
 
 P.9. In step 3. could you explain how the plot "stabilizes" as $l$ increases since one gets very few observations in that region? Argument behind step 4. should be written out, in my opinion.
 
+> You are right. We should better explain this. The plot stabilizes in a region in the middle. We reformulated step 3 accordingly. We also clarified the argument for what was written before at the end of step 4 and added a few sentences for this, following the algorithm.    
+
 p.11. Do you mean lower variance or lower bias?
+
+> In the pareto case the Hill estimator is less biased, but in all cases it has a higher variance compared to the other two estimators. We reformulated this part.  
 
 P.11. I do not see how you derived the conclusion: Therefore, the mle
 is...
 
+> The formulation "Therefore" was wrong. We changed the text accordingly. 
+
 P.14. Is that last formula an equality or an approximation?
 
-> This is an approximation. We changed that. 
+> This is an approximation. We replaced the equality sign by the approximately-equal sign. 
 
 P.18. Space forgotten in "assumption.For"
 
@@ -172,5 +181,5 @@ P.18. Space forgotten in "assumption.For"
 P.19. and earlier, Mark. M Meerschaert seems to be the only author
 cited with his full name and initials - maybe one should strive for uniformity here. 
 
-> We change this accordingly. 
+> We changed this accordingly. 
  
