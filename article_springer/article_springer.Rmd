@@ -143,8 +143,8 @@ events are either fixed
 or light-tailed, and this entails that the 
 threshold crossing times form a Poisson process [@Hsing88]. 
 Then as one increases the threshold and thus decreases the threshold 
-crossing probability $p$, the Poisson process is rarefied, i.e. its 
-intensity decreases _linearly_ with $p$ [see e.g. @beirlantBook]. 
+crossing probability $p_{\ell}$, the Poisson process is rarefied, i.e. its 
+intensity decreases _linearly_ with $p_{\ell}$ [see e.g. @beirlantBook]. 
 
 As will be shown below, in the heavy-tailed waiting time scenario threshold 
 crossing times form a _fractional Poisson process_ 
@@ -154,7 +154,7 @@ The family of Mittag-Leffler distributions nests the exponential
 distribution [@Haubold11], and hence the fractional Poisson process
 generalizes the standard Poisson process. 
 Again as the threshold size increases and the threshold crossing
-probability $p$ decreases, the fractional Poisson process is rarefied: 
+probability $p_{\ell}$ decreases, the fractional Poisson process is rarefied: 
 The scale parameter of the Mittag-Leffler inter-arrival times of 
 threshold crossing times increases, but _superlinearly_; 
 see the Theorem below.
@@ -190,14 +190,11 @@ As a model for extreme observations, we use a Marked Renewal Process (MRP):
 
 **Definition (MRP):** 
 
-: Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random 
-variables, where the $W_k > 0$ are interpreted as the *waiting times* 
-and $J_k \in [x_L, x_R]$ as the *event magnitudes* 
-($x_L \in [-\infty, +\infty), x_R \in (-\infty, +\infty]$). 
-If $W$ and $J$ are independent, the Marked Renewal Process is said to be *uncoupled*. 
+: Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random variables, where the $W_k > 0$ are interpreted as the *waiting times* 
+and $J_k \in \mathbb{R}$ as the *event magnitudes*. If $W$ and $J$ are independent, the Marked Renewal Process is said to be *uncoupled*. 
 
 
-We assume that the $k$-th magnitude $J_k$ occurs at time
+In the following we denote with $x_L \in [-\infty, +\infty)$ and $x_R \in (-\infty, +\infty]$) the left and right endpoint of the distribution of $J$. We assume that the $k$-th magnitude $J_k$ occurs at time
 $T_k = W_1 + \ldots + W_k$. 
 Based on an MRP, we define the Continuous Time Random Exceedance model
 (CTRE) as follows:
@@ -213,7 +210,7 @@ T(\ell) = \sum_{k=1}^{\tau(\ell)} W_k.$$
 By restarting the MRP at $\tau(\ell)$, inductively define the
 two i.i.d. sequences $T(\ell,n)$ and $X(\ell, n)$, $n \in \mathbb N$, 
 called the "inter-arrival times" and the "exceedances", respectively.
-The pair sequence $(T(\ell, n), W(\ell, n))_{n \in \mathbb N}$ is called 
+The pair sequence $(X(\ell, n), T(\ell, n))_{n \in \mathbb N}$ is called 
 a Continuous Time Random Exceedance model (CTRE). 
 If the underlying MRP is uncoupled, then the CTRE is also called 
 uncoupled. 
@@ -234,6 +231,12 @@ grid.arrange(p1,p2)
 ```
 
 In this article, we restrict ourselves to the uncoupled case, where $W$ and $J$ are independent. Then the two sequences $X(\ell, n)_{n \in \mathbb N}$ and $T(\ell, n)_{n \in \mathbb N}$ are independent as well. To see why, note that $X(\ell)$ is, in distribution, simply equal to $J - \ell | J > \ell$, independent of any waiting time $W_k$.  
+We assume for the rest of the article, that the magnitudes $(J_i)_{i \in \mathbb{N}}$ belong to the the max-domain of attraction of some non-degenerate distribution. This means there exist $a_n>0$ and $d_n \in \mathbb{R}$ such that 
+$$ a_n^{-1}(J_1 \vee \ldots \vee J_n -d_n) \Rightarrow A \text{ as } n \rightarrow \infty.$$
+Hence, the distribution of $A$ is a generalized extreme value distribution (GEV) which distribution function is given by 
+$$ F(x;\xi) = \begin{cases}\exp(-(1+\xi x)^{-1/\xi}) & \xi\neq0 \\ \exp(-\exp(-x)) & \xi = 0\end{cases}.$$ 
+The GEV is subdivided into the Gumbel ($\xi=0$), the Weibull ($\xi<0$) and the Fr'echet ($\xi>0$) family of distributions.  
+
 Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top panel, where $W$ has a stable distribution with tail parameter $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and where $J$ is from a standard Gumbel distribution. In the bottom panel, we plot a time series of solar flare intensities derived from a NASA dataset [@HXRBS] which we will later examine more closely (see Section 7). Clearly, the simulated data exhibit long intervals 
 _without any_ events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have visually similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and discards them.
 
@@ -248,14 +251,14 @@ In this section we state and prove the key theorem. For an accessible introducti
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
 \quad n \to \infty
 \end{align}
-for a function $b(n)$ which is regularly varying at $\infty$ with parameter $1/\beta$, and where $\mathbf E[\exp(-sD)] = \exp(-s^\beta)$. Write $p := \mathbf P(J > \ell)$. Then the weak convergence
+for a function $b(n)$ which is regularly varying at $\infty$ with parameter $1/\beta$, and where $\mathbf E[\exp(-sD)] = \exp(-s^\beta)$. Write $p_{\ell} := \mathbf P(J > \ell)$. Then the weak convergence
 $$
-\frac{T(\ell)} {b(1/p)} \to W_\beta \quad \text{ as } \quad \ell \uparrow x_R
+\frac{T(\ell)} {b(1/p_{\ell})} \to Z_\beta \quad \text{ as } \quad \ell \uparrow x_R
 $$
-holds, where the Mittag-Leffler random variable $W_\beta$ is defined on 
+holds, where the Mittag-Leffler random variable $Z_\beta$ is defined on 
 the positive real numbers via 
 $$
-\mathbf E[\exp(-sW_\beta)] = \frac{1}{1+s^\beta}.
+\mathbf E[\exp(-sZ_\beta)] = \frac{1}{1+s^\beta}.
 $$ 
 
 
@@ -306,11 +309,11 @@ Without loss of generality, we choose $\ell^*$ such that $F(\ell^*) = 1/e$,
 and let $\ell = a(\tilde b(c)) \ell^* + d(\tilde b(c))$. 
 We may then calculate 
 $$
-\mathbf P\left[ \frac{T(\ell)}{b(1/p)} > t \right]
-= \mathbf P[T(\ell) > b(1/p) t]
+\mathbf P\left[ \frac{T(\ell)}{b(1/p_{\ell})} > t \right]
+= \mathbf P[T(\ell) > b(1/p_{\ell}) t]
 = \mathbf P[V(ct) \le \ell]
 $$
-where we have substituted $c = b(1/p)$. Moreover 
+where we have substituted $c = b(1/p_{\ell})$. Moreover 
 $$
 \mathbf P[V(ct) \le \ell]
 = \mathbf P\left[ \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
@@ -330,7 +333,7 @@ Using [Theorem 19.1, @Haubold11], we see that
 $X^{1/\beta} D \sim {\rm ML}(\beta, 1)$, concluding the proof. 
 \qed  
 
-For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma W_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
+For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma Z_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
 a heavy-tailed positive distribution for $\beta < 1$, with infinite mean. 
 However, as $\beta \uparrow 1$, ${\rm ML}(\beta, \sigma)$ converges 
 weakly to the exponential distribution ${\rm Exp}(\sigma)$ with mean $\sigma$.
@@ -360,7 +363,7 @@ do not apply.
 
 # Model Choice and inference for the Mittag-Leffler distribution{#sec:ML}
 
-The classical POT approach is based on the fact that exceedances above a high threshhold are asymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enough threshhold. Due to the Theorem in the last Section we know that for high thresholds the times between exceedances are asymptotically Mittag-Leffler distributed in case of heavy-tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we discuss inference for Mittag-Leffler distributions.
+The classical POT approach is based on the fact that exceedances above a high threshold are asymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enough threshold. Due to the Theorem in the last Section we know that for high thresholds the times between exceedances are asymptotically Mittag-Leffler distributed in case of heavy-tailed waiting times between the observations. Hence, before we talk about inference for the exceedances in the next section, we discuss inference for Mittag-Leffler distributions.
 
 Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
 
@@ -437,7 +440,7 @@ df_LRT_boot_01 %>% filter(n=="20" || n=="50" || n=="100" || n=="200") %>% ggplot
 
 The Theorem in Section \ref{sec:scaling} implies that for a high 
 threshold $\ell$ we may approximate the distribution of $T(\ell)$ with an 
-${\rm ML}(\beta, b(1/p))$ distribution, 
+${\rm ML}(\beta, b(1/p_{\ell}))$ distribution, 
 where the function $b(c)$ varies regularly at $\infty$ with parameter $1/\beta$.
 Building on the POT (Peaks-Over-Threshold) method, we propose the following estimation procedure for the distribution of inter-exceedance time $T(\ell)$: 
 
@@ -462,11 +465,11 @@ Setting the threshold at $X_{(k)}$, the threshold exceedance times follow a
 Mittag-Leffler distribution with shape parameter $\hat \beta$ and scale parameter
 $\hat \sigma_0 k^{-1/\beta}$. 
 
-To clarify Step 4: Recall that by the theorem, $\sigma_k / b(1/p)$ is expected to stabilize 
+To clarify Step 4: Recall that by the theorem, $\sigma_k / b(1/p_{\ell})$ is expected to stabilize 
 around a constant as $k \downarrow K_0$. Since $b$ is regularly varying with parameter
-$1/\beta$, we have $b(1/p) = p^{-1/\beta} / L(1/p)$ for some slowly varying function $L$. 
-Approximating $p \approx \hat p := k / n$, we have 
-$$\text{const} \approx \sigma_k / b(1/p) = \sigma_k \times p^{1/\beta} L(1/p) \approx \sigma_k \times k^{1/\beta} n^{-1/\beta} L(n/k)$$
+$1/\beta$, we have $b(1/p_{\ell}) = p_{\ell}^{-1/\beta} / L(1/p_{\ell})$ for some slowly varying function $L$. 
+Approximating $p_{\ell} \approx \hat p_{\ell} := k / n$, we have 
+$$\text{const} \approx \sigma_k / b(1/p_{\ell}) = \sigma_k \times p_{\ell}^{1/\beta} L(1/p_{\ell}) \approx \sigma_k \times k^{1/\beta} n^{-1/\beta} L(n/k)$$
 Assuming that the variation of $L(n/k)$ is minor, we can hence see that 
 $\sigma_k k^{1/\beta}$ stabilizes.
 
@@ -508,7 +511,7 @@ show that $D$ must have the stable distribution
 $S_\beta(\cos(\pi \beta/2)^{1/\beta}, +1, 0)$, which is 
 implemented in the R package `stabledist` by @stabledist. By the Theorem, the distribution of $T(\ell)$ is approximately 
 $$
-{\rm ML}(\beta, p^{-1/\beta}) 
+{\rm ML}(\beta, p_{\ell}^{-1/\beta}) 
 = {\rm ML}(\beta, k^{-1/\beta} n^{1/\beta}),
 $$
 which means 
@@ -819,8 +822,8 @@ extRemes::qqplot(x = log(sample_data), y = log(population_data),
 
 Figure \ref{fig:flares} shows the stability plots for the solar flare data, on the left for the tail parameter and on the right for the scale parameter. The dark grey ranges correspond to 95% confidence intervals, which are derived from the asymptotic normality of the log-moments estimators [@Cahoy2013] and the $\delta$-method [@MittagLeffleR]; dashed lines show the deduced true values of $\beta$ resp.\ $\sigma_0$. The stability plot for the tail stabilizes nicely around 0.85 (dashed line), while 
 the scale parameter stabilizes less obviously near $3 \times 10^7$ (dashed line).
-The growth of the scale parameter for lower threshold appears to be closer to linear in $p$, 
-rather than proportional to $p^{1/0.85}$ as suggested by the Mittag-Leffler
+The growth of the scale parameter for lower threshold appears to be closer to linear in $p_{\ell}$, 
+rather than proportional to $p_{\ell}^{1/0.85}$ as suggested by the Mittag-Leffler
 fits. The reason for this is likely that the overall goodness of fit as 
 compared to an exponential distribution is improved due to the 
 peaked shape of the Mittag-Leffler distribution near $0$,
@@ -849,9 +852,9 @@ T(\ell) \sim {\rm ML}(\beta, k^{-1/\beta} \sigma_0),
 $$
 where $\beta = 0.85$ and $\sigma_0 = 3.0 \times 10^7 {\rm sec}$. 
 Unlike the exponential distribution, the Mittag-Leffler distribution is not memoryless, and the probability density of the time $t$ until the next threshold crossing will depend on the time $t_0$ elapsed since the last threshold crossing.
-This density equals 
+This density is approximately equal to 
 $$
-p(t|\beta, \sigma_0, \ell, t_0) = \frac{f(t + t_0 | \beta, k^{-1/\beta} \sigma_0)}{\mathbf P[T_\ell > t_0]}
+p(t|\beta, \sigma_0, \ell, t_0) \approx \frac{f(t + t_0 | \beta, k^{-1/\beta} \sigma_0)}{\mathbf P[T_\ell > t_0]}
 $$
 where $f(\,\cdot\, | \beta, k^{-1/\beta} \sigma_0)$ is the probability density of ${\rm ML}(\beta, k^{-1/\beta} \sigma_0)$. 
 The more time has passed without a threshold crossing, the more the probability distribution shifts towards larger values for the next crossing
@@ -905,8 +908,8 @@ right panel).
 # Discussion & Conclusion
 
 We have extended the POT (Peaks-over-Threshold) model, a mainstay of extreme value theory, to "bursty" time series, which have been studied 
-intensively in statistical physics. Burstiness is characterized by power-law waiting times between events, and we have shown that the Mittag-Leffler distribution arises naturally as a scaling limit for the inter-exceedance times of high thresholds. Moreover, we have derived the following non-linear scaling behaviour: $\sigma \sim p^{-1/\beta}$, where $\sigma$ is the scale parameter of the distribution of threshold 
-exceedance times, $p$ is the fraction of magnitudes above the threshold, and $\beta$ the exponent of the power law. 
+intensively in statistical physics. Burstiness is characterized by power-law waiting times between events, and we have shown that the Mittag-Leffler distribution arises naturally as a scaling limit for the inter-exceedance times of high thresholds. Moreover, we have derived the following non-linear scaling behaviour: $\sigma \sim p_{\ell}^{-1/\beta}$, where $\sigma$ is the scale parameter of the distribution of threshold 
+exceedance times, $p_{\ell}$ is the fraction of magnitudes above the threshold, and $\beta$ the exponent of the power law. 
 This "anomalous" scaling behaviour in the bursty setting entails two phenomena: 
 
 i) a heavy tail of the inter-arrival time distribution of threshold crossings (long rests), and 
@@ -915,7 +918,7 @@ ii) a high propensity for more threshold crossing events immediately after each 
 
 The Mittag-Leffler distribution captures both phenomena, due to its heavy tail as well as its stretched exponential (peaked) asymptotics for small times. It generalizes the exponential distribution, and in the solar flare data example, this generalization is warranted, because the likelihood-ratio test is strongly significant. 
 
-When we introduced the CTRE model, we assumed that all events are i.i.d. This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the i.i.d. assumption.For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are i.i.d. 
+When we introduced the CTRE model, we assumed that all events are i.i.d. This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the i.i.d. assumption. For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are i.i.d. 
 
 The bursty CTRE approach to model "non-Poissonian" threshold crossing times should be contrasted with the (now standard) approach of clusters of extremes, see e.g. @ferro2003inference. In this approach, i.i.d. event sequences of magnitudes are generalized to stationary sequences of
 event magnitudes (subject to a mixing condition). The two approaches are fundamentally different: A clustering model assumes that each event 

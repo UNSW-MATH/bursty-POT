@@ -1,12 +1,15 @@
-# Changes to previous version
+# Response to the reviewers’ comments on the paper
+
+We would like to thank the reviewers very much for their careful reviews and the helpful comments that gave us the opportunity to improve the manuscript.
+Below we explain point by point how we addressed the comments during our revision of the manuscript.
+
 
 ## Referee 1
 
 ### Major points and questions
 
 > It should be noted, however, that this process has light-tailed
-Mittag-Leffler marginals, while the authors of the paper under review encounter a
-different, heavy-tailed Mittag-Leffler law.
+Mittag-Leffler marginals, while the authors of the paper under review encounter a different, heavy-tailed Mittag-Leffler law.
 
 + We have added the following sentence near the end of Section 3: 
 "We caution the reader that, somewhat confusingly, there is another distribution
@@ -17,7 +20,7 @@ Meerschaert, Mark M, and Hans-Peter Scheffler. 2004. “Limit Theorems forContin
 
 > (p.5, l. 9-13) Why is it true that the limiting distribution exists? It is well known... 
 
-KATHI TO DO
+In case of a continuous distribution one can choose the normalization in such a way that a non-degenerate limit distributions exists, but this is not neccessarily true for a linear normalization. We just forgot to add the assumption, that the distribution of the magnitudes is out of the domain of attraction of an extreme value distribution. We added this accordingly. 
 
 > Note: It is important to observe that due to the fact that the waiting times Wj ’s have infinite
 means, the renewal counting process N(t) cannot be made stationary (through a random shift) and hence this model does not fall into the classic context of Hsing-Leadbetter and Davis-Hsing.
@@ -107,3 +110,67 @@ In the last paragraph of Section 5, we have included pointers to the literature 
     feasible. 
 37. fixed
 38. fixed
+
+## Referee 2
+
+P.3. Definition MPR uses the left and the right end point of the distribution without precise explanation. The role of the sequence $(J_k)$ in the rest of the text should be also discussed.
+
+> We added a definition for the left and the right point.
+  NOCH ETWAS ZU DEN J_k ERGAENZEN.
+
+P.3. in the CTRE definition, in $(T(l,n),W(l,n))_n$, one might expect
+$X(l,n)$.
+
+> You are completely right. This was a typo. We changed this accordingly. 
+
+P.3. Probably $J-l |J > l$?
+
+> You are completely right again. This was also a typo. We changed this accordingly.  
+
+P.4. In the first line of the theorem waiting times should be $W_k$. To avoid confusion, it would be better to use $p_l$ instead of $p$ and some other letter to denote the limit instead of $W_{\beta}$. 
+
+> We changed this accordingly. 
+
+P.5. In the proof you use the fact that $J_k$ have continuous distribution, but this has not been assumed. You also use the fact that $J_k$ belong to some maximal domain of attraction - which is not assumed either.
+
+> Thank you. We added an assumption accordingly. 
+
+
+P.5. You should be careful about which parameter tends to infinity in
+your limiting relations, it seems that $c \rightarrow \infty$ is missing at several places, and $t \rightarrow \infty$ appears instead at one point.
+
+P.5. You seem to to assume that your $l$ grows at a very precise rate - could this be a problem?
+
+P.6. The last two lines of the proof need more explanation, I think.
+
+P.6. threshold
+
+> Fixed.
+
+P.7. Could you comment worse performance of the estimator of the scale
+for small tail indices.
+
+P.7. the Hill or hill estimator?
+
+> Fixed.
+
+P.9. In step 3. could you explain how the plot "stabilizes" as $l$ increases since one gets very few observations in that region? Argument behind step 4. should be written out, in my opinion.
+
+p.11. Do you mean lower variance or lower bias?
+
+P.11. I do not see how you derived the conclusion: Therefore, the mle
+is...
+
+P.14. Is that last formula an equality or an approximation?
+
+> This is an approximation. We changed that. 
+
+P.18. Space forgotten in "assumption.For"
+
+> Fixed.
+
+P.19. and earlier, Mark. M Meerschaert seems to be the only author
+cited with his full name and initials - maybe one should strive for uniformity here. 
+
+> We change this accordingly. 
+ 
