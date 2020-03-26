@@ -194,7 +194,7 @@ As a model for extreme observations, we use a Marked Renewal Process (MRP):
 and $J_k \in \mathbb{R}$ as the *event magnitudes*. If $W$ and $J$ are independent, the Marked Renewal Process is said to be *uncoupled*. 
 
 
-In the following we denote with $x_L \in [-\infty, +\infty)$ and $x_R \in (-\infty, +\infty]$) the left and right endpoint of the distribution of $J$. We assume that the $k$-th magnitude $J_k$ occurs at time
+In the following we denote with $x_L \in [-\infty, +\infty)$ and $x_R \in (-\infty, +\infty]$ the left and right endpoint of the distribution of $J$. We assume that the $k$-th magnitude $J_k$ occurs at time
 $T_k = W_1 + \ldots + W_k$. 
 Based on an MRP, we define the Continuous Time Random Exceedance model
 (CTRE) as follows:
