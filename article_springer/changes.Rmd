@@ -132,22 +132,21 @@ tween two models. Observe that the peaks over threshold l are ignored, so
 random variable $\tau(l)$ could be substituted by any other independent geo-
 metric (or exponential) random variable with mean $1/p(l)$. Moreover, I think, this would simplify some arguments, including the proof of the theorem."
 
-* One connection to the Peaks-Over-Threshold (POT) method is, that one has to apply the classical POT approach to the magnitudes. To make this more clear for the reader, we added a comment at the beginning of Section 4. Additionally, inspirited by the POT method, as you said, we propose to fit the inter-exceedance times in a similar fashion: namely, by fitting a Mittag-Leffler distribution to the inter-exceedance times between the peaks over threshold via stability plots. It is true, that the underlying distribution of the magnitudes, in the way we defined the algorithm, gets nearly ignored. A probable extension of our algorithm could be to approximate the tail probability $p_{\ell}$ for very large thresholds by the GPD distribution, which was in a step before fitted to the magnitudes. We add a remark on this after the algorithm.   
+* One connection to the Peaks-Over-Threshold (POT) method is, that one has to apply the classical POT approach to the magnitudes. To make this more clear for the reader, we added a comment at the beginning of Section 4. Additionally, and indeed inspired by the POT method, we propose to fit the inter-exceedance times in a similar fashion: namely, by fitting a Mittag-Leffler distribution to the inter-exceedance times between the peaks over threshold via stability plots. It is true that we largely ignore the underlying distribution of the magnitudes in our algorithm. Our algorithm could potentially be improved by i) fitting a GPD distribution to the exceedances and thus ii) more accurately approximating the tail probability $p_{\ell}$. We mention this idea in a remark following the algorithm.
 
 
 "The CTRE model considered here can be viewed as a special family of
 renewal processes (with power-law waiting times). Their relatively simple
-structure makes them amenable to theoretical analysis but for the same rea-
-son, I am not convinced that the CTRE model represents a really good
+structure makes them amenable to theoretical analysis but for the same reason, I am not convinced that the CTRE model represents a really good
 alternative to cluster models as a model for bursty data. The authors' claim
 that "visually similar statistical behaviour" can be seen in some real life data
 set seems a bit too vague to me."
 
-* The CTRE model is not intended as a substitute for the usual cluster models. It should be more seen as a complement. If there are dependencies in the data, one should first decluster the data. If there are still clusters after (see for example p.3 in @towe2020modelling), the CTRE can maybe account for this behavior. We add a comment on this to the Discussion & Conclusion. 
+* The CTRE model is not intended as a substitute for the usual cluster models, but rather as a complement. If there are dependencies in the data, one should first decluster the data. If there are still clusters thereafter (see for example p.3 in @towe2020modelling), the CTRE can possible account for this behavior. We added a comment on this to the Discussion & Conclusion Section. 
 
 "Although auto-correlation plots given in Figure 7, after log-transforming data (this does not always ensure infiniteness of moments note) seem to indicate limited dependence in the sequence $log T(l,n)$, it is well known that the choice of such a transformation can in influence appearance of a corresponding graph."
 
-* That is of course true. We calculated here the auto-correlations under the assumption that the underlying data is Mittag-Leffler distributed. The log-Moments of a Mittag-Leffler distribution exist. We added a comment on this in Section 7 to the part "i.i.d.". It is also true that the log-transformation can influence the appearance of the graph. ACFs can always just discover linear dependencies. However, this is just a diagnostic tool to indicate whether the independence assumption is justified. We added for this a comment in the manuscript as well in Section 7 after describing the diagnostic tools. 
+* This is of course true. We calculated here the auto-correlations under the assumption that the underlying data is Mittag-Leffler distributed. The log-Moments of a Mittag-Leffler distribution exist. We added a comment on this in Section 7 to the part "i.i.d.". It is also true that the log-transformation can influence the appearance of the graph. ACFs only uncover linear dependencies reliably. However, this is just a diagnostic tool to indicate whether the independence assumption is justified. We added a comment on this issue in Section 7 after describing the diagnostic tools. 
 
 "The authors finally apply two methods (log-moments and MLE) to estimate parameters of the limiting Mittag-Leffler distribution, and obtain in the process an estimator of the key tail parameter $\beta$. These methods seems to outperform the standard Hill estimator in a simulation study although
 the latter utilizes a much larger data set typically. This phenomena asks
@@ -155,13 +154,12 @@ for at least some explanation and a further study, because if it holds more
 generally, the authors could use their approach as a superior alternative to
 the Hill estimator for any power law distribution with $\beta$ < 1."
 
-* It's in interesting idea to use the proposed method for the estimation of the tail index for any power law with $\beta$ < 1. However, this goes beyond the scope of our article. In our article we know from the theory that the inter-exceedance times which we want to model are approximately Mittag-Leffler distributed, hence its natural to use here specific Mittag-Leffler scale and tail estimators. 
+* It is an interesting idea to use the proposed method for the estimation of the tail index on *any* power law with $\beta$ < 1. However, this goes beyond the scope of our article. In the setting of our article the inter-exceedance times we want to model are approximately Mittag-Leffler distributed, hence it is natural to use specific Mittag-Leffler scale and tail estimators here. 
 
 "The manuscript seems nicely organized. However, writing is not always
-precise, the paper contains some typos and not entirely rigorous mathemati-
-cal arguments.""
+precise, the paper contains some typos and not entirely rigorous mathematical arguments.""
 
-* We revised the whole manuscript according typos, added the missing assumption for the magnitudes and replaced the proof of the theorem by a new, simplified version (EVTL NOCH ANPASSEN). 
+* We revised the whole manuscript according typos, added the missing assumption for the magnitudes and replaced the proof of the theorem by a new, simplified version. 
 
 "I also do not see a clear connection with the POT method suggested in the abstract, mainly because exceedances really play insignifficant role in the analysis."
 
@@ -173,11 +171,11 @@ cal arguments.""
 
 "P.3. in the CTRE definition, in $(T(l,n),W(l,n))_n$, one might expect $X(l,n)$."
 
-* You are completely right. This was a typo. We changed this accordingly. 
+* We agree and corrected this typographic error.
 
 "P.3. Probably $J-l |J > l$?"
 
-* You are completely right again. This was also a typo. We fixed that.  
+* This is correct, and we made the change.
 
 "P.4. In the first line of the theorem waiting times should be $W_k$. To avoid confusion, it would be better to use $p_l$ instead of $p$ and some other letter to denote the limit instead of $W_{\beta}$." 
 
@@ -194,11 +192,11 @@ your limiting relations, it seems that $c \rightarrow \infty$ is missing at seve
 
 "P.5. You seem to assume that your $l$ grows at a very precise rate - could this be a problem?"
 
-* TO DO (evtl noch anpassen) We gave a completely new proof. Hence this point no longer applies. 
+* We gave a completely new proof. Hence this point no longer applies. 
 
 "The last two lines of the proof need more explanation, I think."
 
-* (EVTL noch anpassen) We added some more explanation to the last two lines. 
+* We added some more explanation to the last two lines. 
 
 "P.6. threshold"
 
@@ -207,7 +205,7 @@ your limiting relations, it seems that $c \rightarrow \infty$ is missing at seve
 "P.7. Could you comment worse performance of the estimator of the scale
 for small tail indices."
 
-* For very small tail indices, the (R)MSE is large due to a large variance that results from the fact that in case of a very small tail index single very large events can happen. In the submitted version of the article the simulation study was based on one thousand simulation runs. This was maybe a little bit too small, hence I repeated the study with five thousand runs and now the MSE looks for very small indices more acceptable. I also changed to RMSE since it is easier to interpret.  
+* For very small tail indices, the (R)MSE is large due to a large variance that results from the fact that in case of a very small tail index single very large events can happen. In the submitted version of the article the simulation study was based on one thousand simulation runs. This was maybe a little bit too small, hence we repeated the study with five thousand runs and now the MSE looks for very small indices more acceptable. We also changed to RMSE since it is easier to interpret.  
 
 "P.7. the Hill or hill estimator?"
 
@@ -215,7 +213,7 @@ for small tail indices."
 
 "P.9. In step 3. could you explain how the plot "stabilizes" as $l$ increases since one gets very few observations in that region? Argument behind step 4. should be written out, in my opinion."
 
-* You are right. We should better explain this. The plot stabilizes in a region in the middle. We reformulated step 3 accordingly. We also clarified the argument for what was written before at the end of step 4 and added a few sentences for this, following the algorithm.    
+* We agree that this should be explained better. The plot stabilizes in a region in the middle. We reformulated step 3 accordingly. We also clarified the argument for what was written before at the end of step 4 and added a few sentences for this, following the algorithm.    
 
 "p.11. Do you mean lower variance or lower bias?""
 
