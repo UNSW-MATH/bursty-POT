@@ -69,11 +69,3 @@ reshape2::melt(estimates) %>%
   tbl_ML_estim
 
 save(tbl_ML_estim,file="tbl_ML_estim.RData")
-
-# RMSE
-
-tbl_ML_estim %>%
-  ggplot(aes(true.tail,rmse, colour = method)) +
-  geom_line() + geom_point() +
-  facet_grid(param ~ n, scales = "free_y") +
-  scale_colour_brewer("method", palette = "Set1")
