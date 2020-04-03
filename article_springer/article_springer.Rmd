@@ -265,80 +265,49 @@ $$
 $$ 
 
 
-*Proof of Theorem:* We interpret the threshold crossing time $T(\ell)$ as the hitting time of the 
-underlying CTRM (Continuous Time Random Maxima) or "max-renewal process", 
-and then utilize a result by @MeerschaertStoev08. 
-The running maximum process is defined as 
-$$
-M(c) := J_1 \vee \ldots \vee J_{\lfloor c \rfloor},
-$$
-and since the $J_k$ lie in the domain of attraction of a max-stable distribution $F$ (see \eqref{assumptionJs}), there exist 
-norming functions $a(c)$ and $d(c)$ such that 
-$$
-\mathbf P\left[ \frac{M(c) - d(c)}{a(c)} \le \ell^* \right] 
-\longrightarrow F(\ell^*), \quad c \to \infty
-$$
-where $F$ is a generalized extreme value distribution, and $\ell^*$ is any 
-value from the support of $F$. 
-The CTRM process is then defined via 
-$$
-V(t) = M(N(t)), \quad t \ge 0
-$$
-where $N(t)$ is the renewal process associated with the waiting times 
-$W_k$: 
-$$
-N(t) = \max\{n: W_1 + \ldots + W_n \le t\}.
-$$
-Now a key observation is that
-$$
-T(\ell) = \inf\{t: V(t) > \ell\}, 
-$$
-and that 
-
-\begin{align}
-T(\ell) > t \quad \text{ if and only if } \quad V(t) \le \ell. \label{inverserelat}
-\end{align}
-
-By [Theorem 3.1, @MeerschaertStoev08], we have the stochastic process 
-convergence 
-
-\begin{align}
-\frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
-\stackrel{d}{\longrightarrow} Y(t),  \quad c \to \infty, \label{TheoMS}
-\end{align}
-
-for $t > 0$, where $Y(t)$ is a time-changed ("subordinated") extremal process, and where 
-$\tilde b(c)$ is a regularly varying norming function which is
-_inverse_ to $b(c)$, in the sense that 
-$b(\tilde b(c)) \sim c \sim \tilde b(b(c))$ [@BinghamGoldieTeugels]. 
-
-Without loss of generality, we choose $\ell^*$ such that $F(\ell^*) = 1/e$, 
-and let $\ell = a(\tilde b(c)) \ell^* + d(\tilde b(c))$. 
-We may then calculate 
-$$
-\mathbf P\left[ \frac{T(\ell)}{b(1/p_{\ell})} > t \right]
-= \mathbf P[T(\ell) > b(1/p_{\ell}) t]
-= \mathbf P[V(ct) \le \ell]
-$$
-where we have substituted $c = b(1/p_{\ell})$ and used \eqref{inverserelat}. Moreover, we receive due to the convergence in \eqref{TheoMS}
-$$
-\mathbf P[V(ct) \le \ell]
-= \mathbf P\left[ \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
-\le \frac{\ell - d(\tilde b(c))}{a(\tilde b(c))} \right]
-\longrightarrow \mathbf P\left[ Y(t) \le \ell^* \right] ,  \quad c \to \infty,
-$$
-for $t>0$. Defining the hitting time of level $\ell^*$ by $Y(t)$ as 
-$\xi_{\ell^*} := \inf\{t: Y(t) > \ell^*\}$,
-we then have 
-$$
-P\left[ Y(t) \le \ell^* \right] = \mathbf P[\xi_{\ell^*} > t] 
-= \mathbf P[(-\log F(\ell^*))^{-1/\beta} X^{1/\beta} D > t]
-$$
-by [Proposition 4.2, @MeerschaertStoev08], where $X$ is an exponential 
-random variable with mean $1$. 
-Using [Theorem 19.1, @Haubold11], we see that 
-$X^{1/\beta} D \sim {\rm ML}(\beta, 1)$, concluding the proof. 
-\qed  
+*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, it follows
+	\begin{align*}
+	P\left(\frac{M(c)-d(c)}{a(c)} \leq x\right) \rightarrow F(x) \text{ as } c \rightarrow \infty,
+	\end{align*}
+	where $x$ is any value from the support of $F$. Then it follows,
+	\begin{align*}
+	  F(xa(c)+d(c))^{\lfloor c \rfloor} &\rightarrow F(x) \text{ as } c \rightarrow \infty,\\
+      \Rightarrow  \lfloor c \rfloor \log F(\ell_c)  &\rightarrow \log F(x)\text{ as } c \rightarrow \infty,
+	\end{align*}
+	with $\ell_c:=xa(c)+d(c)$. Furthermore, since $\log(1-x) \sim -x$ for small $x$ it follows
+    \begin{align}
+      c \cdot p(\ell_c) \rightarrow -\log F_A(x)  \text{ as } c \rightarrow \infty,\label{eq:lplconv}
+    \end{align}
+	 with $p(\ell_c):= \overline{F}(\ell_c)$. Since $\tau(\ell_c) \sim Geo(p(\ell_c))$ and \eqref{eq:lplconv}
+	it follows that $\tau(\ell_c)/c$ converges to an Exponential distributed random variable,
+	\begin{align*}
+	\frac{\tau(\ell_c)}{c} \Rightarrow E  \text{ as } c \rightarrow \infty
+	\end{align*}
+	 with parameter $\lambda:=-\log F_A(x)$. Due to
+	\begin{align*}
+	S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \ \text{ as } c \rightarrow \infty,
+	\end{align*}
+    it follows with Gnedenkos transfer theorem (see @gnedenko1983limit), that
+	\begin{align}
+	\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z\ \text{ as }  c \rightarrow \infty, \label{TheoGutArg}
+	\end{align}
+	where the distribution of $Z$ has the characteristic function
+	\begin{align}
+    \Psi(t) &= \int_0^{\infty} (\Phi_D(t))^{y} F_E(dy) \nonumber\\
+    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(t))/\lambda} \nonumber\\
+    &= \frac{1}{1+s^{\beta}\lambda^{-1}}
+	\end{align}
+    where $\Phi_D$ resp. $F_E$ denotes Laplace transform of $D$ resp. the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with parameter $\lambda^{-1/\beta}$. Since
+	\begin{align*}
+    \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(1/p(\ell_c))} = \left(\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(c) }\right) \frac{b(c)}{b(1/p(\ell_c))}  
+	\end{align*}
+	and due to
+	\begin{align*}
+	\frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty.
+	\end{align*}
+	the second factor converges to $\lambda^{1/\beta}$, it follows that
+	 $Z \sim ML(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$ the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
+\qed
 
 For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma Z_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
 a heavy-tailed positive distribution for $\beta < 1$, with infinite mean. 
@@ -380,22 +349,26 @@ Due to the form of the density function of a Mittag-Leffler distribution there e
 
 ```{r MSE, echo=FALSE,warning=FALSE, fig.height=7,fig.width=8,fig.align="center", fig.cap="\\label{fig:MSE} MSE for the estimation of tail (left column) and scale (right column) parameters via log-Moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one, based on 5000 simulation runs.", out.width = '90%'}
 load(here::here("article_springer", "article_springer_files", "ML_estim_simu","tbl_ML_estim.RData"))
+  n.labs <-c("n=25", "n=100", "n=200")
+  names( n.labs ) <-  c("25", "100", "200")
 tbl_ML_estim %>% filter(method=="logMom" | method=="ML")%>%
   filter(n == "25" || n == "100" || n=="200") %>%
   filter(true.scale == "1") %>% 
   ggplot(aes(true.tail, rmse, colour = method, group=method)) + 
   geom_line() + geom_point() + 
-  facet_wrap(c("n","param"), scales = "free", ncol = 2) + 
-  scale_color_manual(values=c("red", "blue"))
+  facet_wrap(c("n","param"), scales = "free", ncol = 2, labeller = labeller(n = n.labs)) + 
+  scale_color_manual(values=c("red", "blue"),name = "Method", labels = c("log-Moment", "MLE"))
+  
 ```
 
 Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator [@hill1975simple] based on the $r+1$ upper order statistics
 \begin{align}\label{eq:Hill}
 H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^{-1}, 
 \end{align}
-where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. The Hill estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. It heavily depends on the choice of $r$ in \eqref{eq:Hill}, and hence on the number of order statistics entering \eqref{eq:Hill}.  Figure \ref{fig:Hillplots} shows Hill plots for simulated Mittag-Leffler data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from these plots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a large tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are many other tail-index estimators not considered in this article, since this would go beyond the scope of our article. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001]. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
+where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. The Hill estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. It heavily depends on the choice of $r$ in \eqref{eq:Hill}, and hence on the number of order statistics entering \eqref{eq:Hill}.  Figure \ref{fig:Hillplots} shows Hill plots for simulated Mittag-Leffler data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from one of those Hillplots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a small tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are extremely unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001]. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
 
-```{r Hillplots, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler data with true tail 0.8 and sample size 200 (left) and 10000 (right), with number of upper order statistics r on which the Hill estimator is based on the x-axis. ", out.width = '90%'}
+```{r Hillplots,  fig.height=5, fig.width=4, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (left) and 10000 (right), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", out.width = '50%'}
+
 hill_estim<-function(k,data){
   n<-length(data)
   data<-sort(data)
@@ -404,24 +377,54 @@ hill_estim<-function(k,data){
   return(1/r)
 }
 
-set.seed(1234)
-hill_estim_plot<-function(k_min,data,k_max=n,true_tail){
+
+hill_estim_range<-function(k_min,data,k_max=n,true_tail){
   n<-length(data)
   x_values<-k_min:k_max
   y_values<-sapply(x_values,hill_estim,data=data)
   df<-data.frame(x=x_values,y=y_values)
-  ggplot2::ggplot(data=df,aes(x_values,y_values))+ geom_line(color="blue")+xlab("Order Statistics") + ylab("Hill-Estimator of Tail Index") +
-  coord_cartesian(ylim=c(0,1.5)) + geom_hline(yintercept=true_tail, linetype="dashed", color = "red", size=0.5)
+  return(df)
 }
+
+
+hill_plot_values<-data.frame(x=numeric(),y=numeric(),rep=numeric())
+for  (m in 1:100){
 data_ml_1<-rml(n=200,tail=0.8,scale=1)
-p1<-hill_estim_plot(k_min=30,data=data_ml_1,true_tail=0.8) +
-  ggtitle("Hill plot, ML-data, n=200")
+df<-hill_estim_range(k_min=30,data=data_ml_1,true_tail=0.8)
+df<-df %>% mutate(rep=m)
+hill_plot_values<-bind_rows(df,hill_plot_values)
+}
 
-data_ml_2<-rml(n=10000,tail=0.8,scale=1)
-p2<-hill_estim_plot(k_min=30,k_max=200,data=data_ml_2,true_tail=0.8) +
-  ggtitle("Hill plot, ML-data, n=10000")
+mean_n200<-hill_plot_values %>% group_by(x) %>% summarize(mean=mean(y))
+p1<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep),colour="lightgrey") +
+  coord_cartesian(ylim = c(0.5, 1.5)) +
+  geom_line(aes(x=x, y=mean),colour="black",data=mean_n200) + 
+  ylab("Estimated tail") +
+  geom_hline(yintercept=0.8, linetype="dashed", color = "red")+
+  xlab("Order Statistics")+
+  ylab("Hill-Estimator of Tail Index")
 
-grid.arrange(p1,p2,ncol=2)
+
+hill_plot_values<-data.frame(x=numeric(),y=numeric(),rep=numeric())
+for  (m in 1:100){
+  data_ml_2<-rml(n=10000,tail=0.8,scale=1)
+  df<-hill_estim_range(k_min=30,k_max=200,data=data_ml_2,true_tail=0.8)
+  df<-df %>% mutate(rep=m)
+  hill_plot_values<-bind_rows(df,hill_plot_values)
+}
+mean_n1000<-hill_plot_values %>% group_by(x) %>% summarize(mean=mean(y))
+
+p2<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep),colour="lightgrey") +
+  coord_cartesian(ylim = c(0.5, 1.5)) +
+  geom_line(aes(x=x, y=mean),colour="black",data=mean_n1000) + 
+  ylab("Estimated tail") +
+  geom_hline(yintercept=0.8, linetype="dashed", color = "red")+
+  xlab("Order Statistics")+
+  ylab("Hill-Estimator of Tail Index")
+ 
+
+
+grid.arrange(p1,p2,nrow=2)
 ```
 
 Since the exponential distribution is nested in the Mittag-Leffler family of 

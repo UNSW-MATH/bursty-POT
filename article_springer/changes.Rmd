@@ -183,7 +183,7 @@ precise, the paper contains some typos and not entirely rigorous mathematical ar
 
 "P.5. In the proof you use the fact that $J_k$ have continuous distribution, but this has not been assumed. You also use the fact that $J_k$ belong to some maximal domain of attraction - which is not assumed either."
 
-* Thank you. We added an assumption accordingly.
+* Thank you. We replaced the proof by a new one as already mentioned above. Additionaly, we added the assumption that the $J_k$ belong to some max domain of attraction at the end of Section 2.
 
 "P.5. You should be careful about which parameter tends to infinity in
 your limiting relations, it seems that $c \rightarrow \infty$ is missing at several places, and $t \rightarrow \infty$ appears instead at one point."
@@ -196,7 +196,7 @@ your limiting relations, it seems that $c \rightarrow \infty$ is missing at seve
 
 "The last two lines of the proof need more explanation, I think."
 
-* We added some more explanation to the last two lines. 
+* Again this point no longer applies since we gave a completely new proof.  
 
 "P.6. threshold"
 

@@ -274,69 +274,43 @@ defined on the positive real numbers via \[
 \]
 \end{description}
 
-\emph{Proof of Theorem:} We interpret the threshold crossing time
-\(T(\ell)\) as the hitting time of the underlying CTRM (Continuous Time
-Random Maxima) or ``max-renewal process'', and then utilize a result by
-Meerschaert and Stoev (2008). The running maximum process is defined as
-\[
-M(c) := J_1 \vee \ldots \vee J_{\lfloor c \rfloor},
-\] and since we assumed that the \(J_k\) our out of the domain of
-attraction of a max-stable distribution \(F\) (see
-\eqref{assumptionJs}), there exist norming functions \(a(c)\) and
-\(d(c)\) such that \[
-\mathbf P\left[ \frac{M(c) - d(c)}{a(c)} \le \ell^* \right] 
-\longrightarrow F(\ell^*), \quad c \to \infty
-\] where \(F\) is a generalized extreme value distribution, and
-\(\ell^*\) is any value from the support of \(F\). The CTRM process is
-then defined via \[
-V(t) = M(N(t)), \quad t \ge 0
-\] where \(N(t)\) is the renewal process associated with the waiting
-times \(W_k\): \[
-N(t) = \max\{n: W_1 + \ldots + W_n \le t\}.
-\] Now a key observation is that \[
-T(\ell) = \inf\{t: V(t) > \ell\}, 
-\] and that
-
-\begin{align}
-T(\ell) > t \quad \text{ if and only if } \quad V(t) \le \ell. \label{inverserelat}
-\end{align}
-
-By (Theorem 3.1, Meerschaert and Stoev, 2008), we have the stochastic
-process convergence
-
-\begin{align}
-\frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
-\stackrel{d}{\longrightarrow} Y(t),  \quad c \to \infty, \label{TheoMS}
-\end{align}
-
-for \(t > 0\), where \(Y(t)\) is a time-changed (``subordinated'')
-extremal process, and where \(\tilde b(c)\) is a regularly varying
-norming function which is \emph{inverse} to \(b(c)\), in the sense that
-\(b(\tilde b(c)) \sim c \sim \tilde b(b(c))\) (Bingham et al., 1989).
-
-Without loss of generality, we choose \(\ell^*\) such that
-\(F(\ell^*) = 1/e\), and let
-\(\ell = a(\tilde b(c)) \ell^* + d(\tilde b(c))\). We may then calculate
-\[
-\mathbf P\left[ \frac{T(\ell)}{b(1/p_{\ell})} > t \right]
-= \mathbf P[T(\ell) > b(1/p_{\ell}) t]
-= \mathbf P[V(ct) \le \ell]
-\] where we have substituted \(c = b(1/p_{\ell})\) and used
-\eqref{inverserelat}. Moreover, we receive due to the convergence in
-\eqref{TheoMS} \[
-\mathbf P[V(ct) \le \ell]
-= \mathbf P\left[ \frac{V(ct) - d(\tilde b(c))}{a(\tilde b(c))} 
-\le \frac{\ell - d(\tilde b(c))}{a(\tilde b(c))} \right]
-\longrightarrow \mathbf P\left[ Y(t) \le \ell^* \right] ,  \quad c \to \infty,
-\] for \(t>0\). Defining the hitting time of level \(\ell^*\) by
-\(Y(t)\) as \(\xi_{\ell^*} := \inf\{t: Y(t) > \ell^*\}\), we then have
-\[
-P\left[ Y(t) \le \ell^* \right] = \mathbf P[\xi_{\ell^*} > t] 
-= \mathbf P[(-\log F(\ell^*))^{-1/\beta} X^{1/\beta} D > t]
-\] by (Proposition 4.2, Meerschaert and Stoev, 2008), where \(X\) is an
-exponential random variable with mean \(1\). Using (Theorem 19.1,
-Haubold et al., 2011), we see that
-\(X^{1/\beta} D \sim {\rm ML}(\beta, 1)\), concluding the proof. \qed  
+\emph{Proof of Theorem:} Due to assumption \eqref{assumptionJs}, it
+follows \begin{align*}
+    P\left(\frac{M(c)-d(c)}{a(c)} \leq x\right) \rightarrow F(x) \text{ as } c \rightarrow \infty,
+    \end{align*} where \(x\) is any value from the support of \(F\).
+Then it follows, \begin{align*}
+      F(xa(c)+d(c))^{\lfloor c \rfloor} &\rightarrow F(x) \text{ as } c \rightarrow \infty,\\
+      \Rightarrow  \lfloor c \rfloor \log F(\ell_c)  &\rightarrow \log F(x)\text{ as } c \rightarrow \infty,
+    \end{align*} with \(\ell_c:=xa(c)+d(c)\). Furthermore, since
+\(\log(1-x) \sim -x\) for small \(x\) it follows \begin{align}
+      c \cdot p(\ell_c) \rightarrow -\log F_A(x)  \text{ as } c \rightarrow \infty,\label{eq:lplconv}
+    \end{align} with \(p(\ell_c):= \overline{F}(\ell_c)\). Since
+\(\tau(\ell_c) \sim Geo(p(\ell_c))\) and \eqref{eq:lplconv} it follows
+that \(\tau(\ell_c)/c\) converges to an Exponential distributed random
+variable, \begin{align*}
+    \frac{\tau(\ell_c)}{c} \Rightarrow E  \text{ as } c \rightarrow \infty
+    \end{align*} with parameter \(\lambda:=-\log F_A(x)\). Due to
+\begin{align*}
+    S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \ \text{ as } c \rightarrow \infty,
+    \end{align*} it follows with Gnedenkos transfer theorem (see
+Gnedenko (1983)), that \begin{align}
+    \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z\ \text{ as }  c \rightarrow \infty, \label{TheoGutArg}
+    \end{align} where the distribution of \(Z\) has the characteristic
+function \begin{align}
+    \Psi(t) &= \int_0^{\infty} (\Phi_D(t))^{y} F_E(dy) \nonumber\\
+    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(t))/\lambda} \nonumber\\
+    &= \frac{1}{1+s^{\beta}\lambda^{-1}}
+    \end{align} where \(\Phi_D\) resp. \(F_E\) denotes Laplace transform
+of \(D\) resp. the distribution function of \(E\). Hence, \(Z\) is
+Mittag-Leffler distributed with parameter \(\lambda^{-1/\beta}\). Since
+\begin{align*}
+    \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(1/p(\ell_c))} = \left(\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(c) }\right) \frac{b(c)}{b(1/p(\ell_c))}  
+    \end{align*} and due to \begin{align*}
+    \frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty.
+    \end{align*} the second factor converges to \(\lambda^{1/\beta}\),
+it follows that \(Z \sim ML(\beta,1)\). Since \(c \rightarrow \infty\)
+is equivalent to \(\ell \uparrow x_R\) the assertion follows with
+\(\ell:=\ell_c\) and \(p_\ell:=p(\ell_c)\). \qed
 
 For a scale parameter \(\sigma > 0\), we write
 \({\rm ML}(\beta, \sigma)\) for the distribution of \(\sigma Z_\beta\).
@@ -376,19 +350,20 @@ distribution}\label{sec:ML}}
 The classical POT approach is based on the fact that exceedances above a
 high threshold are asymptotically GPD distributed, hence a GPD
 distribution is fitted to the exceedances above a high enough threshold.
-This approach was well-established a long time ago and is standard in
-extreme value theory nowadays. Hence we just refer here to the according
-literature (Smith (1984), Leadbetter (1991), Davison and Smith (1990)),
-a nice introduction can be found in Beirlant et al. (2006) Ch.5.3,
-Embrechts et al. (2013) Ch. 6.5. or Coles (2001) Ch.4. Hence, we focus
-in this article mainly on the inter-exceedance times. Due to the Theorem
-in the last Section we know that for high thresholds the times between
-exceedances are asymptotically Mittag-Leffler distributed in case of
-heavy-tailed waiting times between the observations. In this article we
-propose to proceed with inter-exceedance times in a similar fashion as
-with the magnitudes in the classical POT approach, more precisely to fit
-a Mittag-Leffler distribution via stability plots to the
-inter-exceedance times. Hence, before we talk about inference for the
+As this approach is by now well-established in extreme value theory, we
+do not discuss it any further. Instead, this article focuses on our new
+contribution: the modelling of inter-exceedance times. For literature
+pointing to POT see e.g.~Smith (1984); Leadbetter (1991); Davison and
+Smith (1990); Beirlant et al. (2006) Ch.5.3; Embrechts et al. (2013) Ch.
+6.5.; Coles (2001) Ch.4.
+
+Due to the Theorem in the last Section we know that for high thresholds
+the times between exceedances are asymptotically Mittag-Leffler
+distributed in case of heavy-tailed waiting times between the
+observations. In this article we propose to model inter-exceedance times
+in a similar fashion as magnitudes in the classical POT approach, more
+precisely to fit a Mittag-Leffler distribution to the inter-exceedance
+times via stability plots. Hence, before we discuss inference for the
 inter-exceedance times in the next section, we first discuss inference
 for Mittag-Leffler distributions.
 
@@ -432,37 +407,40 @@ H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^
 denote the order statistics in decreasing order of a sequence
 \(X_1,\ldots,X_n\). The Hill estimator only performs reliably well for
 distributions close to Pareto (see Resnick, 1997). It heavily depends on
-the choice of \(r\) in \eqref{eq:Hill}, hence on the number of order
-statistics entering into \eqref{eq:Hill}. Figure \ref{fig:Hillplots}
-shows Hill plots for Mittag-Leffler simulated data, with varying sample
-sizes and tails. To deduce the correct tail parameter estimates from
-these plots is virtually impossible. To estimate the tail parameter of a
-Mittag-Leffler distribution with the Hill estimator, the sample size has
-to be much larger and one has to choose a large tuning parameter \(r\).
-In case that only events above a high threshold are recorded,
-\(n=10000\) events are unrealistic. There is a vast literature on
-bias-reduced versions of the Hill estimator and on the optimal choice of
-\(r\), mainly based on imposed second-order regular variation conditions
-(see e.g.~Beirlant et al., 2006, p. Ch.4.4 and 4.7 and references in
-it). Also, there are lot of other tail-index estimators not taken under
-consideration in our article, since this would go beyond the scope of
-our article. However, we know from the Theorem in Section
-\ref{sec:scaling} that the inter-exceedance times are asymptotically
-Mittag-Leffler distributed. So all these general tail (and scale)
-estimation methods are statistically less efficient since they only use
-a portion of the information contained in the data, as mentioned by
-Kozubowski (2001). Furthermore, the Hill estimator of course completely
-fails, if the inter-arrival times are exponentially distributed and not
-heavy-tailed. Hence, we propose to use the log-Moment estimator or the
-MLE for Mittag-Leffler distributions.
+the choice of \(r\) in \eqref{eq:Hill}, and hence on the number of order
+statistics entering \eqref{eq:Hill}. Figure \ref{fig:Hillplots} shows
+Hill plots for simulated Mittag-Leffler data, with varying sample sizes
+and tails. To deduce the correct tail parameter estimates from one of
+those Hillplots is virtually impossible. To estimate the tail parameter
+of a Mittag-Leffler distribution with the Hill estimator, the sample
+size has to be much larger and one has to choose a small tuning
+parameter \(r\). In case that only events above a high threshold are
+recorded, \(n=10000\) events are extremely unrealistic. There is a vast
+literature on bias-reduced versions of the Hill estimator and on the
+optimal choice of \(r\), mainly based on imposed second-order regular
+variation conditions (see e.g.~Beirlant et al., 2006, p. Ch.4.4 and 4.7
+and references in it). Also, there are hundreds other tail-index
+estimators not considered in this article, since this would go beyond
+the scope of our article. For example the moment estimator (Dekkers et
+al., 1989), the Pickands estimator (Pickands III and others, 1975), the
+QQ-estimator (Kratz and Resnick, 1996), to name a few. A nice overview
+can be found in (Fedotenkov, 2018). However, we know from the Theorem in
+Section \ref{sec:scaling} that the inter-exceedance times are
+asymptotically Mittag-Leffler distributed, and hence it is unsurprising
+that general tail (and scale) estimation methods that do not take into
+account this structure are statistically less efficient (Kozubowski,
+2001). Finally, the Hill estimator completely fails in the important
+special case where the inter-arrival times are exponentially distributed
+and not heavy-tailed. For these reasons, we propose to use the
+log-Moment estimator or the MLE for Mittag-Leffler distributions.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\linewidth]{article_springer_files/figure-latex/Hillplots-1} 
+{\centering \includegraphics[width=0.5\linewidth]{article_springer_files/figure-latex/Hillplots-1} 
 
 }
 
-\caption{\label{fig:Hillplots} Hillplots for simulated Mittag-Leffler data with true tail 0.8 and sample size 200 (left) and 10000 (right), with number of upper order statics r on which the Hill estimator is based on the x-axis. }\label{fig:Hillplots}
+\caption{\label{fig:Hillplots} Hillplots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (left) and 10000 (right), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. }\label{fig:Hillplots}
 \end{figure}
 
 Since the exponential distribution is nested in the Mittag-Leffler
@@ -523,15 +501,16 @@ inter-exceedance time \(T(\ell)\):
     the parameter estimates \(\hat\beta_k\) and \(\hat \sigma_k\).
   \end{enumerate}
 \item
-  Plot \(k\) vs.~\(\hat \beta_k\). To the right, as
-  \(k \downarrow K_0\), the asymptotics are off and bias is high. To the
-  left (high threshold), data are scarce and variance is high. Choose a
-  region of \emph{stability} in the middle for a parameter estimate
-  \(\hat \beta\).
+  Plot \(k\) vs.~\(\hat \beta_k\). To the right (\(k \uparrow K\), low
+  threshold), the asymptotics are off and bias is high. To the left
+  (\(k \downarrow K_0\), high threshold), data is scarce and variance is
+  high. In the middle, look for a region of \emph{stability} for a
+  parameter estimate \(\hat \beta\). Choose as \(\hat \beta\) a
+  representative value from this region.
 \item
   Plot \(k\) vs.~\(k^{1/\hat \beta} \hat \sigma_k\). Again, choose a
-  region of \emph{stability} as \(k\) gets smaller and define
-  \(\hat \sigma_0\).
+  region of \emph{stability} and, and choose a representative
+  \(\hat \sigma_0\) from that region.
 \end{enumerate}
 
 The inferred values \(\hat \beta\) and \(\hat \sigma_0\) can then be
@@ -635,11 +614,10 @@ The performance of log-Moment and Maximum-Likelihood estimators for the
 tail resp. the scale parameter is shown in Figure \ref{Fig:TailSimu}
 resp. \ref{Fig:ScaleSimu}. Both estimators show good performance, with a
 slight advantage for the Maximum-Likelihood estimator. This advantage is
-paid for by a higher computational cost. Moreover, the bottom row in
+paid for with a higher computational cost. Moreover, the bottom row in
 Figure \ref{Fig:TailSimu} shows clearly that the log-Moment and
 Maximum-Likelihood estimators generalize to the exponential case
-(\(\beta = 1\)) whereas a general tail estimator like the Hill-estimator
-would not.
+(\(\beta = 1\)) whereas the Hill-estimator would not.
 
 \begin{figure}
 
@@ -843,35 +821,34 @@ times should be contrasted with the (now standard) approach of clusters
 of extremes, see e.g.~Ferro and Segers (2003). In this approach, i.i.d.
 event sequences of magnitudes are generalized to stationary sequences of
 event magnitudes (subject to a mixing condition). The two approaches are
-fundamentally different: A clustering model assumes that each event
-belongs to one particular (latent) group of events. For bursts, however,
-the aim is to identify an underlying scale-free pattern in the event
-dynamics, which is often characteristic of complex systems. It is an
-interesting open problem to develop quality criteria, based e.g.~on
-measures of surprise (Lee et al., 2015), which guide an applied
-statistician in the choice between a clustering and a CTRE approach for
-a particular problem. But the CTRE approach should not be seen as a
-substitute for the usual cluster approach. It was for example also
-observed in Towe et al. (2020) that clusters of extreme events still
-exist after declustering. We believe it is possible to unify the cluster
-approach with our CTRE approach by considering CTREs based on MRPs with
-a \emph{stationary}, rather than i.i.d., sequence of magnitudes. Then
-the times between clusters are asymptotically Mittag-Leffler
-distributed. The identification of clusters in the context of
-heavy-tailed inter-arrival times is an open problem. But what one could
-do in case of observing dependencies between the exceedances: one could
-build natural clusters for example by considering daily maxima instead
-of hourly maxima.
+fundamentally different: Clustering assumes that each event belongs to
+one particular (latent) group of events. For bursts, however, the aim is
+to identify an underlying scale-free pattern in the event dynamics,
+which is often characteristic of complex systems. It is an interesting
+open problem to develop criteria, based e.g.~on measures of surprise
+(Lee et al., 2015), that guide an applied statistician in the choice
+between a clustering and a CTRE approach for a particular problem. In
+sum, the CTRE approach should not be seen as a substitute for the usual
+cluster approach, but rather as a complementary approach.
 
-Finally, a purely scale-free pattern for event times may be too rigid as
-an assumption for some bursty time series, because often the
-heavy-tailed character of the inter-arrival time distribution does not
-hold at all time scales; rather, it applies at short and intermediate
-time scales, and is truncated (or tempered, reverting to an exponential
-distribution) at very long time scales (see e.g.~Meerschaert et al.,
-2012; and Aban et al., 2006). In such situations, a ``tempered''
-Mittag-Leffler distribution may provide a more realistic fit, which we
-aim to introduce in follow-up work.
+Moreover, it was observed in Towe et al. (2020) that clusters of extreme
+events still exist after declustering. We believe it is possible to
+marry the clustering approach with our CTRE approach by considering
+CTREs based on MRPs with a \emph{stationary}, rather than i.i.d.,
+sequence of magnitudes, so that the times between clusters are
+asymptotically Mittag-Leffler distributed. More broadly speaking, the
+identification of clusters in the context of heavy-tailed inter-arrival
+times is an open problem.
+
+Finally, a purely scale-free pattern for event times may be too rigid an
+assumption for some bursty time series, because often the heavy-tailed
+character of the inter-arrival time distribution does not hold at all
+time scales. Rather, it applies at short and intermediate time scales,
+and is truncated (or tempered, reverting to an exponential distribution)
+at very long time scales (see e.g.~Meerschaert et al., 2012; and Aban et
+al., 2006). In such situations, a ``tempered'' Mittag-Leffler
+distribution may provide a more realistic fit, which we aim to introduce
+in follow-up work.
 
 \hypertarget{acknowledgements}{%
 \section*{Acknowledgements}\label{acknowledgements}}
@@ -924,10 +901,6 @@ extreme events with power-law interarrival times. Geophys. Res. Lett.
 34, DOI:10.1029/2007GL030767.
 doi:\href{https://doi.org/10.1029/2007GL030767}{10.1029/2007GL030767}
 
-\leavevmode\hypertarget{ref-BinghamGoldieTeugels}{}%
-Bingham, N.H., Goldie, C.M., Teugels, J.L., 1989. Regular variation.
-Cambridge university press.
-
 \leavevmode\hypertarget{ref-Cahoy2013}{}%
 Cahoy, D.O., 2013. Estimation of Mittag-Leffler Parameters. Commun.
 Stat. - Simul. Comput. 42, 303--315.
@@ -952,6 +925,11 @@ Davison, A.C., Smith, R.L., 1990. Models for exceedances over high
 thresholds. Journal of the Royal Statistical Society: Series B
 (Methodological) 52, 393--425.
 
+\leavevmode\hypertarget{ref-dekkers1989moment}{}%
+Dekkers, A.L., Einmahl, J.H., De Haan, L., 1989. A moment estimator for
+the index of an extreme-value distribution. The Annals of Statistics
+1833--1855.
+
 \leavevmode\hypertarget{ref-HXRBS}{}%
 Dennis, B.R., Orwig, L.E., Kennard, G.S., Labow, G.J., Schwartz, R.A.,
 Shaver, A.R., Tolbert, A.K., 1991. The complete Hard X Ray Burst
@@ -965,6 +943,10 @@ events: For insurance and finance. Springer Science \& Business Media.
 Esary, J.D., Marshall, A.W., 1973. Shock Models and Wear Processes.
 doi:\href{https://doi.org/10.1214/aop/1176996891}{10.1214/aop/1176996891}
 
+\leavevmode\hypertarget{ref-fedotenkov2018review}{}%
+Fedotenkov, I., 2018. A review of more than one hundred pareto-tail
+index estimators.
+
 \leavevmode\hypertarget{ref-ferro2003inference}{}%
 Ferro, C.A., Segers, J., 2003. Inference for clusters of extreme values.
 Journal of the Royal Statistical Society: Series B (Statistical
@@ -973,6 +955,11 @@ Methodology) 65, 545--556.
 \leavevmode\hypertarget{ref-MittagLeffleR}{}%
 Gill, G., Straka, P., 2017. MittagLeffleR: Using the mittag-leffler
 distributions in r.
+
+\leavevmode\hypertarget{ref-gnedenko1983limit}{}%
+Gnedenko, B., 1983. On limit theorems for a random number of random
+variables, in: Probability Theory and Mathematical Statistics. Springer,
+pp. 167--176.
 
 \leavevmode\hypertarget{ref-Gut1999}{}%
 Gut, A., Hüsler, J., 1999. Extreme Shock Models. Extremes 295--307.
@@ -1019,6 +1006,11 @@ doi:\href{https://doi.org/10.1103/PhysRevE.83.025102}{10.1103/PhysRevE.83.025102
 Kozubowski, T.J., 2001. Fractional moment estimation of linnik and
 mittag-leffler parameters. Mathematical and computer modelling 34,
 1023--1035.
+
+\leavevmode\hypertarget{ref-Kratz96}{}%
+Kratz, M., Resnick, S.I., 1996. The qq-estimator and heavy tails.
+Commun. Stat. Part C Stoch. Model. 12, 699--724.
+doi:\href{https://doi.org/10.1080/15326349608807407}{10.1080/15326349608807407}
 
 \leavevmode\hypertarget{ref-Laskin2003}{}%
 Laskin, N., 2003. Fractional Poisson process. Commun. Nonlinear Sci.
@@ -1082,6 +1074,10 @@ doi:\href{https://doi.org/10.1162/NECO_a_00213}{10.1162/NECO\_a\_00213}
 \leavevmode\hypertarget{ref-Hsing88}{}%
 On the Exceedance Point Process for a Stationary Sequence, 1988. 78,
 97--112.
+
+\leavevmode\hypertarget{ref-pickands1975statistical}{}%
+Pickands III, J., others, 1975. Statistical inference using extreme
+order statistics. the Annals of Statistics 3, 119--131.
 
 \leavevmode\hypertarget{ref-R}{}%
 R Core Team, 2018. R: A language and environment for statistical
