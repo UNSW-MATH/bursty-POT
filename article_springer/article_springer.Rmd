@@ -278,12 +278,12 @@ $$
     \begin{align}
       c \cdot p(\ell_c) \rightarrow -\log F_A(x)  \text{ as } c \rightarrow \infty,\label{eq:lplconv}
     \end{align}
-	 with $p(\ell_c):= \overline{F}(\ell_c)$. Since $\tau(\ell_c) \sim Geo(p(\ell_c))$ and \eqref{eq:lplconv}
+	 with $p(\ell_c):= 1-F(\ell_c)$. Since $\tau(\ell_c) \sim Geo(p(\ell_c))$ and \eqref{eq:lplconv}
 	it follows that $\tau(\ell_c)/c$ converges to an Exponential distributed random variable,
 	\begin{align*}
 	\frac{\tau(\ell_c)}{c} \Rightarrow E  \text{ as } c \rightarrow \infty
 	\end{align*}
-	 with parameter $\lambda:=-\log F_A(x)$. Due to
+	 with inverse mean $\lambda:=-\log F_A(x)$. Due to
 	\begin{align*}
 	S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \ \text{ as } c \rightarrow \infty,
 	\end{align*}
@@ -293,20 +293,21 @@ $$
 	\end{align}
 	where the distribution of $Z$ has the characteristic function
 	\begin{align}
-    \Psi(t) &= \int_0^{\infty} (\Phi_D(t))^{y} F_E(dy) \nonumber\\
-    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(t))/\lambda} \nonumber\\
+    \Psi(s) &= \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy) \nonumber\\
+    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(s))/\lambda} \nonumber\\
     &= \frac{1}{1+s^{\beta}\lambda^{-1}}
 	\end{align}
-    where $\Phi_D$ resp. $F_E$ denotes Laplace transform of $D$ resp. the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with parameter $\lambda^{-1/\beta}$. Since
+    where $\Phi_D(s) = \exp(-s^\beta)$ is the Laplace transform of $D$ 
+    and  $F_E(dy)$ is the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with parameter $\lambda^{-1/\beta}$. Rewriting
 	\begin{align*}
     \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(1/p(\ell_c))} = \left(\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(c) }\right) \frac{b(c)}{b(1/p(\ell_c))}  
 	\end{align*}
-	and due to
+	and
 	\begin{align*}
-	\frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty.
+	\frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty,
 	\end{align*}
-	the second factor converges to $\lambda^{1/\beta}$, it follows that
-	 $Z \sim ML(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$ the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
+	the second factor converges to $\lambda^{1/\beta}$, and it follows that
+	 $Z \sim ML(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$, the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
 \qed
 
 For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma Z_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
@@ -367,7 +368,7 @@ H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^
 \end{align}
 where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. The Hill estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. It heavily depends on the choice of $r$ in \eqref{eq:Hill}, and hence on the number of order statistics entering \eqref{eq:Hill}.  Figure \ref{fig:Hillplots} shows Hill plots for simulated Mittag-Leffler data, with varying sample sizes and tails. To deduce the correct tail parameter estimates from one of those Hillplots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a small tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are extremely unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001]. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
 
-```{r Hillplots,  fig.height=5, fig.width=4, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (left) and 10000 (right), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", out.width = '50%'}
+```{r Hillplots,  fig.height=5, fig.width=4, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (first panel) and 10000 (second panel), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", out.width = '50%'}
 
 hill_estim<-function(k,data){
   n<-length(data)
