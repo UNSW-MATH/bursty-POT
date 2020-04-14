@@ -126,10 +126,10 @@ to the threshold exceedances. A commonly made assumption in POT models
 is that times between events are either fixed or light-tailed, and this
 entails that the threshold crossing times form a Poisson process (``On
 the Exceedance Point Process for a Stationary Sequence,'' 1988). Then as
-one increases the threshold and thus decreases the threshold crossing
-probability \(p_{\ell}\), the Poisson process is rarefied, i.e.~its
-intensity decreases \emph{linearly} with \(p_{\ell}\) (see e.g.~Beirlant
-et al., 2006).
+one increases the threshold \(\ell\) and thus decreases the threshold
+crossing probability \(p_{\ell}\), the Poisson process is rarefied,
+i.e.~its intensity decreases \emph{linearly} with \(p_{\ell}\) (see
+e.g.~Beirlant et al., 2006).
 
 As will be shown below, in the heavy-tailed waiting time scenario
 threshold crossing times form a \emph{fractional Poisson process}
@@ -137,11 +137,11 @@ threshold crossing times form a \emph{fractional Poisson process}
 with Mittag-Leffler distributed waiting times. The family of
 Mittag-Leffler distributions nests the exponential distribution (Haubold
 et al., 2011), and hence the fractional Poisson process generalizes the
-standard Poisson process. Again as the threshold size increases and the
-threshold crossing probability \(p_{\ell}\) decreases, the fractional
-Poisson process is rarefied: The scale parameter of the Mittag-Leffler
-inter-arrival times of threshold crossing times increases, but
-\emph{superlinearly}; see the Theorem below.
+standard Poisson process. Again as the threshold size \(\ell\) increases
+and the threshold crossing probability \(p_{\ell}\) decreases, the
+fractional Poisson process is rarefied: The scale parameter of the
+Mittag-Leffler inter-arrival times of threshold crossing times
+increases, but \emph{superlinearly}; see the Theorem below.
 
 Maxima of events which occur according to a renewal process with
 heavy-tailed waiting times have been studied under the names
@@ -191,7 +191,7 @@ be \emph{uncoupled}.
 In the following we denote with \(x_L \in [-\infty, +\infty)\) and
 \(x_R \in (-\infty, +\infty]\) the left and right endpoint of the
 distribution of \(J\). We assume that the \(k\)-th magnitude \(J_k\)
-occurs at time \(T_k = W_1 + \ldots + W_k\). Based on an MRP, we define
+occurs at time \(T_k = W_1 + \ldots + W_k\). Based on a MRP, we define
 the Continuous Time Random Exceedance model (CTRE) as follows:
 
 \begin{description}
@@ -258,9 +258,11 @@ recommend the book by Meerschaert and Sikorskii (2012).
 
 \begin{description}
 \item[\textbf{Theorem:}]
-Let the waiting times \(W_k\) be in the domain of attraction of a
-positively skewed sum-stable law with stability parameter
-\(0 < \beta < 1\); more precisely, \begin{align} \label{eq:stability}
+For the magnitudes \(J_k\) assumption \eqref{assumptionJs} holds.
+Furthermore, let the waiting times \(W_k\) be in the domain of
+attraction of a positively skewed sum-stable law with stability
+parameter \(0 < \beta < 1\); more precisely,
+\begin{align} \label{eq:stability}
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
 \quad n \to \infty
 \end{align} for a function \(b(n)\) which is regularly varying at
@@ -284,12 +286,12 @@ Then it follows, \begin{align*}
     \end{align*} with \(\ell_c:=xa(c)+d(c)\). Furthermore, since
 \(\log(1-x) \sim -x\) for small \(x\) it follows \begin{align}
       c \cdot p(\ell_c) \rightarrow -\log F_A(x)  \text{ as } c \rightarrow \infty,\label{eq:lplconv}
-    \end{align} with \(p(\ell_c):= \overline{F}(\ell_c)\). Since
+    \end{align} with \(p(\ell_c):= 1-F(\ell_c)\). Since
 \(\tau(\ell_c) \sim Geo(p(\ell_c))\) and \eqref{eq:lplconv} it follows
 that \(\tau(\ell_c)/c\) converges to an Exponential distributed random
 variable, \begin{align*}
     \frac{\tau(\ell_c)}{c} \Rightarrow E  \text{ as } c \rightarrow \infty
-    \end{align*} with parameter \(\lambda:=-\log F_A(x)\). Due to
+    \end{align*} with inverse mean \(\lambda:=-\log F_A(x)\). Due to
 \begin{align*}
     S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \ \text{ as } c \rightarrow \infty,
     \end{align*} it follows with Gnedenkos transfer theorem (see
@@ -297,20 +299,20 @@ Gnedenko (1983)), that \begin{align}
     \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z\ \text{ as }  c \rightarrow \infty, \label{TheoGutArg}
     \end{align} where the distribution of \(Z\) has the characteristic
 function \begin{align}
-    \Psi(t) &= \int_0^{\infty} (\Phi_D(t))^{y} F_E(dy) \nonumber\\
-    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(t))/\lambda} \nonumber\\
+    \Psi(s) &= \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy) \nonumber\\
+    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(s))/\lambda} \nonumber\\
     &= \frac{1}{1+s^{\beta}\lambda^{-1}}
-    \end{align} where \(\Phi_D\) resp. \(F_E\) denotes Laplace transform
-of \(D\) resp. the distribution function of \(E\). Hence, \(Z\) is
-Mittag-Leffler distributed with parameter \(\lambda^{-1/\beta}\). Since
-\begin{align*}
+    \end{align} where \(\Phi_D(s) = \exp(-s^\beta)\) is the Laplace
+transform of \(D\) and \(F_E(dy)\) is the distribution function of
+\(E\). Hence, \(Z\) is Mittag-Leffler distributed with parameter
+\(\lambda^{-1/\beta}\). Rewriting \begin{align*}
     \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(1/p(\ell_c))} = \left(\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(c) }\right) \frac{b(c)}{b(1/p(\ell_c))}  
-    \end{align*} and due to \begin{align*}
-    \frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty.
+    \end{align*} and \begin{align*}
+    \frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty,
     \end{align*} the second factor converges to \(\lambda^{1/\beta}\),
-it follows that \(Z \sim ML(\beta,1)\). Since \(c \rightarrow \infty\)
-is equivalent to \(\ell \uparrow x_R\) the assertion follows with
-\(\ell:=\ell_c\) and \(p_\ell:=p(\ell_c)\). \qed
+and it follows that \(Z \sim ML(\beta,1)\). Since
+\(c \rightarrow \infty\) is equivalent to \(\ell \uparrow x_R\), the
+assertion follows with \(\ell:=\ell_c\) and \(p_\ell:=p(\ell_c)\). \qed
 
 For a scale parameter \(\sigma > 0\), we write
 \({\rm ML}(\beta, \sigma)\) for the distribution of \(\sigma Z_\beta\).
@@ -385,7 +387,10 @@ Likelihood estimation is implemented via numerical optimization. The MLE
 slightly outperforms the log-Moment estimator regarding bias and RMSE
 for big enough sample sizes, but is extremely computationally intensive.
 Figure \ref{fig:MSE} shows that both estimators perform well, even for
-small sample sizes.
+small sample sizes. For smaller tails both estimators show an increasing
+rmse for the scale estimation due to an increasing variance. This
+results from the fact that in case of very small tails, single very
+large values can occur.
 
 \begin{figure}
 
@@ -393,7 +398,7 @@ small sample sizes.
 
 }
 
-\caption{\label{fig:MSE} MSE for the estimation of tail (left column) and scale (right column) parameters via log-Moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one, based on 5000 simulation runs.}\label{fig:MSE}
+\caption{\label{fig:MSE} Rmse for the estimation of tail (left column) and scale (right column) parameters via log-Moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one, based on 5000 simulation runs.}\label{fig:MSE}
 \end{figure}
 
 Since the Mittag-Leffler distribution is heavy-tailed, many researchers
@@ -409,30 +414,33 @@ denote the order statistics in decreasing order of a sequence
 distributions close to Pareto (see Resnick, 1997). It heavily depends on
 the choice of \(r\) in \eqref{eq:Hill}, and hence on the number of order
 statistics entering \eqref{eq:Hill}. Figure \ref{fig:Hillplots} shows
-Hill plots for simulated Mittag-Leffler data, with varying sample sizes
-and tails. To deduce the correct tail parameter estimates from one of
-those Hillplots is virtually impossible. To estimate the tail parameter
-of a Mittag-Leffler distribution with the Hill estimator, the sample
-size has to be much larger and one has to choose a small tuning
-parameter \(r\). In case that only events above a high threshold are
-recorded, \(n=10000\) events are extremely unrealistic. There is a vast
-literature on bias-reduced versions of the Hill estimator and on the
-optimal choice of \(r\), mainly based on imposed second-order regular
-variation conditions (see e.g.~Beirlant et al., 2006, p. Ch.4.4 and 4.7
-and references in it). Also, there are hundreds other tail-index
-estimators not considered in this article, since this would go beyond
-the scope of our article. For example the moment estimator (Dekkers et
-al., 1989), the Pickands estimator (Pickands III and others, 1975), the
-QQ-estimator (Kratz and Resnick, 1996), to name a few. A nice overview
-can be found in (Fedotenkov, 2018). However, we know from the Theorem in
-Section \ref{sec:scaling} that the inter-exceedance times are
-asymptotically Mittag-Leffler distributed, and hence it is unsurprising
-that general tail (and scale) estimation methods that do not take into
-account this structure are statistically less efficient (Kozubowski,
-2001). Finally, the Hill estimator completely fails in the important
-special case where the inter-arrival times are exponentially distributed
-and not heavy-tailed. For these reasons, we propose to use the
-log-Moment estimator or the MLE for Mittag-Leffler distributions.
+100 Hill plots (grey thin lines) for simulated Mittag-Leffler data with
+tail parameter \(\beta=0.8\) and scale \(\sigma=1\), for a sample size
+of \(n=200\) (left) and \(n=1000\) (right). The dark lines are the means
+and the red dotted lines show the true tail parameter. To deduce the
+correct tail parameter estimates from one of those Hillplots is
+virtually impossible. To estimate the tail parameter of a Mittag-Leffler
+distribution with the Hill estimator, the sample size has to be much
+larger and one has to choose a small tuning parameter \(r\). In case
+that only events above a high threshold are recorded, \(n=10000\) events
+are extremely unrealistic. There is a vast literature on bias-reduced
+versions of the Hill estimator and on the optimal choice of \(r\),
+mainly based on imposed second-order regular variation conditions (see
+e.g.~Beirlant et al., 2006, p. Ch.4.4 and 4.7 and references in it).
+Also, there are hundreds other tail-index estimators not considered in
+this article, since this would go beyond the scope of our article. For
+example the moment estimator (Dekkers et al., 1989), the Pickands
+estimator (Pickands III and others, 1975), the QQ-estimator (Kratz and
+Resnick, 1996), to name a few. A nice overview can be found in
+(Fedotenkov, 2018). However, we know from the Theorem in Section
+\ref{sec:scaling} that the inter-exceedance times are asymptotically
+Mittag-Leffler distributed, and hence it is unsurprising that general
+tail (and scale) estimation methods that do not take into account this
+structure are statistically less efficient (Kozubowski, 2001). Finally,
+the Hill estimator completely fails in the important special case where
+the inter-arrival times are exponentially distributed and not
+heavy-tailed. For these reasons, we propose to use the log-Moment
+estimator or the MLE for Mittag-Leffler distributions.
 
 \begin{figure}
 
@@ -440,7 +448,7 @@ log-Moment estimator or the MLE for Mittag-Leffler distributions.
 
 }
 
-\caption{\label{fig:Hillplots} Hillplots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (left) and 10000 (right), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. }\label{fig:Hillplots}
+\caption{\label{fig:Hillplots} Hillplots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (first panel) and 10000 (second panel), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. }\label{fig:Hillplots}
 \end{figure}
 
 Since the exponential distribution is nested in the Mittag-Leffler
@@ -509,8 +517,8 @@ inter-exceedance time \(T(\ell)\):
   representative value from this region.
 \item
   Plot \(k\) vs.~\(k^{1/\hat \beta} \hat \sigma_k\). Again, choose a
-  region of \emph{stability} and, and choose a representative
-  \(\hat \sigma_0\) from that region.
+  region of \emph{stability} and a representative \(\hat \sigma_0\) from
+  that region.
 \end{enumerate}
 
 The inferred values \(\hat \beta\) and \(\hat \sigma_0\) can then be
@@ -566,7 +574,8 @@ magnitude pairs \((W_k, J_k)\) for waiting times that follow
   an exponential distribution.
 \end{enumerate}
 
-In order to have exact analytical values available for \(\beta\) and
+The magnitudes are in all scenarios standard Gumbel distributed. In
+order to have exact analytical values available for \(\beta\) and
 \(\sigma_0\), a distribution for \(W_k\) needs to be chosen for which
 \(b(n)\) from \eqref{eq:stability} is known.
 
@@ -770,7 +779,7 @@ h(t) = \frac{f(t| \beta, k^{-1/\beta} \sigma_0))}{\int_t^\infty f(\tau| \beta, k
 decreasing function for the Mittag-Leffler distribution.
 
 \begin{figure}
-\includegraphics[width=\textwidth]{article_springer_files/figure-latex/hazard-1} \caption{\label{fig:hazard} Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\beta = 0.8$, $\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\beta$.}\label{fig:hazard}
+\includegraphics[width=\textwidth]{article_springer_files/figure-latex/hazard-1} \caption{\label{fig:hazard} Left: Conditional distribution of time until next threshold crossing, depending on elapsed time $t_0$ since last crossing ($\beta = 0.9$, $\sigma_0 = 1$). Right: Hazard rate depending on tail parameter $\beta$.}\label{fig:hazard}
 \end{figure}
 
 The closer \(\beta\) is to \(1\), the more the hazard rate mimics that

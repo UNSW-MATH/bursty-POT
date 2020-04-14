@@ -5,14 +5,14 @@ author:
   - Katharina Hees
   - Peter Straka
   - Smarak Nayak
-date: "11 März 2020"
+date: "14 April 2020"
 bibliography: CTRMstats.bib
 output: pdf_document
 ---
 
 
 We would like to thank the reviewers very much for their careful reviews and the helpful comments that gave us the opportunity to improve the manuscript.
-Below we explain point by point how we addressed the comments during our revision of the manuscript.
+Below we explain point by point how we addressed the comments during our revision of the manuscript. Additionally you can find attached a pdf version of the revised manuscript where you can track the changes we have made.
 
 
 # Referee 1
@@ -30,7 +30,15 @@ Meerschaert, Mark M, and Hans-Peter Scheffler. 2004. “Limit Theorems for Conti
 
 "(p.5, l. 9-13) Why is it true that the limiting distribution exists? It is well known..."
 
-* In case of a continuous distribution one can choose the normalization in such a way that a non-degenerate limit distributions exists, but this is not necessarily true for a linear normalization. We just forgot to add the assumption, that the distribution of the magnitudes is out of the domain of attraction of an extreme value distribution. We added this assumption in Section 2. 
+* In case of a continuous distribution one can choose the normalization in such a way that a non-degenerate limit distributions exists, but this is not necessarily true for a linear normalization. We just forgot to add the assumption, that the distribution of the magnitudes is out of the domain of attraction of an extreme value distribution. We added the following to Section 2: "We assume for the rest of the article, that the magnitudes $(J_i)_{i \in \mathbb{N}}$ belong to the the max-domain of attraction of some non-degenerate distribution. This means there exist $a_n>0$ and $d_n \in \mathbb{R}$ such that 
+\begin{align} \label{assumptionJs}
+a_n^{-1}(J_1 \vee \ldots \vee J_n -d_n) \Rightarrow A \text{ as } n \rightarrow \infty.
+\end{align}
+Hence, the distribution of $A$ is a generalized extreme value distribution (GEV) which distribution function is given by 
+$$ F(x;\xi) = \begin{cases}\exp(-(1+\xi x)^{-1/\xi}) & \xi\neq0 \\ \exp(-\exp(-x)) & \xi = 0\end{cases}.$$ 
+The GEV is subdivided into the Gumbel ($\xi=0$), the Weibull ($\xi<0$) and the Fréchet ($\xi>0$) family of distributions."  
+
+
 
 "Note: It is important to observe that due to the fact that the waiting times Wj ’s have infinite
 means, the renewal counting process N(t) cannot be made stationary (through a random shift) and hence this model does not fall into the classic context of Hsing-Leadbetter and Davis-Hsing."
@@ -45,7 +53,7 @@ means, the renewal counting process N(t) cannot be made stationary (through a ra
 
 "The use of k is very confusing ... These two sentences are so unclear, so poorly written...  Be specific, choose your words carefully and introduce labels/titles in the plots."
 
-* We have re-written the entire section titled "Simulation study". 
+* We have re-written the entire section titled "Simulation study" and added labels as well as titles to the plots. 
 
 "(Section 5 and 6) In these 2 sections it is implied that p = k/n .... While a complete rigor in the discussion on the statistical methodology is perhaps not necessary, it is important for the reader to clearly see where “asymptotic approximations” are applied."
 
@@ -62,11 +70,17 @@ be going beyond the scope of their work, but proper pointers to the literature s
 given and the notion of second order regular variation (required to establish asymptotic
 distributions) should be mentioned."
 
-* Thank you for this valuable hint and the reference for the article of Peter Hall. We added a sentence regarding bias-reduced versions of the Hill estimator at the end of Section 4. Moreover, we decided to discard the Hill estimator from the simulation study since we already gave at the end of Section 4 sufficient arguments, why we propose to use a parametric estimator based on the Mittag-Leffler distribution instead of a general tail index estimator. Otherwise this would just confuse the reader. 
+* Thank you for this valuable hint and the reference for the article of Peter Hall. We added a sentence regarding bias-reduced versions of the Hill estimator at the end of Section 4: "There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]." Moreover, we decided to discard the Hill estimator from the simulation study since we already gave at the end of Section 4 sufficient arguments, why we propose to use a parametric estimator based on the Mittag-Leffler distribution instead of a general tail index estimator. Otherwise this would just confuse the reader. We have added the following sentences near the end of Section 4: "Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section 3 that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001]. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions." 
 
 "Last but not least, given that the authors are dealing with more or less standard semi-parametric estimation of heavy-tail exponents and scales, they could formulate limit theorems on the asymptotic distribution of their statistics and derive Wold-type confidence intervals for the estimated parameters. ... "
 
-* In the last paragraph of Section 5, we have included pointers to the literature for confidence intervals for the shape and scale parameters of the Mittag-Leffler distribution, and how these lead to "confidence bands" in our plots, based on the CTRE package. 
+* In the last paragraph of Section 5, we have included pointers to the literature for confidence intervals for the shape and scale parameters of the Mittag-Leffler distribution, and how these lead to "confidence intervals" in our plots, based on the CTRE package: "For computationally efficient estimates of the Mittag-Leffler parameters we have used 
+the method of log-transformed moments. This estimation method provides 
+point estimates as well as confidence intervals based on sampling variance [@Cahoy2013], 
+and has been implemented in the R software package
+`MittagLeffleR` [@MittagLeffleR]. The stability plots for $\hat \beta$ and $\hat \sigma_0$
+can be furnished with these confidence intervals, see e.g.\ Figure 10, 
+to produce (non-simultaneous) confidence bands."
 
 
 ## Typos and suggestions
@@ -103,7 +117,7 @@ distributions) should be mentioned."
 30. fixed
 31. fixed
 32. fixed
-33. We have commented as follows: 
+33. We have commented at the end of Section 7 as follows: 
     "The stability plot for the tail stabilizes nicely around 0.9 (dashed line), while 
     the scale parameter stabilizes less obviously near $3 \times 10^7$ (dashed line).
     The growth of the scale parameter for lower threshold appears to be closer to linear in $p$, 
@@ -127,12 +141,11 @@ distributions) should be mentioned."
 # Referee 2
 
 "I understand the authors find inspiration in Peaks-Over-Threshold (POT)
-method of extreme value theory, although, I do not see a real connection be-
-tween two models. Observe that the peaks over threshold l are ignored, so
-random variable $\tau(l)$ could be substituted by any other independent geo-
-metric (or exponential) random variable with mean $1/p(l)$. Moreover, I think, this would simplify some arguments, including the proof of the theorem."
+method of extreme value theory, although, I do not see a real connection between two models. Observe that the peaks over threshold l are ignored, so
+random variable $\tau(l)$ could be substituted by any other independent geometric (or exponential) random variable with mean $1/p(l)$. Moreover, I think, this would simplify some arguments, including the proof of the theorem."
 
-* One connection to the Peaks-Over-Threshold (POT) method is, that one has to apply the classical POT approach to the magnitudes. To make this more clear for the reader, we added a comment at the beginning of Section 4. Additionally, and indeed inspired by the POT method, we propose to fit the inter-exceedance times in a similar fashion: namely, by fitting a Mittag-Leffler distribution to the inter-exceedance times between the peaks over threshold via stability plots. It is true that we largely ignore the underlying distribution of the magnitudes in our algorithm. Our algorithm could potentially be improved by i) fitting a GPD distribution to the exceedances and thus ii) more accurately approximating the tail probability $p_{\ell}$. We mention this idea in a remark following the algorithm.
+* One connection to the Peaks-Over-Threshold (POT) method is, that one has to apply the classical POT approach to the magnitudes. To make this more clear for the reader, we added the following comment at the beginning of Section 4:"The classical POT approach is based on the fact that exceedances above a high threshold are asymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enough threshold. As this approach is by now well-established in extreme value theory, we do not discuss it any further. Instead, this article focuses on our new contribution: the modelling of inter-exceedance times. For literature pointing to POT see e.g. @smith1984threshold; @leadbetter1991basis; @davison1990models; @beirlantBook Ch.5.3; @embrechts2013modelling Ch. 6.5.; @ColesBook Ch.4."  
+Additionally, and indeed inspired by the POT method, we propose to fit the inter-exceedance times in a similar fashion: namely, by fitting a Mittag-Leffler distribution to the inter-exceedance times between the peaks over threshold via stability plots. It is true that we largely ignore the underlying distribution of the magnitudes in our algorithm. Our algorithm could potentially be improved by i) fitting a GPD distribution to the exceedances and thus ii) more accurately approximating the tail probability $p_{\ell}$. We mention this idea in a remark following the algorithm: "We approximated $p_{\ell}$, the probability that an event is larger than $l$, by its relative frequency. One could also approximate this tail probability by the GPD distribution fitted to the exceedances."
 
 
 "The CTRE model considered here can be viewed as a special family of
@@ -142,11 +155,12 @@ alternative to cluster models as a model for bursty data. The authors' claim
 that "visually similar statistical behaviour" can be seen in some real life data
 set seems a bit too vague to me."
 
-* The CTRE model is not intended as a substitute for the usual cluster models, but rather as a complement. If there are dependencies in the data, one should first decluster the data. If there are still clusters thereafter (see for example p.3 in @towe2020modelling), the CTRE can possible account for this behavior. We added a comment on this to the Discussion & Conclusion Section. 
+* The CTRE model is not intended as a substitute for the usual cluster models, but rather as a complement. If there are dependencies in the data, one should first decluster the data. If there are still clusters thereafter (see for example p.3 in @towe2020modelling), the CTRE can possible account for this behavior. We added a comment on this to the Discussion & Conclusion Section: "In sum, the CTRE approach should not be seen as a substitute for the usual cluster approach, but rather as a complementary approach. Moreover, it was observed in @towe2020modelling that clusters of extreme events still exist after declustering. We believe it is possible to marry the clustering approach with our CTRE approach by considering CTREs based on MRPs with a _stationary_, rather than i.i.d., sequence of magnitudes, so that the times between clusters are asymptotically Mittag-Leffler distributed. More broadly speaking, the identification of clusters in the context of heavy-tailed inter-arrival times is an open problem."
 
-"Although auto-correlation plots given in Figure 7, after log-transforming data (this does not always ensure infiniteness of moments note) seem to indicate limited dependence in the sequence $log T(l,n)$, it is well known that the choice of such a transformation can in influence appearance of a corresponding graph."
+"Although auto-correlation plots given in Figure 7, after log-transforming data (this does not always ensure infiniteness of moments note) seem to indicate limited dependence in the sequence $log T(l,n)$, it is well known that the choice of such a transformation can influence appearance of a corresponding graph."
 
-* This is of course true. We calculated here the auto-correlations under the assumption that the underlying data is Mittag-Leffler distributed. The log-Moments of a Mittag-Leffler distribution exist. We added a comment on this in Section 7 to the part "i.i.d.". It is also true that the log-transformation can influence the appearance of the graph. ACFs only uncover linear dependencies reliably. However, this is just a diagnostic tool to indicate whether the independence assumption is justified. We added a comment on this issue in Section 7 after describing the diagnostic tools. 
+* This is of course true. We calculated here the auto-correlations under the assumption that the underlying data is Mittag-Leffler distributed. The log-Moments of a Mittag-Leffler distribution exist. We added a comment on this in Section 7 to the part "i.i.d.": "Since we are expecting the inter-exceedance times to be Mittag-Leffler distributed and hence to have infinite mean but finite log-moments, we first take the logarithms of the times."  
+It is also true that the log-transformation can influence the appearance of the graph. ACFs only uncover linear dependencies reliably. However, this is just a diagnostic tool to indicate whether the independence assumption is justified. We added a comment on this issue in Section 7 after describing the diagnostic tools: "The ACF plots of course can just give an indication whether there are dependencies, since they actually just measure linear dependencies. Furthermore, if one calculates the ACF for the logarithmic inter-exceedance times, the ACF indicates on the original scale a multiplicative dependence." 
 
 "The authors finally apply two methods (log-moments and MLE) to estimate parameters of the limiting Mittag-Leffler distribution, and obtain in the process an estimator of the key tail parameter $\beta$. These methods seems to outperform the standard Hill estimator in a simulation study although
 the latter utilizes a much larger data set typically. This phenomena asks
@@ -154,12 +168,12 @@ for at least some explanation and a further study, because if it holds more
 generally, the authors could use their approach as a superior alternative to
 the Hill estimator for any power law distribution with $\beta$ < 1."
 
-* It is an interesting idea to use the proposed method for the estimation of the tail index on *any* power law with $\beta$ < 1. However, this goes beyond the scope of our article. In the setting of our article the inter-exceedance times we want to model are approximately Mittag-Leffler distributed, hence it is natural to use specific Mittag-Leffler scale and tail estimators here. 
+* It is an interesting idea to use the proposed method for the estimation of the tail index on *any* power law with $\beta$ < 1. However, this goes beyond the scope of our article. In the setting of our article the inter-exceedance times we want to model are approximately Mittag-Leffler distributed, hence it is natural to use specific Mittag-Leffler scale and tail estimators here. See Section 4: "However, we know from the Theorem in Section 3 that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001]."
 
 "The manuscript seems nicely organized. However, writing is not always
 precise, the paper contains some typos and not entirely rigorous mathematical arguments.""
 
-* We revised the whole manuscript according typos, added the missing assumption for the magnitudes and replaced the proof of the theorem by a new, simplified version. 
+* We revised the whole manuscript according typos, added the missing assumption for the magnitudes and replaced the proof of the theorem by a new, simplified version, inspired by your suggestions. 
 
 "I also do not see a clear connection with the POT method suggested in the abstract, mainly because exceedances really play insignifficant role in the analysis."
 
@@ -167,7 +181,7 @@ precise, the paper contains some typos and not entirely rigorous mathematical ar
 
 "P.3. Definition MPR uses the left and the right end point of the distribution without precise explanation. The role of the sequence $(J_k)$ in the rest of the text should be also discussed."
 
-* We added a definition for the left and the right point. For the role of the magnitudes, see above.
+* We added a definition for the left and the right point following the Defintion of the MRP in Section 2. For the role of the magnitudes, see above.
 
 "P.3. in the CTRE definition, in $(T(l,n),W(l,n))_n$, one might expect $X(l,n)$."
 
@@ -205,7 +219,8 @@ your limiting relations, it seems that $c \rightarrow \infty$ is missing at seve
 "P.7. Could you comment worse performance of the estimator of the scale
 for small tail indices."
 
-* For very small tail indices, the (R)MSE is large due to a large variance that results from the fact that in case of a very small tail index single very large events can happen. In the submitted version of the article the simulation study was based on one thousand simulation runs. This was maybe a little bit too small, hence we repeated the study with five thousand runs and now the MSE looks for very small indices more acceptable. We also changed to RMSE since it is easier to interpret.  
+* For very small tail indices, the (R)MSE is large due to a large variance that results from the fact that in case of a very small tail index single very large events can happen. We added the following comment to Section 4: "For smaller tails both estimators show an increasing rmse for the scale estimation due to an increasing variance. This results from the fact that in case of very small tails, single very large values can occur."  
+In the submitted version of the article the simulation study was based on one thousand simulation runs. This was maybe a little bit too small, hence we repeated the study with five thousand runs and now the MSE looks for very small indices more acceptable. We also changed to RMSE since it is easier to interpret.  
 
 "P.7. the Hill or hill estimator?"
 
@@ -236,3 +251,5 @@ is..."
 cited with his full name and initials - maybe one should strive for uniformity here." 
 
 * We changed this accordingly. 
+
+# References {-}
