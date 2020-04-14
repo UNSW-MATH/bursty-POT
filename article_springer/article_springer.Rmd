@@ -15,6 +15,7 @@ author:
 - name: "Katharina Hees"
   affiliation: a
   email: "hees@statistik.tu-dortmund.de"
+  correspondence: true
   
 - name: "Smarak Nayak"
   affiliation: b
@@ -50,21 +51,20 @@ keywords:
 abstract: |
   In many complex systems studied in statistical physics, 
   inter-arrival times between events such as solar flares, trades and 
-  neuron voltages follow a heavy-tailed distribution. The set of event times is fractal-like, being dense in some 
-  time windows and empty in others, a phenomenon which has been dubbed 
+  neuron voltages follow a heavy-tailed distribution. The set of event times is fractal-like, 
+  being dense in some time windows and empty in others, a phenomenon which has been dubbed 
   "bursty". 
   
-  This article proposes a new model for the _inter-exceedance times_ of events 
-  above high thresholds; the threshold exceedances itself are modeled via the standard 
+  A new model for the _inter-exceedance times_ of events 
+  above high thresholds is proposed; the threshold exceedances itself are modeled via the standard 
   Peaks-Over-Threshold (POT) method. For high thresholds and 
-  infinite-mean waiting times, we show that the times between threshold 
+  infinite-mean waiting times, it is shown that the times between threshold 
   crossings are Mittag-Leffler distributed, and thus form a "fractional 
   Poisson Process" which generalizes the standard Poisson Process of threshold
   exceedances.
-  We provide graphical means of estimating model parameters and assessing 
-  model fit. Along the way, we apply our inference method to a real-world
-  bursty time series, and 
-  show how the memory of the Mittag-Leffler distribution affects 
+  Graphical means of estimating model parameters and assessing 
+  model fit are provided. Along the way, the inference method gets applied to a real-world
+  bursty time series, and it is shown how the memory of the Mittag-Leffler distribution affects 
   the predictive distribution for the time until the next extreme event. 
 
 bibliography: CTRMstats.bib
