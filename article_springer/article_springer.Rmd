@@ -144,7 +144,7 @@ events are either fixed
 or light-tailed, and this entails that the 
 threshold crossing times form a Poisson process [@Hsing88]. 
 Then as one increases the threshold $\ell$ and thus decreases the threshold 
-crossing probability $p_{\ell}$, the Poisson process is rarefied, i.e. its 
+crossing probability $p_{\ell}$, the Poisson process is thinned, i.e. its 
 intensity decreases _linearly_ with $p_{\ell}$ [see e.g. @beirlantBook]. 
 
 As will be shown below, in the heavy-tailed waiting time scenario threshold 
@@ -155,7 +155,7 @@ The family of Mittag-Leffler distributions nests the exponential
 distribution [@Haubold11], and hence the fractional Poisson process
 generalizes the standard Poisson process. 
 Again as the threshold size $\ell$ increases and the threshold crossing
-probability $p_{\ell}$ decreases, the fractional Poisson process is rarefied: 
+probability $p_{\ell}$ decreases, the fractional Poisson process is thinned: 
 The scale parameter of the Mittag-Leffler inter-arrival times of 
 threshold crossing times increases, but _superlinearly_; 
 see the Theorem below.
@@ -238,8 +238,10 @@ We assume for the rest of the article, that the magnitudes $(J_i)_{i \in \mathbb
 \begin{align} \label{assumptionJs}
 a_n^{-1}(J_1 \vee \ldots \vee J_n -d_n) \Rightarrow A \text{ as } n \rightarrow \infty.
 \end{align}
-Hence, the distribution of $A$ is a generalized extreme value distribution (GEV) which distribution function is given by 
-$$ F(x;\xi) = \begin{cases}\exp(-(1+\xi x)^{-1/\xi}) & \xi\neq0 \\ \exp(-\exp(-x)) & \xi = 0\end{cases}.$$ 
+Hence, the distribution of $A$ is a generalized extreme value distribution (GEV) whose distribution function is given by 
+$$ F(x;\xi) = \begin{cases}\exp(-(1+\xi x)_+^{-1/\xi}) & \xi\neq0 \\ \exp(-\exp(-x)) & \xi = 0\end{cases}$$ 
+where $(.)_+:= \max\{0,.\}$.
+
 The GEV is subdivided into the Gumbel ($\xi=0$), the Weibull ($\xi<0$) and the Fréchet ($\xi>0$) family of distributions.  
 
 Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top panel, where $W$ has a stable distribution with tail parameter $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and where $J$ is from a standard Gumbel distribution. In the bottom panel, we plot a time series of solar flare intensities derived from a NASA dataset [@HXRBS] which we will later examine more closely (see Section 7). Clearly, the simulated data exhibit long intervals 
@@ -247,7 +249,13 @@ _without any_ events, whereas in the real-world dataset events appear continuous
 
 # Scaling limit of Exceedance Times {#sec:scaling}
 
-In this section we state and prove the key theorem. For an accessible introduction to regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
+In this section we state and prove the key theorem, which is founded on the concept of regular variation. A Borel-measurable function $f:\mathbb (0,\infty) \to (0,\infty)$ is said be "regularly varying at $\infty$ with parameter (or "index") $\rho$ if 
+
+$$
+\frac{f(\lambda x)}{f(x)} = \lambda^\rho \quad \text{ for all } \lambda > 0.
+$$
+
+For more details regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
 
 **Theorem:** 
 
@@ -256,7 +264,7 @@ In this section we state and prove the key theorem. For an accessible introducti
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
 \quad n \to \infty
 \end{align}
-for a function $b(n)$ which is regularly varying at $\infty$ with parameter $1/\beta$, and where $\mathbf E[\exp(-sD)] = \exp(-s^\beta)$. Write $p_{\ell} := \mathbf P(J > \ell)$. Then the weak convergence
+for a function $b(n)$ which is regularly varying at $\infty$ with parameter $1/\beta$, and where $\mathbf E[\exp(-sD)] = \exp(-s^\beta)$, $s > 0$. Write $p_{\ell} := \mathbf P(J > \ell)$. Then the weak convergence
 $$
 \frac{T(\ell)} {b(1/p_{\ell})} \to Z_\beta \quad \text{ as } \quad \ell \uparrow x_R
 $$
@@ -267,11 +275,11 @@ $$
 $$ 
 
 
-*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, it follows
+*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, it follows that
 	\begin{align*}
-	P\left(\frac{M(c)-d(c)}{a(c)} \leq x\right) \rightarrow F(x) \text{ as } c \rightarrow \infty,
+	P\left(\frac{M(c)-d(c)}{a(c)} \leq x\right) \rightarrow F(x) := F(x,\xi) \text{ as } c \rightarrow \infty,
 	\end{align*}
-	where $x$ is any value from the support of $F$. Then it follows,
+	where $x$ is any value from the support of $F$. Then
 	\begin{align*}
 	  F(xa(c)+d(c))^{\lfloor c \rfloor} &\rightarrow F(x) \text{ as } c \rightarrow \infty,\\
       \Rightarrow  \lfloor c \rfloor \log F(\ell_c)  &\rightarrow \log F(x)\text{ as } c \rightarrow \infty,
@@ -289,7 +297,7 @@ $$
 	\begin{align*}
 	S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \ \text{ as } c \rightarrow \infty,
 	\end{align*}
-    it follows with Gnedenkos transfer theorem (see @gnedenko1983limit), that
+    it follows with Gnedenko's transfer theorem (see @gnedenko1983limit), that
 	\begin{align}
 	\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z\ \text{ as }  c \rightarrow \infty, \label{TheoGutArg}
 	\end{align}
@@ -348,9 +356,9 @@ Due to the Theorem in the last Section we know that for high thresholds the time
 
 Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-Moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
 
-Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the R Package `MittagLeffleR` [@MittagLeffleR], Maximum Likelihood estimation is implemented via numerical optimization. The MLE slightly outperforms the log-Moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computationally intensive. Figure \ref{fig:MSE} shows that both estimators perform well, even for small sample sizes. For smaller tails both estimators show an increasing rmse for the scale estimation due to an increasing variance. This results from the fact that in case of very small tails, single very large values can occur. 
+Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the R Package `MittagLeffleR` [@MittagLeffleR], Maximum Likelihood estimation is implemented via numerical optimization. The MLE slightly outperforms the log-Moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computationally intensive. Figure \ref{fig:MSE} shows that both estimators perform well, even for small sample sizes. For smaller tails both estimators show an increasing RMSE for the scale estimation due to an increasing variance. This results from the fact that in case of very small tails, single very large values can occur. 
 
-```{r MSE, echo=FALSE,warning=FALSE, fig.height=7,fig.width=8,fig.align="center", fig.cap="\\label{fig:MSE} Rmse for the estimation of tail (left column) and scale (right column) parameters via log-Moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one, based on 5000 simulation runs.", out.width = '90%'}
+```{r MSE, echo=FALSE,warning=FALSE, fig.height=7,fig.width=8,fig.align="center", fig.cap="\\label{fig:MSE} RMSE for the estimation of tail (left column) and scale (right column) parameters via log-Moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one, based on 5000 simulation runs.", out.width = '90%'}
 load(here::here("article_springer", "article_springer_files", "ML_estim_simu","tbl_ML_estim.RData"))
   n.labs <-c("n=25", "n=100", "n=200")
   names( n.labs ) <-  c("25", "100", "200")
@@ -360,7 +368,7 @@ tbl_ML_estim %>% filter(method=="logMom" | method=="ML")%>%
   ggplot(aes(true.tail, rmse, colour = method, group=method)) + 
   geom_line() + geom_point() + 
   facet_wrap(c("n","param"), scales = "free", ncol = 2, labeller = labeller(n = n.labs)) + 
-  scale_color_manual(values=c("red", "blue"),name = "Method", labels = c("log-Moment", "MLE")) + ggtitle("Rmse for log-Moment and MLE") +
+  scale_color_manual(values=c("red", "blue"),name = "Method", labels = c("log-Moment", "MLE")) + ggtitle("RMSE for log-Moment and MLE") +
    theme(plot.title = element_text(hjust = 0.5))
   
 ```
@@ -370,9 +378,9 @@ Since the Mittag-Leffler distribution is heavy-tailed, many researchers would in
 H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^{-1}, 
 \end{align}
 where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. The Hill estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. It heavily depends on the choice of $r$ in \eqref{eq:Hill}, and hence on the number of order statistics entering \eqref{eq:Hill}.  Figure \ref{fig:Hillplots} shows 100 Hill plots (grey thin lines) for simulated Mittag-Leffler data with tail parameter $\beta=0.8$ and scale $\sigma=1$, for a sample size of $n=200$ (left) and $n=1000$ (right). The dark lines are the means and the red dotted lines show the true tail
-parameter. To deduce the correct tail parameter estimates from one of those Hillplots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a small tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are extremely unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001]. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
+parameter. To deduce the correct tail parameter estimates from one of those Hill plots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a small tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are extremely unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001]. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
 
-```{r Hillplots,  fig.height=5, fig.width=4, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hillplots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (first panel) and 10000 (second panel), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", out.width = '50%'}
+```{r Hillplots,  fig.height=5, fig.width=4, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hill plots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (first panel) and 10000 (second panel), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", out.width = '50%'}
 
 hill_estim<-function(k,data){
   n<-length(data)
@@ -429,7 +437,7 @@ p2<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep),colour="lig
  
 
 
-grid.arrange(p1,p2,nrow=2,top="Hillplots") 
+grid.arrange(p1,p2,nrow=2,top="Hill plots") 
 ```
 
 Since the exponential distribution is nested in the Mittag-Leffler family of 
@@ -915,7 +923,7 @@ right panel).
 
 # Discussion & Conclusion
 
-We have extended the POT (Peaks-over-Threshold) model, a mainstay of extreme value theory, to "bursty" time series, which have been studied 
+We have applied the POT (Peaks-over-Threshold) model, a mainstay of extreme value theory, to "bursty" time series, which have been studied 
 intensively in statistical physics. Burstiness is characterized by power-law waiting times between events, and we have shown that the Mittag-Leffler distribution arises naturally as a scaling limit for the inter-exceedance times of high thresholds. Moreover, we have derived the following non-linear scaling behaviour: $\sigma \sim p_{\ell}^{-1/\beta}$, where $\sigma$ is the scale parameter of the distribution of threshold 
 exceedance times, $p_{\ell}$ is the fraction of magnitudes above the threshold $\ell$, and $\beta$ the exponent of the power law. 
 This "anomalous" scaling behaviour in the bursty setting entails two phenomena: 
@@ -928,17 +936,15 @@ The Mittag-Leffler distribution captures both phenomena, due to its heavy tail a
 
 When we introduced the CTRE model, we assumed that all events are i.i.d. This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the i.i.d. assumption. For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are i.i.d. 
 
-The bursty CTRE approach to model "non-Poissonian" threshold crossing times should be contrasted with the (now standard) approach of clusters of extremes, see e.g. @ferro2003inference. In this approach, i.i.d. event sequences of magnitudes are generalized to stationary sequences of
-event magnitudes (subject to a mixing condition). The two approaches are fundamentally different: Clustering assumes that each event belongs to one particular (latent) group of events. For bursts, however, the aim is to identify an underlying scale-free pattern in the event 
-dynamics, which is often characteristic of complex systems. It is an interesting open problem to develop criteria, based e.g. on measures of surprise [@Lee15], that guide an applied statistician in the choice between a clustering and a CTRE approach for a particular problem. 
-In sum, the CTRE approach should not be seen as a substitute for the usual cluster approach, but rather as a complementary approach. 
+The CTRE approach to model "non-Poissonian" threshold crossing times should be contrasted with the well-documented approach of clusters of extremes, see e.g. @ferro2003inference. When the underlying stochastic process is *stationary*, the exceedances of high thresholds form, asymptotically, a *Cluster Poisson Process*.
+In the setting of this article, however, clustering-like dynamics occur due to the *non-stationarity* of the underlying renewal-reward process, which has infinite-mean renewal times. 
+Hence CTRE and Cluster Poisson Process shouldn't be viewed as competing methods, as the underlying data generating processes are quite different.
+In weighing the evidence for either of the two data generating processes, criteria could be developed, based e.g. on measures of surprise [@Lee15], which may prove to be valuable for future applied statisticians.
 
-Moreover, it was observed in @towe2020modelling that clusters of extreme events still exist after declustering. We believe it is possible to marry the clustering approach with our CTRE approach by considering CTREs based on MRPs with a _stationary_, rather than i.i.d., sequence of magnitudes, so that the times between clusters are asymptotically Mittag-Leffler distributed. More broadly speaking, the identification of clusters in the context of heavy-tailed inter-arrival times is an open problem. 
-
-Finally, a purely scale-free pattern for event times may be too rigid an 
-assumption for some bursty time series, because often the heavy-tailed character of the inter-arrival time
-distribution does not hold at all time scales. Rather, it applies at short and intermediate time scales, and is truncated (or tempered, 
-reverting to an exponential distribution) at very long time scales [see e.g. @MeerschaertRoyQin; and @Aban06]. In such situations, a "tempered" Mittag-Leffler distribution may provide a more realistic fit, which we aim to introduce in follow-up work. 
+Finally, we note that assuming a purely scale-free pattern for event times may be too rigid an 
+assumption, which unnecessarily limits the applicability of CTREs. Often, the heavy-tailed character of the inter-arrival time
+distribution holds at short to intermediate time scales, and is truncated (or tempered, 
+reverting to an exponential distribution) at very long time scales [see e.g. @MeerschaertRoyQin; and @Aban06]. In such situations, a "tempered" Mittag-Leffler distribution may provide a better fit, which we aim to introduce in follow-up work. 
 
 
 # Acknowledgements {-}
