@@ -56,8 +56,7 @@ abstract: |
   "bursty". 
   
   A new model for the _inter-exceedance times_ of events 
-  above high thresholds is proposed; the threshold exceedances itself are modeled via the standard 
-  Peaks-Over-Threshold (POT) method. For high thresholds and 
+  above high thresholds is proposed. For high thresholds and 
   infinite-mean waiting times, it is shown that the times between threshold 
   crossings are Mittag-Leffler distributed, and thus form a "fractional 
   Poisson Process" which generalizes the standard Poisson Process of threshold
@@ -319,6 +318,10 @@ $$
 	the second factor converges to $\lambda^{1/\beta}$, and it follows that
 	 $Z \sim ML(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$, the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
 \qed
+
+**Remark:**
+
+:[@MeerschaertStoev08] proofed a limit theorem for the maxima of iid random variables separated by infinite mean waiting times. They showed that the duration time of the limit process is Mittag-Leffler distributed. [@Basrak2014] described the asymptotic distribution under similar assumptions of all upper orders statistics using point processes.  
 
 For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma Z_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
 a heavy-tailed positive distribution for $\beta < 1$, with infinite mean. 
@@ -938,8 +941,7 @@ When we introduced the CTRE model, we assumed that all events are i.i.d. This as
 
 The CTRE approach to model "non-Poissonian" threshold crossing times should be contrasted with the well-documented approach of clusters of extremes, see e.g. @ferro2003inference. When the underlying stochastic process is *stationary*, the exceedances of high thresholds form, asymptotically, a *Cluster Poisson Process*.
 In the setting of this article, however, clustering-like dynamics occur due to the *non-stationarity* of the underlying renewal-reward process, which has infinite-mean renewal times. 
-Hence CTRE and Cluster Poisson Process shouldn't be viewed as competing methods, as the underlying data generating processes are quite different.
-In weighing the evidence for either of the two data generating processes, criteria could be developed, based e.g. on measures of surprise [@Lee15], which may prove to be valuable for future applied statisticians.
+Hence CTRE and Cluster Poisson Process shouldn't be viewed as competing methods, as the underlying data generating processes are quite different. To differentiate between the two models we use the term *bursty* which is standard in the context of heavy-tailed inter-arrival times in the physics community [e.g. @Barabasi2005;@Vasquez2006;@Karsai2012;@Vajna2013]). In weighing the evidence for either of the two data generating processes, criteria could be developed, based e.g. on measures of surprise [@Lee15], which may prove to be valuable for future applied statisticians.
 
 Finally, we note that assuming a purely scale-free pattern for event times may be too rigid an 
 assumption, which unnecessarily limits the applicability of CTREs. Often, the heavy-tailed character of the inter-arrival time
