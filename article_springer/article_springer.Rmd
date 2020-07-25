@@ -319,10 +319,6 @@ $$
 	 $Z \sim ML(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$, the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
 \qed
 
-**Remark:**
-
-:[@MeerschaertStoev08] proofed a limit theorem for the maxima of iid random variables separated by infinite mean waiting times. They showed that the duration time of the limit process is Mittag-Leffler distributed. [@Basrak2014] described the asymptotic distribution under similar assumptions of all upper orders statistics using point processes.  
-
 For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma Z_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
 a heavy-tailed positive distribution for $\beta < 1$, with infinite mean. 
 However, as $\beta \uparrow 1$, ${\rm ML}(\beta, \sigma)$ converges 
@@ -342,7 +338,7 @@ For a detailed reference on the Mittag-Leffler distribution, see e.g.
 **Remark:**
 
 : If $\beta = 1$, the result of the Theorem above is standard, see e.g. 
-Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a different choice of scaling constant. 
+Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a different choice of scaling constant. [@MeerschaertStoev08] proofed a limit theorem for the maxima of iid random variables separated by infinite mean waiting times. They showed that the duration time of the limit process is Mittag-Leffler distributed. [@Basrak2014] described the asymptotic distribution under similar assumptions of all upper orders statistics using point processes.
 
 **Remark:**
 
