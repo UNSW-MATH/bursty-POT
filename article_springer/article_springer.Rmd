@@ -251,7 +251,7 @@ _without any_ events, whereas in the real-world dataset events appear continuous
 In this section we state and prove the key theorem, which is founded on the concept of regular variation. A Borel-measurable function $f:\mathbb (0,\infty) \to (0,\infty)$ is said be "regularly varying at $\infty$ with parameter (or "index") $\rho$ if 
 
 $$
-\frac{f(\lambda x)}{f(x)} = \lambda^\rho \quad \text{ for all } \lambda > 0.
+\underset{x\rightarrow \infty}{lim}\frac{f(\lambda x)}{f(x)} = \lambda^\rho \quad \text{ for all } \lambda > 0.
 $$
 
 For more details regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
