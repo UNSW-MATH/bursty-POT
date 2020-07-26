@@ -68,19 +68,17 @@ abstract: |
 
 bibliography: CTRMstats.bib
 csl: elsevier-harvard.csl
-output: 
+output:
+  html_document: default
   rticles::elsevier_article:
     number_sections: true
     fig_caption: yes
-
                 
-
 params:
   tail: 0.8
   n: 10000
 
 header-icludes: \usepackage{amssymb,natbib}
-
 
 ---
 
@@ -408,7 +406,7 @@ hill_plot_values<-bind_rows(df,hill_plot_values)
 }
 
 mean_n200<-hill_plot_values %>% group_by(x) %>% summarize(mean=mean(y))
-p1<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep),colour="lightgrey") +
+p1<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep), alpha=0.1) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x=x, y=mean),colour="black",data=mean_n200) + 
   ylab("Estimated tail") +
@@ -426,7 +424,7 @@ for  (m in 1:100){
 }
 mean_n1000<-hill_plot_values %>% group_by(x) %>% summarize(mean=mean(y))
 
-p2<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep),colour="lightgrey") +
+p2<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep), alpha=0.1) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x=x, y=mean),colour="black",data=mean_n1000) + 
   ylab("Estimated tail") +
@@ -604,7 +602,7 @@ invisible(sapply(
 #logMoment estimator
 logMom_Ex1_tail <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_estimates_tail08_logMoms_Ex1) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_logMoms_Ex1) + 
@@ -613,7 +611,7 @@ logMom_Ex1_tail <-
 #ml estimator
 mle_Ex1_tail <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_estimates_tail08_mles_Ex1) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_mles_Ex1) + 
@@ -624,7 +622,7 @@ mle_Ex1_tail <-
 # hill_Ex1_tail <-
 #   ggplot() + geom_line(data = tbl_estimates_tail08_hill_Ex1,
 #                        aes(x = k, y = value, group = rep),
-#                        colour = "lightgrey") +
+#                        alpha = 0.05) +
 #   coord_cartesian(ylim = c(0.5, 1.5)) +
 #   geom_line(data=means.tbl_hill_Ex1,aes(x=k, y=mw),colour="black") + 
 #   ylab("Estimated tail") +
@@ -636,7 +634,7 @@ mle_Ex1_tail <-
 #logMoment estimator
 logMom_Ex2_tail <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_estimates_Ex2_Pareto_tail08_logMoms) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_logMoms_Ex2) + 
@@ -646,7 +644,7 @@ logMom_Ex2_tail <-
 #ml estimator
 mle_Ex2_tail <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_estimates_Ex2_Pareto_tail08_mles) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_mles_Ex2) + 
@@ -656,7 +654,7 @@ mle_Ex2_tail <-
 # #Hill estimator
 # hill_Ex2_tail <-
 #   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-#                        colour = "lightgrey",
+#                        alpha = 0.05,
 #                        data = tbl_estimates_Ex2_Pareto_tail08_hill_times) +
 #   coord_cartesian(ylim = c(0.5, 1.5)) +
 #   geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_hill_times_Ex2) + 
@@ -668,7 +666,7 @@ mle_Ex2_tail <-
 #logMoment estimator
 logMom_Ex3_tail <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_estimates_Example3_Exp_logMoms) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x = k, y = mw), colour = "black", data = means.tbl_logMoms_Ex3) + 
@@ -678,7 +676,7 @@ logMom_Ex3_tail <-
 #ml estimator
 mle_Ex3_tail <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_estimates_Example3_Exp_mles) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
   geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_mles_Ex3) + 
@@ -688,7 +686,7 @@ mle_Ex3_tail <-
 # #Hill estimator
 # hill_Ex3_tail <-
 #   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-#                        colour = "lightgrey",
+#                        alpha = 0.05,
 #                        data = tbl_estimates_Example3_Exp_hill_times) +
 #   coord_cartesian(ylim = c(0.5, 10)) +
 #   geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_hill_times_Ex3) + 
@@ -710,7 +708,7 @@ grid.arrange(
 #Example One
 logMom_Ex1_scale <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_scales_logMoms_Ex1) +
   coord_cartesian(ylim = c(0, 2)) +
   geom_line(aes(x = k, y = mw), colour = "black", means.tbl_scales_logMoms_Ex1) + 
@@ -719,7 +717,7 @@ logMom_Ex1_scale <-
 
 mle_Ex1_scale <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_scales_mles_Ex1) +
   coord_cartesian(ylim = c(0, 2)) +
   geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex1) + 
@@ -730,7 +728,7 @@ mle_Ex1_scale <-
 
 logMom_Ex2_scale <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_scales_logMoms_Ex2) +
   coord_cartesian(ylim = c(0, 2)) +
   geom_line(aes(x=k, y=mw),colour="black",means.tbl_scales_logMoms_Ex2) + 
@@ -739,7 +737,7 @@ logMom_Ex2_scale <-
 
 mle_Ex2_scale <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_scales_mles_Ex2) +
   coord_cartesian(ylim = c(0, 2)) +
   geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex2) + 
@@ -750,7 +748,7 @@ mle_Ex2_scale <-
 
 logMom_Ex3_scale <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_scales_logMoms_Ex3) +
   coord_cartesian(ylim = c(0, 2)) +
   geom_line(aes(x=k, y=mw),colour="black",means.tbl_scales_logMoms_Ex3) + 
@@ -759,7 +757,7 @@ logMom_Ex3_scale <-
 
 mle_Ex3_scale <-
   ggplot() + geom_line(aes(x = k, y = value, group = rep),
-                       colour = "lightgrey",
+                       alpha = 0.05,
                        data = tbl_scales_mles_Ex3) +
   coord_cartesian(ylim = c(0, 2)) +
   geom_line(aes(x=k, y=mw),colour="black",data=means.tbl_scales_mles_Ex3) + 
