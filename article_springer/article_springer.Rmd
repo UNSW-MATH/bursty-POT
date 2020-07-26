@@ -362,7 +362,7 @@ load(here::here("article_springer", "article_springer_files", "ML_estim_simu","t
   n.labs <-c("n=25", "n=100", "n=200")
   names( n.labs ) <-  c("25", "100", "200")
 tbl_ML_estim %>% filter(method=="logMom" | method=="ML")%>%
-  filter(n == "25" || n == "100" || n=="200") %>%
+  filter(n == "25" | n == "100" | n=="200") %>%
   filter(true.scale == "1") %>% 
   ggplot(aes(true.tail, rmse, colour = method, group=method)) + 
   geom_line() + geom_point() + 
@@ -451,7 +451,7 @@ Figure \ref{Fig:LRT} displays the (simulated) power for the bootstrapped LRT for
 
 ```{r LRT_power, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{Fig:LRT} Power for bootstrapped LRT for different sample sizes, varying tails and scale parameter equal to 1.", out.width='90%'}
 load(here::here("article_springer","article_springer_files","ML_LRT_simu","estimates_df_LRT_boot1_01.RData"))
-df_LRT_boot_01 %>% filter(n=="20" || n=="50" || n=="100" || n=="200") %>% ggplot(aes(x=true.tail,y=power)) +  geom_line(aes(y=power,group=factor(n),color=factor(n),linetype=factor(n)),size=0.5)+
+df_LRT_boot_01 %>%  ungroup() %>% filter(n=="20" | n=="50" | n=="100" | n=="200") %>% ggplot(aes(x=true.tail,y=power)) +  geom_line(aes(y=power,group=factor(n),color=factor(n),linetype=factor(n)),size=0.5)+
   scale_linetype_manual(values = c("solid","dashed","twodash","dotted"),name  ="Sample size")+
    labs(y="Power",x= "True tail parameter")+
   scale_color_manual(values=c("red", "blue","darkgreen","black"), name  ="Sample size") +
