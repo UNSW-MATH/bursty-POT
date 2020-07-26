@@ -249,14 +249,14 @@ _without any_ events, whereas in the real-world dataset events appear continuous
 In this section we state and prove the key theorem, which is founded on the concept of regular variation. A Borel-measurable function $f:\mathbb (0,\infty) \to (0,\infty)$ is said be "regularly varying at $\infty$ with parameter (or "index") $\rho$ if 
 
 $$
-\underset{x\rightarrow \infty}{lim}\frac{f(\lambda x)}{f(x)} = \lambda^\rho \quad \text{ for all } \lambda > 0.
+\lim_{x \to \infty} \frac{f(\lambda x)}{f(x)} = \lambda^\rho \quad \text{ for all } \lambda > 0.
 $$
 
-For more details regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
+For more details on regular variation and stable limit theorems, we recommend the book by @MeerschaertSikorskii.
 
 **Theorem:** 
 
-: For the magnitudes $J_k$ assumption \eqref{assumptionJs} holds. Furthermore, let the waiting times $W_k$ be in the domain of attraction of a positively skewed sum-stable law with stability parameter $0 < \beta < 1$; more precisely,
+: For the magnitudes $J_k$, let assumption \eqref{assumptionJs} hold. Furthermore, let the waiting times $W_k$ be in the domain of attraction of a positively skewed sum-stable law with stability parameter $0 < \beta < 1$; more precisely,
 \begin{align} \label{eq:stability}
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
 \quad n \to \infty
