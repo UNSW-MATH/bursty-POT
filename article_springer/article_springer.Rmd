@@ -394,7 +394,8 @@ Suppose the "correct" threshold $\ell_0$ was known, in the sense that
 thresholding at $\ell_0$ would result precisely in an underlying MRP 
 $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}. 
 In this case, we could apply any tail (and scale) estimator such as e.g.
-Hill's estimator to the $W_i$ and thus infer the distribution of 
+Hill's estimator [@hill1975simple]
+to the $W_i$ and thus infer the distribution of 
 inter-exceedance times. 
 
 But guessing the correct threshold $\ell_0$ and proceeding with this
@@ -412,36 +413,19 @@ The more the threshold $\ell_0$ cuts into $\mathcal S$ from below, the more
 the distributions of IETs will resemble a MLD, according to the Theorem.
 As we do not know to what extent this effect occurs, 
 and since the limit is an MLD, it is practicable to fit an MLD to the IETs to 
-begin with. 
+begin with.
 
+For high thresholds where few IETs are left, estimating a tail parameter
+by fitting a MLD has advantages over e.g. the Hill estimator: 
+since the underlying distribution of IETs *is* a MLD, 
+the fits are more accurate. 
+Figure \ref{fig:Hillplots} shows Hill plots for 200 IETs, for two Mittag-Leffler
+datasets of sizes 200 and 10000 (and an irrelevant distribution of magnitudes).
+Clearly the variance is too high to give useful estimates.
+For corresponding fits based on the assumption of a Mittag-Leffler distribution,
+see Figure \ref{Fig:TailSimu}, top row, yielding more reliable predictions 
+(more discussion further below).
 
-# Fitting Mittag-Leffler Distributions {#sec:ML}
-
-Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-Moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
-
-Due to the form of the density function of a Mittag-Leffler distribution there exists no closed form for the Maximum Likelihood estimator (MLE). In the R Package `MittagLeffleR` [@MittagLeffleR], Maximum Likelihood estimation is implemented via numerical optimization. The MLE slightly outperforms the log-Moment estimator regarding bias and RMSE for big enough sample sizes, but is extremely computationally intensive. Figure \ref{fig:MSE} shows that both estimators perform well, even for small sample sizes. For smaller tails both estimators show an increasing RMSE for the scale estimation due to an increasing variance. This results from the fact that in case of very small tails, single very large values can occur. 
-
-```{r MSE, echo=FALSE,warning=FALSE, fig.height=7,fig.width=8,fig.align="center", fig.cap="\\label{fig:MSE} RMSE for the estimation of tail (left column) and scale (right column) parameters via log-Moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one, based on 5000 simulation runs.", out.width = '90%'}
-load(here::here("article_springer", "article_springer_files", "ML_estim_simu","tbl_ML_estim.RData"))
-  n.labs <-c("n=25", "n=100", "n=200")
-  names( n.labs ) <-  c("25", "100", "200")
-tbl_ML_estim %>% filter(method=="logMom" | method=="ML")%>%
-  filter(n == "25" | n == "100" | n=="200") %>%
-  filter(true.scale == "1") %>% 
-  ggplot(aes(true.tail, rmse, colour = method, group=method)) + 
-  geom_line() + geom_point() + 
-  facet_wrap(c("n","param"), scales = "free", ncol = 2, labeller = labeller(n = n.labs)) + 
-  scale_color_manual(values=c("red", "blue"),name = "Method", labels = c("log-Moment", "MLE")) + ggtitle("RMSE for log-Moment and MLE") +
-   theme(plot.title = element_text(hjust = 0.5))
-  
-```
-
-Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator [@hill1975simple] based on the $r+1$ upper order statistics
-\begin{align}\label{eq:Hill}
-H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^{-1}, 
-\end{align}
-where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. The Hill estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. It heavily depends on the choice of $r$ in \eqref{eq:Hill}, and hence on the number of order statistics entering \eqref{eq:Hill}.  Figure \ref{fig:Hillplots} shows 100 Hill plots (grey thin lines) for simulated Mittag-Leffler data with tail parameter $\beta=0.8$ and scale $\sigma=1$, for a sample size of $n=200$ (left) and $n=1000$ (right). The dark lines are the means and the red dotted lines show the true tail
-parameter. To deduce the correct tail parameter estimates from one of those Hill plots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a small tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are extremely unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001] on the *thresholded* data. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
 
 ```{r Hillplots,  fig.height=5, fig.width=4, echo=FALSE,warning=FALSE, fig.align="center", fig.cap="\\label{fig:Hillplots} Hill plots for m=100 simulated Mittag-Leffler datasets with true tail 0.8 and sample size 200 (first panel) and 10000 (second panel), with number of upper order statistics r on which the Hill estimator is based on the x-axis. The grey thin lines are the Hill plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter. ", out.width = '50%'}
 
@@ -488,20 +472,49 @@ for  (m in 1:100){
   df<-df %>% mutate(rep=m)
   hill_plot_values<-bind_rows(df,hill_plot_values)
 }
-mean_n1000<-hill_plot_values %>% group_by(x) %>% summarize(mean=mean(y))
+mean_n10000<-hill_plot_values %>% group_by(x) %>% summarize(mean=mean(y))
 
 p2<-hill_plot_values %>% ggplot() + geom_line(aes(x=x,y=y,group=rep), alpha=0.1) +
   coord_cartesian(ylim = c(0.5, 1.5)) +
-  geom_line(aes(x=x, y=mean),colour="black",data=mean_n1000) + 
+  geom_line(aes(x=x, y=mean),colour="black",data=mean_n10000) + 
   ylab("Estimated tail") +
   geom_hline(yintercept=0.8, linetype="dashed", color = "red")+
   xlab("Order Statistics")+
   ylab("Hill-Estimator of Tail Index")
  
-
-
 grid.arrange(p1,p2,nrow=2,top="Hill plots") 
 ```
+
+
+# Fitting Mittag-Leffler Distributions {#sec:ML}
+
+Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-Moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
+
+The Maximum Likelihood Estimator (MLE) for the MLD is not straightforward 
+to implement, since the MLD density admits no closed form analytical expression.
+In the R Package `MittagLeffleR` [@MittagLeffleR], MLE is implemented via numerical optimization. The MLE slightly outperforms the log-Moment estimator regarding bias and RMSE for big enough sample sizes, but is computationally very intensive. Figure \ref{fig:MSE} shows that both estimators perform well, even for small sample sizes. For smaller tails both estimators show an increasing RMSE for the scale estimation due to an increasing variance. This results from the fact that in case of very small tails, single very large values can occur. 
+
+```{r MSE, echo=FALSE,warning=FALSE, fig.height=7,fig.width=8,fig.align="center", fig.cap="\\label{fig:MSE} RMSE for the estimation of tail (left column) and scale (right column) parameters via log-Moment estimator and MLE of a Mittag-Leffler sample with varying sample size n=25, 100, 200, varying tails on the x-axis and fixed scale equal to one, based on 5000 simulation runs.", out.width = '90%'}
+load(here::here("article_springer", "article_springer_files", "ML_estim_simu","tbl_ML_estim.RData"))
+  n.labs <-c("n=25", "n=100", "n=200")
+  names( n.labs ) <-  c("25", "100", "200")
+tbl_ML_estim %>% filter(method=="logMom" | method=="ML")%>%
+  filter(n == "25" | n == "100" | n=="200") %>%
+  filter(true.scale == "1") %>% 
+  ggplot(aes(true.tail, rmse, colour = method, group=method)) + 
+  geom_line() + geom_point() + 
+  facet_wrap(c("n","param"), scales = "free", ncol = 2, labeller = labeller(n = n.labs)) + 
+  scale_color_manual(values=c("red", "blue"),name = "Method", labels = c("log-Moment", "MLE")) + ggtitle("RMSE for log-Moment and MLE") +
+   theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator [@hill1975simple] based on the $r+1$ upper order statistics
+\begin{align}\label{eq:Hill}
+H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^{-1}, 
+\end{align}
+where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. The Hill estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. It heavily depends on the choice of $r$ in \eqref{eq:Hill}, and hence on the number of order statistics entering \eqref{eq:Hill}.  Figure \ref{fig:Hillplots} shows 100 Hill plots (grey thin lines) for simulated Mittag-Leffler data with tail parameter $\beta=0.8$ and scale $\sigma=1$, for a sample size of $n=200$ (left) and $n=1000$ (right). The dark lines are the means and the red dotted lines show the true tail
+parameter. To deduce the correct tail parameter estimates from one of those Hill plots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a small tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are extremely unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001] on the *thresholded* data. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
 
 Since the exponential distribution is nested in the Mittag-Leffler family of 
 distributions, a Likelihood-ratio Test (LRT) seems to be an appropriate way to choose 
