@@ -182,7 +182,7 @@ The source code for the figures generated in this manuscript is
 available online at <https://github.com/strakaps/bursty-POT>. 
 
 
-# Continuous Time Random Exceedances (CTRE)
+# Continuous Time Random Exceedances (CTRE) {#sec:CTRE}
 
 As a model for extreme observations, we use a Marked Renewal Process (MRP):
 
@@ -345,11 +345,77 @@ and hence the results by @Hsing88 on the exceedances of stationary sequences
 do not apply. 
 
 
-# Model Choice and inference for the Mittag-Leffler distribution{#sec:ML}
+# Mittag-Leffler Stability Plots
 
-The classical POT approach is based on the fact that exceedances above a high threshold are asymptotically GPD distributed, hence a GPD distribution is fitted to the exceedances above a high enough threshold. As this approach is by now well-established in extreme value theory, we do not discuss it any further. Instead, this article focuses on our new contribution: the modelling of inter-exceedance times. For literature pointing to POT see e.g. @smith1984threshold; @leadbetter1991basis; @davison1990models; @beirlantBook Ch.5.3; @embrechts2013modelling Ch. 6.5.; @ColesBook Ch.4.
+We assume a dataset of the form $\{(T_i, X_i), i \in I\}$,
+where $T_i$ are timestamps and $X_i$ are magnitudes.
+In this article, we focus on modelling the distribution of threshold
+*exceedance times* rather than the *exceedances* themselves. For the latter, 
+see the POT approach [@smith1984threshold;
+@leadbetter1991basis; @davison1990models; @beirlantBook Ch.5.3;
+@embrechts2013modelling Ch. 6.5.; @ColesBook Ch.4.].
+With the previous section setting the stage, we assume that only the large
+magnitudes (aka "shocks") follow a MRP.  The smaller magnitudes are possibly
+nuisance data that may be irrelevant with respect to the modelling of extremes
+and their waiting times. 
+Accordingly, we assume a threshold $\ell$, and discard all
+data $(T_i, X_i)$ where $X_i \le \ell$, yielding the thinned dataset
+$\{(T_i, X_i), i \in I(\ell)\}$, where $I(\ell) \subseteq I$.
 
-Due to the Theorem in the last Section we know that for high thresholds the times between exceedances are asymptotically Mittag-Leffler distributed in case of heavy-tailed waiting times between the observations. In this article we propose to model inter-exceedance times in a similar fashion as magnitudes in the classical POT approach, more precisely to fit a Mittag-Leffler distribution to the inter-exceedance times via stability plots. Hence, before we discuss inference for the inter-exceedance times in the next section, we first discuss inference for Mittag-Leffler distributions.
+However, this raises the question of how high or low the threshold should be
+chosen. Recall that with the POT method for the modelling of extremes, the
+distribution of the thresholded exceedances converges to a GPD, and the
+threshold must be chosen high enough so that the exceedances fit a GPD well. 
+The threshold choice translates into a
+bias-variance trade-off: low thresholds yield more data to fit a GPD (low 
+variance), but the distribution of exceedances may deviate from a GPD 
+distribution (high bias); and high thresholds present the opposite scenario.
+It is understood, however, that there is a *range* of threshold values that
+ought to yield similar GPD parameter estimates. In other words, plots of
+threshold vs. parameter estimate ought to exhibit that parameter estimates
+are *stable* with respect to the choice of threshold. 
+
+For inter-exceedance *times* (IETs), the same idea applies. 
+By the Theorem, the inter-exceedance times converge to a Mittag-Leffler
+distribution (MLD), and importantly, the tail parameter $\beta$ is 
+*independent* of (or *stable* with respect to) the choice of threshold.
+For high thresholds, the IET distribution may fit an MLD well, but few
+IETs may be left for a fit (high variance). 
+For low thresholds, their distribution may be not well represented
+by an MLD; or, too many events may be interpreted as 
+shocks, resulting in a biased estimate of the parameters of the limiting MLD.
+For illustration, consider the case where measurements are taken daily:
+Then at the lowest threshold, all IETs equal one day,
+leaving no hint at a power-law distribution whatsoever. Raising the threshold
+may or may not produce IETs that start exhibiting a power-law; and both cases
+are represented by the MLD, with $\beta < 1$ or $\beta = 1$.
+
+Suppose the "correct" threshold $\ell_0$ was known, in the sense that 
+thresholding at $\ell_0$ would result precisely in an underlying MRP 
+$\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}. 
+In this case, we could apply any tail (and scale) estimator such as e.g.
+Hill's estimator to the $W_i$ and thus infer the distribution of 
+inter-exceedance times. 
+
+But guessing the correct threshold $\ell_0$ and proceeding with this
+type of inference is less favourable to modelling IETs with the MLD, 
+as we now explain.
+In real-world datasets, a "correct" threshold may not exist: the data 
+$\{(T_i, X_i): i \in I\}$ may be a mixture of an MRP with some other
+time series $\{(T'_i, X'_i): i \in I'\}$, and the supports $\mathcal S'$
+and $\mathcal S$ of the distributions
+of $X'_i$ and the magnitudes $J_i$ (aka the MRP marks) may overlap.
+Then thresholding at e.g. $\ell_0 = \sup \mathcal S'$ 
+no longer results in a "clean" MRP: some $J_i$'s will be removed, meaning
+that some $W_i$'s will be merged into a longer IET.
+The more the threshold $\ell_0$ cuts into $\mathcal S$ from below, the more
+the distributions of IETs will resemble a MLD, according to the Theorem.
+As we do not know to what extent this effect occurs, 
+and since the limit is an MLD, it is practicable to fit an MLD to the IETs to 
+begin with. 
+
+
+# Fitting Mittag-Leffler Distributions {#sec:ML}
 
 Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-Moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
 
