@@ -509,13 +509,11 @@ tbl_ML_estim %>% filter(method=="logMom" | method=="ML")%>%
   
 ```
 
-Since the Mittag-Leffler distribution is heavy-tailed, many researchers would intuitively give the highest importance to the tail behaviour of the distribution. Of course, one can also use established tail exponent estimators for the estimation of the parameter $\beta$ such as the Hill estimator [@hill1975simple] based on the $r+1$ upper order statistics
-\begin{align}\label{eq:Hill}
-H_{r,n}=\left[ \frac{1}{r} \sum_{i=0}^{r} \log \frac{X_{(i)}}{X_{(r+1)}}\right]^{-1}, 
-\end{align}
-where $X_{(1)} \geq X_{(2)} \geq \ldots \geq X_{(n)}$ denote the order statistics in decreasing order of a sequence $X_1,\ldots,X_n$. The Hill estimator only performs reliably well for distributions close to Pareto [see @Resnick97]. It heavily depends on the choice of $r$ in \eqref{eq:Hill}, and hence on the number of order statistics entering \eqref{eq:Hill}.  Figure \ref{fig:Hillplots} shows 100 Hill plots (grey thin lines) for simulated Mittag-Leffler data with tail parameter $\beta=0.8$ and scale $\sigma=1$, for a sample size of $n=200$ (left) and $n=1000$ (right). The dark lines are the means and the red dotted lines show the true tail
-parameter. To deduce the correct tail parameter estimates from one of those Hill plots is virtually impossible. To estimate the tail parameter of a Mittag-Leffler distribution with the Hill estimator, the sample size has to be much larger and one has to choose a small tuning parameter $r$. In case that only events above a high threshold are recorded, $n=10000$ events are extremely unrealistic. There is a vast literature on bias-reduced versions of the Hill estimator and on the optimal choice of $r$, mainly based on imposed second-order regular variation conditions [see e.g. @beirlantBook, Ch.4.4 and 4.7 and references in it]. Also, there are hundreds other tail-index estimators not considered in this article, since this would go beyond the scope of our article. For example the moment estimator [@dekkers1989moment], the Pickands estimator [@pickands1975statistical], the QQ-estimator [@Kratz96], to name a few. A nice overview can be found in [@fedotenkov2018review]. However, we know from the Theorem in Section \ref{sec:scaling} that the inter-exceedance times are asymptotically Mittag-Leffler distributed, and hence it is unsurprising that general tail (and scale) estimation methods that do not take into account this structure are statistically less efficient [@kozubowski2001] on the *thresholded* data. Finally, the Hill estimator completely fails in the important special case where the inter-arrival times are exponentially distributed and not heavy-tailed. For these reasons, we propose to use the log-Moment estimator or the MLE for Mittag-Leffler distributions.
+With the above comparisons of estimators for the MLD in mind, 
+we propose to use the log-Moment estimator, or the MLE when computational 
+resources are not an issue.
 
+**Weighing the evidence for heavy tails.**
 Since the exponential distribution is nested in the Mittag-Leffler family of 
 distributions, a Likelihood-ratio Test (LRT) seems to be an appropriate way to choose 
 between a model with exponential and Mittag-Leffler inter-exceedance times.
