@@ -69,7 +69,6 @@ abstract: |
 bibliography: CTRMstats.bib
 csl: elsevier-harvard.csl
 output:
-  html_document: default
   rticles::elsevier_article:
     number_sections: true
     fig_caption: yes
