@@ -185,7 +185,7 @@ As a model for extreme observations, we use a Marked Renewal Process (MRP):
 
 **Definition (MRP):** 
 
-: Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be i.i.d. pairs of random variables, where the $W_k > 0$ are interpreted as the *waiting times* 
+: Let $(W,J), (W_1, J_1), (W_2, J_2), \ldots$ be iid pairs of random variables, where the $W_k > 0$ are interpreted as the *waiting times* 
 and $J_k \in \mathbb{R}$ as the *event magnitudes*. If $W$ and $J$ are independent, the Marked Renewal Process is said to be *uncoupled*. 
 
 
@@ -203,7 +203,7 @@ Define the pair of random variables $(X(\ell), T(\ell))$ via
 $$X(\ell) = J_{\tau(\ell)} - \ell, \quad 
 T(\ell) = \sum_{k=1}^{\tau(\ell)} W_k.$$
 By restarting the MRP at $\tau(\ell)$, inductively define the
-two i.i.d. sequences $T(\ell,n)$ and $X(\ell, n)$, $n \in \mathbb N$, 
+two iid sequences $T(\ell,n)$ and $X(\ell, n)$, $n \in \mathbb N$, 
 called the "inter-arrival times" and the "exceedances", respectively.
 The pair sequence $(X(\ell, n), T(\ell, n))_{n \in \mathbb N}$ is called 
 a Continuous Time Random Exceedance model (CTRE). 
@@ -525,7 +525,7 @@ df_LRT_boot_01 %>%  ungroup() %>% filter(n=="20" | n=="50" | n=="100" | n=="200"
 ```
 
 
-## Inference on Exceedance times
+## Algorithm for the inference on exceedance times
 
 The Theorem in Section \ref{sec:scaling} implies that for a high 
 threshold $\ell$ we may approximate the distribution of $T(\ell)$ with an 
@@ -535,7 +535,7 @@ Building on the POT (Peaks-Over-Threshold) method, we propose the following esti
 
 1. Extract the $K$ largest order statistics 
 (i.e. the $K$ largest values, where e.g. $K = 300$) 
-$X_{(1)}, \ldots, X_{(K)}$ together with their timestamps $T_{(1)}, \ldots, T_{(K-1)}$. 
+$x_{(1)}, \ldots, x_{(K)}$ together with their timestamps $t_{(1)}, \ldots, t_{(K-1)}$. 
 
 2. Choose a minimum number of exceedances $K_0\leq K$, e.g. $K_0 = 5$, and for each $k$ ranging from $K_0$ to $K$: 
     a) extract the set $\mathcal T_k$ of exceedance times between the magnitudes exceeding the threshold $X_{(k)}$
@@ -844,10 +844,10 @@ We now want to apply the proposed method to a real data example, the solar flare
  
 Before we apply the approach described in Section 5 to the solar flare data, we first have to check if all model assumptions are fulfilled. The CTRE model is based on three main assumptions, which are repeated below. For each assumption, we suggest one means of checking if it holds: 
 
-i.i.d.:
+iid :
 
 : After removing the "noise observations" below the smallest threshold 
-  $\ell_0$, the pair sequence $(T(\ell_0, i), X(\ell_0,i))$ is i.i.d. 
+  $\ell_0$, the pair sequence $(T(\ell_0, i), X(\ell_0,i))$ is iid 
   An indication if this is true is given by an auto-correlation plot. Since we are expecting the inter-exceedance times to be Mittag-Leffler distributed and hence to have infinite mean but finite log-moments, we first take the logarithms of the times.
   
 
@@ -998,7 +998,7 @@ ii) a high propensity for more threshold crossing events immediately after each 
 
 The Mittag-Leffler distribution captures both phenomena, due to its heavy tail as well as its stretched exponential (peaked) asymptotics for small times. It generalizes the exponential distribution, and in the solar flare data example, this generalization is warranted, because the likelihood-ratio test is strongly significant. 
 
-When we introduced the CTRE model, we assumed that all events are i.i.d. This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the i.i.d. assumption. For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are i.i.d. 
+When we introduced the CTRE model, we assumed that all events are iid This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the iid assumption. For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are iid 
 
 The CTRE approach to model "non-Poissonian" threshold crossing times should be contrasted with the well-documented approach of clusters of extremes, see e.g. @ferro2003inference. When the underlying stochastic process is *stationary*, the exceedances of high thresholds form, asymptotically, a *Cluster Poisson Process*.
 In the setting of this article, however, clustering-like dynamics occur due to the *non-stationarity* of the underlying renewal-reward process, which has infinite-mean renewal times. 
