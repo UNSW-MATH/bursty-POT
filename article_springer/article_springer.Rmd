@@ -169,14 +169,11 @@ models.
 In this work, however, we introduce a method of inference for this type of 
 model, which is seemingly not available in the literature.
 
-We review the marked renewal process in Section 2, and 
-derive a scaling limit theorem for inter-exceedance times in Section 3.
-We give a statistical procedure to estimate model parameters via stability plots 
-in Section 5, but to set the stage we first discuss inference for the 
-Mittag-Leffler distribution in Section 4. A simulation study of the effectiveness of our statistical procedure is given in Section 6. In Section 7 we apply our method to a real data set.  In Section 8, we discuss the memory property of the  Mittag-Leffler distribution, and how it affects the predictive distribution for the time until the next threshold crossing event. Finally we close with a discussion and conclusion in Section 9.
+We review the marked renewal process in Section 2.1, and 
+derive a scaling limit theorem for inter-exceedance times in Section 2.2.
+We give a statistical procedure to estimate model parameters via stability plots in Section 3.1 and 3.4, but to set the stage we first discuss inference for the Mittag-Leffler distribution in Section 3.2 as well as a Likelihood-ratio test to assess the goodness of fit. A simulation study of the effectiveness of our statistical procedure is given in Section 4. In Section 5 we apply our method to a real data set.  In Section 6, we discuss the memory property of the  Mittag-Leffler distribution, and how it affects the predictive distribution for the time until the next threshold crossing event. Finally we close with a discussion and conclusion in Section 7.
 For all statistical computations we have used R [@R]. 
-All code and data used for the analysis in this article has been organized into 
-an R package `CTRE` (<https://github.com/strakaps/CTRE>).
+All code and data used for the analysis in this article has been organized into an R package `CTRE` (<https://github.com/strakaps/CTRE>).
 The source code for the figures generated in this manuscript is 
 available online at <https://github.com/strakaps/bursty-POT>. 
 
@@ -348,8 +345,8 @@ do not apply.
 
 ## Mittag-Leffler Stability Plots
 
-We assume a dataset of the form $\{(T_i, X_i), i \in I\}$,
-where $T_i$ are timestamps and $X_i$ are magnitudes.
+We assume a dataset of the form $\{(t_i, x_i), i \in I\}$,
+where $t_i$ are timestamps and $x_i$ are magnitudes.
 In this article, we focus on modelling the distribution of threshold
 *exceedance times* rather than the *exceedances* themselves. For the latter, 
 see the POT approach [@smith1984threshold;
@@ -360,8 +357,8 @@ magnitudes (aka "shocks") follow a MRP.  The smaller magnitudes are possibly
 nuisance data that may be irrelevant with respect to the modelling of extremes
 and their waiting times. 
 Accordingly, we assume a threshold $\ell$, and discard all
-data $(T_i, X_i)$ where $X_i \le \ell$, yielding the thinned dataset
-$\{(T_i, X_i), i \in I(\ell)\}$, where $I(\ell) \subseteq I$.
+data where $X_i \le \ell$, yielding the thinned dataset
+$\{(t^{(l)}_i, x^{(l)}_i), i \in I(\ell)\}$, where $I(\ell) \subseteq I$.
 
 However, this raises the question of how high or low the threshold should be
 chosen. Recall that with the POT method for the modelling of extremes, the
@@ -385,46 +382,38 @@ IETs may be left for a fit (high variance).
 For low thresholds, their distribution may be not well represented
 by an MLD; or, too many events may be interpreted as 
 shocks, resulting in a biased estimate of the parameters of the limiting MLD.
-For illustration, consider the case where measurements are taken daily:
-Then at the lowest threshold, all IETs equal one day,
-leaving no hint at a power-law distribution whatsoever. Raising the threshold
-may or may not produce IETs that start exhibiting a power-law; and both cases
-are represented by the MLD, with $\beta < 1$ or $\beta = 1$.
+<!-- For illustration, consider the case where measurements are taken daily: -->
+<!-- Then at the lowest threshold, all IETs equal one day, -->
+<!-- leaving no hint at a power-law distribution whatsoever. Raising the threshold -->
+<!-- may or may not produce IETs that start exhibiting a power-law; and both cases -->
+<!-- are represented by the MLD, with $\beta < 1$ or $\beta = 1$. -->
 
-Suppose the "correct" threshold $\ell_0$ was known, in the sense that 
-thresholding at $\ell_0$ would result precisely in an underlying MRP 
-$\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}. 
-In this case, we could apply any tail (and scale) estimator such as e.g.
-Hill's estimator [@hill1975simple]
-to the $W_i$ and thus infer the distribution of 
-inter-exceedance times. 
+<!-- Suppose the "correct" threshold $\ell_0$ was known, in the sense that  -->
+<!-- thresholding at $\ell_0$ would result precisely in an underlying MRP  -->
+<!-- $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}.  -->
+In case we would have data of a MRP $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of inter-exceedance times. However, in real-world datasets, the MRP assumption is unrealistic for low thresholds. The unknown data generating process is likely to be more complex, with dependencies or mixtures of time series at low thresholds, structures that possibly vanish for higher thresholds. Fitting just the IETs means that only the exceedances as well as the times inbetween have to satify the iid assumption.  
 
-But guessing the correct threshold $\ell_0$ and proceeding with this
-type of inference is less favourable to modelling IETs with the MLD, 
-as we now explain.
-In real-world datasets, a "correct" threshold may not exist: the data 
-$\{(T_i, X_i): i \in I\}$ may be a mixture of an MRP with some other
-time series $\{(T'_i, X'_i): i \in I'\}$, and the supports $\mathcal S'$
-and $\mathcal S$ of the distributions
-of $X'_i$ and the magnitudes $J_i$ (aka the MRP marks) may overlap.
-Then thresholding at e.g. $\ell_0 = \sup \mathcal S'$ 
-no longer results in a "clean" MRP: some $J_i$'s will be removed, meaning
-that some $W_i$'s will be merged into a longer IET.
-The more the threshold $\ell_0$ cuts into $\mathcal S$ from below, the more
-the distributions of IETs will resemble a MLD, according to the Theorem.
-As we do not know to what extent this effect occurs, 
-and since the limit is an MLD, it is practicable to fit an MLD to the IETs to 
-begin with.
+<!-- But guessing the correct threshold $\ell_0$ and proceeding with this -->
+<!-- type of inference is less favourable to modelling IETs with the MLD,  -->
+<!-- as we now explain. -->
+<!-- In real-world datasets, a "correct" threshold may not exist: the data  -->
+<!-- $\{(T_i, X_i): i \in I\}$ may be a mixture of an MRP with some other -->
+<!-- time series $\{(T'_i, X'_i): i \in I'\}$, and the supports $\mathcal S'$ -->
+<!-- and $\mathcal S$ of the distributions -->
+<!-- of $X'_i$ and the magnitudes $J_i$ (aka the MRP marks) may overlap. -->
+<!-- Then thresholding at e.g. $\ell_0 = \sup \mathcal S'$  -->
+<!-- no longer results in a "clean" MRP: some $J_i$'s will be removed, meaning -->
+<!-- that some $W_i$'s will be merged into a longer IET. -->
+<!-- The more the threshold $\ell_0$ cuts into $\mathcal S$ from below, the more -->
+<!-- the distributions of IETs will resemble a MLD, according to the Theorem. -->
+<!-- As we do not know to what extent this effect occurs,  -->
+<!-- and since the limit is an MLD, it is practicable to fit an MLD to the IETs to begin with. -->
 
 For high thresholds where few IETs are left, estimating a tail parameter
 by fitting a MLD has advantages over e.g. the Hill estimator: 
 since the underlying distribution of IETs *is* a MLD, 
-the fits are more accurate. 
-Figure \ref{fig:Hillplots} shows Hill plots for 200 IETs, for two Mittag-Leffler
-datasets of sizes 200 and 10000 (and an irrelevant distribution of magnitudes).
-Clearly the variance is too high to give useful estimates.
-For corresponding fits based on the assumption of a Mittag-Leffler distribution,
-see Figure \ref{Fig:TailSimu}, top row, yielding more reliable predictions 
+the fits are more accurate. Figure \ref{fig:Hillplots} shows Hill plots for 200 IETs, for two Mittag-Leffler datasets of sizes 200 and 10000 (and an irrelevant distribution of magnitudes).
+Clearly the variance is too high to give useful estimates. For corresponding fits based on the assumption of a Mittag-Leffler distribution, see Figure \ref{Fig:TailSimu}, top row, yielding more reliable predictions 
 (more discussion further below).
 
 
@@ -514,11 +503,10 @@ With the above comparisons of estimators for the MLD in mind,
 we propose to use the log-Moment estimator, or the MLE when computational 
 resources are not an issue.
 
-## Weighing the evidence for heavy tails  
+## Goodness-of-Fit Test  
 
 Since the exponential distribution is nested in the Mittag-Leffler family of 
-distributions, a Likelihood-ratio Test (LRT) seems to be an appropriate way to choose 
-between a model with exponential and Mittag-Leffler inter-exceedance times.
+distributions, a Likelihood-ratio Test (LRT) seems to be an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times.
 Although the two models are nested, the asymptotic distribution is not 
 $\chi^2_1$-distributed, and Wilk's Theorem does not hold: under $H_0$, the 
 parameter $\beta$ of Mittag-Leffler distribution is equal to $1$, and hence lies
