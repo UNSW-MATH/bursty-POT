@@ -357,7 +357,7 @@ magnitudes (aka "shocks") follow a MRP.  The smaller magnitudes are possibly
 nuisance data that may be irrelevant with respect to the modelling of extremes
 and their waiting times. 
 Accordingly, we assume a threshold $\ell$, and discard all
-data where $X_i \le \ell$, yielding the thinned dataset
+data where $x_i \le \ell$, yielding the thinned dataset
 $\{(t^{(l)}_i, x^{(l)}_i), i \in I(\ell)\}$, where $I(\ell) \subseteq I$.
 
 However, this raises the question of how high or low the threshold should be
@@ -391,7 +391,7 @@ shocks, resulting in a biased estimate of the parameters of the limiting MLD.
 <!-- Suppose the "correct" threshold $\ell_0$ was known, in the sense that  -->
 <!-- thresholding at $\ell_0$ would result precisely in an underlying MRP  -->
 <!-- $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}.  -->
-In case we would have data of a MRP $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of inter-exceedance times. However, in real-world datasets, the MRP assumption is unrealistic for low thresholds. The unknown data generating process is likely to be more complex, with dependencies or mixtures of time series at low thresholds, structures that possibly vanish for higher thresholds. Fitting just the IETs means that only the exceedances as well as the times inbetween have to satify the iid assumption.  
+In case we would have data of a MRP $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of inter-exceedance times. However, in real-world datasets, the MRP assumption is unrealistic for low thresholds. The unknown data generating process is likely to be more complex, with dependencies or mutliple data generating mechanisms at low thresholds, structures that possibly vanish for higher thresholds. Fitting just the IETs means that only the exceedances as well as the times inbetween have to satify the iid assumption.  
 
 <!-- But guessing the correct threshold $\ell_0$ and proceeding with this -->
 <!-- type of inference is less favourable to modelling IETs with the MLD,  -->
