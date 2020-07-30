@@ -180,8 +180,9 @@ an R package `CTRE` (<https://github.com/strakaps/CTRE>).
 The source code for the figures generated in this manuscript is 
 available online at <https://github.com/strakaps/bursty-POT>. 
 
+# Probabilistic Model
 
-# Continuous Time Random Exceedances (CTRE) {#sec:CTRE}
+## Continuous Time Random Exceedances (CTRE) {#sec:CTRE}
 
 As a model for extreme observations, we use a Marked Renewal Process (MRP):
 
@@ -243,7 +244,7 @@ The GEV is subdivided into the Gumbel ($\xi=0$), the Weibull ($\xi<0$) and the F
 Figure \ref{fig:thresholdedBursty} shows a simulated dataset in the top panel, where $W$ has a stable distribution with tail parameter $\beta =$ `r params$tail` (and skewness $1$ and location $0$), and where $J$ is from a standard Gumbel distribution. In the bottom panel, we plot a time series of solar flare intensities derived from a NASA dataset [@HXRBS] which we will later examine more closely (see Section 7). Clearly, the simulated data exhibit long intervals 
 _without any_ events, whereas in the real-world dataset events appear continuously. The threshold exceedances, however, appear to have visually similar statistical behaviour in both models. Observations below a threshold are commonly discarded in Extreme Value Theory (POT approach); likewise, the CTRE model interprets these observations as noise and discards them.
 
-# Scaling limit of Exceedance Times {#sec:scaling}
+## Scaling limit of Exceedance Times {#sec:scaling}
 
 In this section we state and prove the key theorem, which is founded on the concept of regular variation. A Borel-measurable function $f:\mathbb (0,\infty) \to (0,\infty)$ is said be "regularly varying at $\infty$ with parameter (or "index") $\rho$ if 
 
@@ -343,8 +344,9 @@ Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a d
 and hence the results by @Hsing88 on the exceedances of stationary sequences
 do not apply. 
 
+# Statistical Inference 
 
-# Mittag-Leffler Stability Plots
+## Mittag-Leffler Stability Plots
 
 We assume a dataset of the form $\{(T_i, X_i), i \in I\}$,
 where $T_i$ are timestamps and $X_i$ are magnitudes.
@@ -485,7 +487,7 @@ grid.arrange(p1,p2,nrow=2,top="Hill plots")
 ```
 
 
-# Fitting Mittag-Leffler Distributions {#sec:ML}
+## Fitting Mittag-Leffler Distributions {#sec:ML}
 
 Historically, the first method proposed for the estimation of the Mittag-Leffler distribution parameters was the fractional moment estimator by @kozubowski2001. Unlike the first moments, the fractional moments of order $p$ for $p<\beta$ exist and are tractable. One drawback of this method is that constant priors for the tail parameter are needed for the calculation of the estimates. @Cahoy2010 proposed a moment estimator of the log-transformed data, which does not require any prior. Furthermore, they performed simulation studies illustrating that the log-Moment outperforms the fractional moment estimator with respect to bias and root mean squared error (RMSE).
 
@@ -512,7 +514,8 @@ With the above comparisons of estimators for the MLD in mind,
 we propose to use the log-Moment estimator, or the MLE when computational 
 resources are not an issue.
 
-**Weighing the evidence for heavy tails.**
+## Weighing the evidence for heavy tails  
+
 Since the exponential distribution is nested in the Mittag-Leffler family of 
 distributions, a Likelihood-ratio Test (LRT) seems to be an appropriate way to choose 
 between a model with exponential and Mittag-Leffler inter-exceedance times.
@@ -534,7 +537,7 @@ df_LRT_boot_01 %>%  ungroup() %>% filter(n=="20" | n=="50" | n=="100" | n=="200"
 ```
 
 
-# Inference on Exceedance times
+## Inference on Exceedance times
 
 The Theorem in Section \ref{sec:scaling} implies that for a high 
 threshold $\ell$ we may approximate the distribution of $T(\ell)$ with an 
