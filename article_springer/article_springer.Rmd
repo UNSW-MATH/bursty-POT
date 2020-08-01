@@ -507,7 +507,7 @@ df_LRT_boot_01 %>%  ungroup() %>% filter(n=="20" | n=="50" | n=="100" | n=="200"
 ```
 
 
-## Algorithm for the inference on exceedance times
+## Algorithm for the inference on inter-exceedance times
 
 The Theorem in Section \ref{sec:scaling} implies that for a high 
 threshold $\ell$ we may approximate the distribution of $T(\ell)$ with an 
@@ -810,7 +810,7 @@ Before we apply the approach described in Section 5 to the solar flare data, we 
 iid:
 
 : After removing the "noise observations" below the smallest threshold 
-  $\ell_0$, the pair sequence $(T(\ell_0, i), X(\ell_0,i))$ is iid 
+  $\ell_0$, the pair sequence $(T(\ell_0, i), X(\ell_0,i))$ is iid. 
   An indication if this is true is given by an auto-correlation plot. Since we are expecting the inter-exceedance times to be Mittag-Leffler distributed and hence to have infinite mean but finite log-moments, we first take the logarithms of the times.
   
 
