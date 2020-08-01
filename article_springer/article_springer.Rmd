@@ -72,6 +72,7 @@ output:
   rticles::elsevier_article:
     number_sections: true
     fig_caption: yes
+  htlml_document: default
                 
 params:
   tail: 0.8
@@ -357,8 +358,8 @@ magnitudes (aka "shocks") follow a MRP.  The smaller magnitudes are possibly
 nuisance data that may be irrelevant with respect to the modelling of extremes
 and their waiting times. 
 Accordingly, we assume a threshold $\ell$, and discard all
-data where $x_i \le \ell$, yielding the thinned dataset
-$\{(t^{(l)}_i, x^{(l)}_i), i \in I(\ell)\}$, where $I(\ell) \subseteq I$.
+data where $x_i \le \ell$, yielding the thresholded dataset
+$\{(t^{(\ell)}_i, x^{(\ell)}_i), i \in I(\ell)\}$, with $x^{(\ell)}_i=x_i-\ell$, where $I(\ell):=\left\{i: x_i \le \ell \right\} \subseteq I$.
 
 However, this raises the question of how high or low the threshold should be
 chosen. Recall that with the POT method for the modelling of extremes, the
@@ -391,7 +392,7 @@ shocks, resulting in a biased estimate of the parameters of the limiting MLD.
 <!-- Suppose the "correct" threshold $\ell_0$ was known, in the sense that  -->
 <!-- thresholding at $\ell_0$ would result precisely in an underlying MRP  -->
 <!-- $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}.  -->
-In case we would have data of a MRP $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of inter-exceedance times. However, in real-world datasets, the MRP assumption is unrealistic for low thresholds. The unknown data generating process is likely to be more complex, with dependencies or mutliple data generating mechanisms at low thresholds, structures that possibly vanish for higher thresholds. Fitting just the IETs means that only the exceedances as well as the times inbetween have to satify the iid assumption.  
+In case we would have data of a MRP $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of inter-exceedance times. However, in real-world datasets, the MRP assumption is too strong for low thresholds. The unknown data generating process is likely to be more complex, with dependencies or mutliple data generating mechanisms at low thresholds, structures that possibly vanish for higher thresholds. Fitting only the IETs means that the iid assumption applies to exceedances and IETs only.  
 
 <!-- But guessing the correct threshold $\ell_0$ and proceeding with this -->
 <!-- type of inference is less favourable to modelling IETs with the MLD,  -->
@@ -503,7 +504,7 @@ With the above comparisons of estimators for the MLD in mind,
 we propose to use the log-Moment estimator, or the MLE when computational 
 resources are not an issue.
 
-## Goodness-of-Fit Test  
+## Weighing the evidence for non-exponential inter-arrival times  
 
 Since the exponential distribution is nested in the Mittag-Leffler family of 
 distributions, a Likelihood-ratio Test (LRT) seems to be an appropriate way to choose between a model with exponential and Mittag-Leffler inter-exceedance times.
