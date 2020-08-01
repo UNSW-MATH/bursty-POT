@@ -272,16 +272,14 @@ $$
 $$ 
 
 
-*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, for any $x$ from 
-the support of $F(x;\xi)$
-$$
-	P\left(\frac{J_1 \vee \ldots \vee J_{\lfloor c \rfloor}-d(c)}{a(c)} \leq x\right) \rightarrow F(x;\xi)
-\\
-\Longleftrightarrow F_J(xa(c)+d(c))^{\lfloor c \rfloor} \rightarrow F(x;\xi)
-\\
-\Longleftrightarrow  \lfloor c \rfloor \log F_J(\ell_c)  \rightarrow \log F(x;\xi)
-$$
-	with $\ell_c:=xa(c)+d(c)$. Furthermore, since $\log(1-x) \sim -x$ for small $x$ it follows
+*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}
+\begin{align*}
+& & P\left(\frac{J_1 \vee \ldots \vee J_{\lfloor c \rfloor}-d(c)}{a(c)} \leq x\right) & \rightarrow F(x;\xi) \\
+& \Longleftrightarrow & F_J(xa(c)+d(c))^{\lfloor c \rfloor} & \rightarrow F(x;\xi) \\
+& \Longleftrightarrow &  \lfloor c \rfloor \log F_J(\ell_c) & \rightarrow \log F(x;\xi)
+\end{align*}
+as $c \rightarrow \infty$, for any $x$ from 
+the support of $F(x;\xi)$,	with $\ell_c:=xa(c)+d(c)$. Furthermore, since $\log(1-x) \sim -x$ for small $x$ it follows
 $$
 c \cdot p(\ell_c) \rightarrow -\log F(x;\xi) \quad  \text{ as } c \rightarrow \infty,
 $$
@@ -299,12 +297,10 @@ $$
 	\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z \quad \text{ as }  c \rightarrow \infty, 
 $$
 	where the distribution of $Z$ has the characteristic function
-$$
-\Psi(s) = \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy)
-= \frac{1}{1-\log(\Phi_D(s))/\lambda}
-= \frac{1}{1+s^{\beta}\lambda^{-1}}
-= \frac{1}{1+(s \lambda^{-1/\beta})^{\beta}}
-$$
+\begin{align*}
+\Psi(s) &= \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy) = \frac{1}{1-\log(\Phi_D(s))/\lambda}\\
+&= \frac{1}{1+s^{\beta}\lambda^{-1}} = \frac{1}{1+(s \lambda^{-1/\beta})^{\beta}}
+\end{align*}
     where $\Phi_D(s) = \exp(-s^\beta)$ is the Laplace transform of $D$ 
     and  $F_E(dy)$ is the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with scale parameter $\lambda^{-1/\beta}$. Rewriting
 $$
