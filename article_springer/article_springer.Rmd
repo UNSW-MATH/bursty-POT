@@ -172,7 +172,7 @@ model, which is seemingly not available in the literature.
 
 We review the marked renewal process in Section 2.1, and 
 derive a scaling limit theorem for inter-exceedance times in Section 2.2.
-We give a statistical procedure to estimate model parameters via stability plots in Section 3.1 and 3.4, but to set the stage we first discuss inference for the Mittag-Leffler distribution in Section 3.2 as well as a Likelihood-ratio test to assess the goodness of fit. A simulation study of the effectiveness of our statistical procedure is given in Section 4. In Section 5 we apply our method to a real data set.  In Section 6, we discuss the memory property of the  Mittag-Leffler distribution, and how it affects the predictive distribution for the time until the next threshold crossing event. Finally we close with a discussion and conclusion in Section 7.
+We give a statistical procedure to estimate model parameters via stability plots in Section 3.1 and 3.4, but first we need to discuss inference for the Mittag-Leffler distribution in Section 3.2 as well as a Likelihood-ratio test to guide the choice, whether a Mittag-Leffler or an exponential distribution fits better to the inter-exceedance times. A simulation study of the effectiveness of our statistical procedure is given in Section 4. In Section 5 we apply our method to a real data set.  In Section 6, we discuss the memory property of the  Mittag-Leffler distribution, and how it affects the predictive distribution for the time until the next threshold crossing event. Finally we close with a discussion and conclusion in Section 7.
 For all statistical computations we have used R [@R]. 
 All code and data used for the analysis in this article has been organized into an R package `CTRE` (<https://github.com/strakaps/CTRE>).
 The source code for the figures generated in this manuscript is 
@@ -205,7 +205,7 @@ $$X(\ell) = J_{\tau(\ell)} - \ell, \quad
 T(\ell) = \sum_{k=1}^{\tau(\ell)} W_k.$$
 By restarting the MRP at $\tau(\ell)$, inductively define the
 two iid sequences $T(\ell,n)$ and $X(\ell, n)$, $n \in \mathbb N$, 
-called the "inter-arrival times" and the "exceedances", respectively.
+called the "inter-exceedance times" (IETs) and the "exceedances", respectively.
 The pair sequence $(X(\ell, n), T(\ell, n))_{n \in \mathbb N}$ is called 
 a Continuous Time Random Exceedance model (CTRE). 
 If the underlying MRP is uncoupled, then the CTRE is also called 
@@ -256,12 +256,12 @@ For more details on regular variation and stable limit theorems, we recommend th
 
 : For the magnitudes $J_k$, let assumption \eqref{assumptionJs} hold. Furthermore, let the waiting times $W_k$ be in the domain of attraction of a positively skewed sum-stable law with stability parameter $0 < \beta < 1$; more precisely,
 \begin{align} \label{eq:stability}
-\frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, 
+\frac{W_1 + \ldots + W_n}{b(n)} \Rightarrow D, 
 \quad n \to \infty
 \end{align}
 for a function $b(n)$ which is regularly varying at $\infty$ with parameter $1/\beta$, and where $\mathbf E[\exp(-sD)] = \exp(-s^\beta)$, $s > 0$. Write $p_{\ell} := \mathbf P(J > \ell)$. Then the weak convergence
 $$
-\frac{T(\ell)} {b(1/p_{\ell})} \to Z_\beta \quad \text{ as } \quad \ell \uparrow x_R
+\frac{T(\ell)} {b(1/p_{\ell})} \Rightarrow  Z_\beta \quad \text{ as } \quad \ell \uparrow x_R
 $$
 holds, where the Mittag-Leffler random variable $Z_\beta$ is defined on 
 the positive real numbers via 
@@ -272,7 +272,7 @@ $$
 
 *Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, it follows that
 	\begin{align*}
-	P\left(\frac{M(c)-d(c)}{a(c)} \leq x\right) \rightarrow F(x) := F(x,\xi) \text{ as } c \rightarrow \infty,
+	P\left(\frac{J_1 \vee \ldots \vee J_{\lfloor c \rfloor}-d(c)}{a(c)} \leq x\right) \rightarrow F(x) := F(x,\xi) \text{ as } c \rightarrow \infty,
 	\end{align*}
 	where $x$ is any value from the support of $F$. Then
 	\begin{align*}
@@ -283,7 +283,7 @@ $$
     \begin{align}
       c \cdot p(\ell_c) \rightarrow -\log F_A(x)  \text{ as } c \rightarrow \infty,\label{eq:lplconv}
     \end{align}
-	 with $p(\ell_c):= 1-F(\ell_c)$. Since $\tau(\ell_c) \sim Geo(p(\ell_c))$ and \eqref{eq:lplconv}
+	 with $p(\ell_c):= 1-F(\ell_c)$ and $F_A$ is the CDF of the limit distribution, the GEV, in \eqref{assumptionJs}. Since $\tau(\ell_c) \sim Geo(p(\ell_c))$ and \eqref{eq:lplconv}
 	it follows that $\tau(\ell_c)/c$ converges to an Exponential distributed random variable,
 	\begin{align*}
 	\frac{\tau(\ell_c)}{c} \Rightarrow E  \text{ as } c \rightarrow \infty
@@ -303,7 +303,7 @@ $$
     &= \frac{1}{1+s^{\beta}\lambda^{-1}}
 	\end{align}
     where $\Phi_D(s) = \exp(-s^\beta)$ is the Laplace transform of $D$ 
-    and  $F_E(dy)$ is the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with parameter $\lambda^{-1/\beta}$. Rewriting
+    and  $F_E(dy)$ is the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with scale parameter $\lambda^{-1/\beta}$. Rewriting
 	\begin{align*}
     \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(1/p(\ell_c))} = \left(\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(c) }\right) \frac{b(c)}{b(1/p(\ell_c))}  
 	\end{align*}
@@ -333,7 +333,7 @@ For a detailed reference on the Mittag-Leffler distribution, see e.g.
 
 **Remark:**
 
-: If $\beta = 1$, the result of the Theorem above is standard, see e.g. 
+: If $\beta = 1$, the result of the Theorem above is standard, see  
 Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a different choice of scaling constant. [@MeerschaertStoev08] proved a limit theorem for the maxima of iid random variables separated by infinite mean waiting times. They have also shown that the hitting time of the limit process is Mittag-Leffler distributed. [@Basrak2014] described the asymptotic distribution, under similar assumptions, of all upper orders statistics using point processes.   
 
 **Remark:**
