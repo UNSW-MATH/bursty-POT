@@ -284,7 +284,7 @@ $$
 c \cdot p(\ell_c) \rightarrow -\log F(x;\xi) \quad  \text{ as } c \rightarrow \infty,
 $$
 with $p(\ell_c):= 1-F(\ell_c)$. Due to $\tau(\ell_c) \sim {\rm Geo}(p(\ell_c))$ and above equation,
-	it follows that $\tau(\ell_c)/c$ converges to an Exponential random variable,
+	it follows that $\tau(\ell_c)/c$ converges to an exponential random variable,
 $$
 	\frac{\tau(\ell_c)}{c} \Rightarrow E \quad  \text{ as } c \rightarrow \infty
 $$
