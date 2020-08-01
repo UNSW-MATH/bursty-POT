@@ -74,8 +74,8 @@ output:
   rticles::elsevier_article:
     number_sections: true
     fig_caption: yes
-  htlml_document: default
-                
+  html_document: default
+
 params:
   tail: 0.8
   n: 10000
@@ -272,49 +272,50 @@ $$
 $$ 
 
 
-*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, it follows that
-	\begin{align*}
-	P\left(\frac{J_1 \vee \ldots \vee J_{\lfloor c \rfloor}-d(c)}{a(c)} \leq x\right) \rightarrow F(x) := F(x,\xi) \text{ as } c \rightarrow \infty,
-	\end{align*}
-	where $x$ is any value from the support of $F$. Then
-	\begin{align*}
-	  F(xa(c)+d(c))^{\lfloor c \rfloor} &\rightarrow F(x) \text{ as } c \rightarrow \infty,\\
-      \Rightarrow  \lfloor c \rfloor \log F(\ell_c)  &\rightarrow \log F(x)\text{ as } c \rightarrow \infty,
-	\end{align*}
+*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, for any $x$ from 
+the support of $F(x;\xi)$
+$$
+	P\left(\frac{J_1 \vee \ldots \vee J_{\lfloor c \rfloor}-d(c)}{a(c)} \leq x\right) \rightarrow F(x;\xi)
+\\
+\Longleftrightarrow F_J(xa(c)+d(c))^{\lfloor c \rfloor} \rightarrow F(x;\xi)
+\\
+\Longleftrightarrow  \lfloor c \rfloor \log F_J(\ell_c)  \rightarrow \log F(x;\xi)
+$$
 	with $\ell_c:=xa(c)+d(c)$. Furthermore, since $\log(1-x) \sim -x$ for small $x$ it follows
-    \begin{align}
-      c \cdot p(\ell_c) \rightarrow -\log F_A(x)  \text{ as } c \rightarrow \infty,\label{eq:lplconv}
-    \end{align}
-	 with $p(\ell_c):= 1-F(\ell_c)$ and $F_A$ is the CDF of the limit distribution, the GEV, in \eqref{assumptionJs}. Since $\tau(\ell_c) \sim Geo(p(\ell_c))$ and \eqref{eq:lplconv}
-	it follows that $\tau(\ell_c)/c$ converges to an Exponential distributed random variable,
-	\begin{align*}
-	\frac{\tau(\ell_c)}{c} \Rightarrow E  \text{ as } c \rightarrow \infty
-	\end{align*}
-	 with inverse mean $\lambda:=-\log F_A(x)$. Due to
-	\begin{align*}
-	S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \ \text{ as } c \rightarrow \infty,
-	\end{align*}
+$$
+c \cdot p(\ell_c) \rightarrow -\log F(x;\xi) \quad  \text{ as } c \rightarrow \infty,
+$$
+with $p(\ell_c):= 1-F(\ell_c)$. Due to $\tau(\ell_c) \sim {\rm Geo}(p(\ell_c))$ and above equation,
+	it follows that $\tau(\ell_c)/c$ converges to an Exponential random variable,
+$$
+	\frac{\tau(\ell_c)}{c} \Rightarrow E \quad  \text{ as } c \rightarrow \infty
+$$
+	 with inverse mean $\lambda:=-\log F(x;\xi)$. Due to
+$$
+	S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \quad \text{ as } c \rightarrow \infty,
+$$
     it follows with Gnedenko's transfer theorem (see @gnedenko1983limit), that
-	\begin{align}
-	\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z\ \text{ as }  c \rightarrow \infty, \label{TheoGutArg}
-	\end{align}
+$$
+	\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z \quad \text{ as }  c \rightarrow \infty, 
+$$
 	where the distribution of $Z$ has the characteristic function
-	\begin{align}
-    \Psi(s) &= \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy) \nonumber\\
-    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(s))/\lambda} \nonumber\\
-    &= \frac{1}{1+s^{\beta}\lambda^{-1}}
-	\end{align}
+$$
+\Psi(s) = \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy)
+= \frac{1}{1-\log(\Phi_D(s))/\lambda}
+= \frac{1}{1+s^{\beta}\lambda^{-1}}
+= \frac{1}{1+(s \lambda^{-1/\beta})^{\beta}}
+$$
     where $\Phi_D(s) = \exp(-s^\beta)$ is the Laplace transform of $D$ 
     and  $F_E(dy)$ is the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with scale parameter $\lambda^{-1/\beta}$. Rewriting
-	\begin{align*}
+$$
     \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(1/p(\ell_c))} = \left(\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(c) }\right) \frac{b(c)}{b(1/p(\ell_c))}  
-	\end{align*}
+$$
 	and
-	\begin{align*}
+$$
 	\frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty,
-	\end{align*}
+$$
 	the second factor converges to $\lambda^{1/\beta}$, and it follows that
-	 $Z \sim ML(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$, the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
+	 $Z \sim {\rm ML}(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$, the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
 \qed
 
 For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma Z_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
