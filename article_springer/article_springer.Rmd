@@ -538,7 +538,7 @@ Mittag-Leffler distribution with shape parameter $\hat \beta$ and scale paramete
 $\hat \sigma_0 k^{-1/\beta}$. 
 
 To clarify Step 4: Recall that by the theorem, $\sigma_k / b(1/p_{\ell})$ is expected to stabilize 
-around a constant as $k$ gets smaller. Since $b$ is regularly varying with parameter
+around a constant as $k$ decreases. Since $b$ is regularly varying with parameter
 $1/\beta$, we have $b(1/p_{\ell}) = p_{\ell}^{-1/\beta} / L(1/p_{\ell})$ for some slowly varying function $L$. 
 Approximating $p_{\ell}$ by $\hat p_{\ell} := k / n$, we have 
 $$\text{const} \approx \sigma_k / b(1/p_{\ell}) = \sigma_k \times p_{\ell}^{1/\beta} L(1/p_{\ell}) \approx \sigma_k \times k^{1/\beta} n^{-1/\beta} L(n/k)$$
@@ -612,7 +612,7 @@ Recall that $k$ is the index of the order statistics of $J_k$ at which the
 threshold $\ell$ is placed. 
 
 The performance of log-Moment and Maximum-Likelihood estimators for the tail resp. the scale parameter is shown in Figure \ref{Fig:TailSimu} resp. \ref{Fig:ScaleSimu}. Both estimators show good performance, with a slight advantage for the Maximum-Likelihood estimator. This advantage is paid for with a higher computational cost. Moreover, the bottom row in Figure \ref{Fig:TailSimu} shows clearly that the log-Moment and Maximum-Likelihood estimators generalize to the exponential case ($\beta = 1$) whereas the Hill-estimator would not.  
-Notice that any data below a certain threshold gets discarded in our approach and hence need not to satisfy the iid assumption. In our simulation study we only simulated data from iid sequences of $(W_k)_{k \in \mathbb{N}}$, in real data situations its likely that there are dependencies or more complex data generating processes vanishing for higher thresholds. We only need the exceedances as well as the inter-exceedance times to be iid. 
+Notice that any data below a certain threshold is discarded in our approach and hence need not satisfy the iid assumption. In our simulation study we only simulated data from iid sequences of $(W_k)_{k \in \mathbb{N}}$; in real data situations it is likely that there are dependencies or more complex data generating processes which vanish for higher thresholds. We only need the exceedances and IETs to be iid. 
 
 ```{r TailSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:TailSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and exponentially distributed waiting times (lower row). Left column: log-Moment estimator, right column: MLE. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter.", fig.show='hold', out.width = '100%'}
 
