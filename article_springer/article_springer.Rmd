@@ -62,10 +62,12 @@ abstract: |
   Poisson Process" which generalizes the standard Poisson Process of threshold
   exceedances.
   Graphical means of estimating model parameters and assessing 
-  model fit are provided. Along the way, the inference method gets applied to a real-world
-  bursty time series, and it is shown how the memory of the Mittag-Leffler distribution affects 
-  the predictive distribution for the time until the next extreme event. 
-
+  model fit are provided. 
+  The inference method is
+  applied to an empirical bursty time series, and it is shown how the memory of the
+  Mittag-Leffler distribution affects prediction of the time until
+  the next extreme event."
+  
 bibliography: CTRMstats.bib
 csl: elsevier-harvard.csl
 output:
@@ -383,32 +385,14 @@ IETs may be left for a fit (high variance).
 For low thresholds, their distribution may be not well represented
 by an MLD; or, too many events may be interpreted as 
 shocks, resulting in a biased estimate of the parameters of the limiting MLD.
-<!-- For illustration, consider the case where measurements are taken daily: -->
-<!-- Then at the lowest threshold, all IETs equal one day, -->
-<!-- leaving no hint at a power-law distribution whatsoever. Raising the threshold -->
-<!-- may or may not produce IETs that start exhibiting a power-law; and both cases -->
-<!-- are represented by the MLD, with $\beta < 1$ or $\beta = 1$. -->
-
-<!-- Suppose the "correct" threshold $\ell_0$ was known, in the sense that  -->
-<!-- thresholding at $\ell_0$ would result precisely in an underlying MRP  -->
-<!-- $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}.  -->
-In case we would have data of a MRP $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of inter-exceedance times. However, in real-world datasets, the MRP assumption is too strong for low thresholds. The unknown data generating process is likely to be more complex, with dependencies or mutliple data generating mechanisms at low thresholds, structures that possibly vanish for higher thresholds. Fitting only the IETs means that the iid assumption applies to exceedances and IETs only.  
-
-<!-- But guessing the correct threshold $\ell_0$ and proceeding with this -->
-<!-- type of inference is less favourable to modelling IETs with the MLD,  -->
-<!-- as we now explain. -->
-<!-- In real-world datasets, a "correct" threshold may not exist: the data  -->
-<!-- $\{(T_i, X_i): i \in I\}$ may be a mixture of an MRP with some other -->
-<!-- time series $\{(T'_i, X'_i): i \in I'\}$, and the supports $\mathcal S'$ -->
-<!-- and $\mathcal S$ of the distributions -->
-<!-- of $X'_i$ and the magnitudes $J_i$ (aka the MRP marks) may overlap. -->
-<!-- Then thresholding at e.g. $\ell_0 = \sup \mathcal S'$  -->
-<!-- no longer results in a "clean" MRP: some $J_i$'s will be removed, meaning -->
-<!-- that some $W_i$'s will be merged into a longer IET. -->
-<!-- The more the threshold $\ell_0$ cuts into $\mathcal S$ from below, the more -->
-<!-- the distributions of IETs will resemble a MLD, according to the Theorem. -->
-<!-- As we do not know to what extent this effect occurs,  -->
-<!-- and since the limit is an MLD, it is practicable to fit an MLD to the IETs to begin with. -->
+If we had MRP data $\{(W_i, J_i): i \in I\}$ as defined in Section 
+\ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's 
+estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of 
+inter-exceedance times. However, in real-world datasets, the MRP assumption is too 
+strong for low thresholds. The unknown data generating process is likely more 
+complex, with dependencies or multiple data generating mechanisms at low thresholds 
+and structures that may vanish for higher thresholds. Fitting only the IETs means 
+that the iid assumption applies to exceedances and IETs only.  
 
 For high thresholds where few IETs are left, estimating a tail parameter
 by fitting a MLD has advantages over e.g. the Hill estimator: 
