@@ -62,18 +62,20 @@ abstract: |
   Poisson Process" which generalizes the standard Poisson Process of threshold
   exceedances.
   Graphical means of estimating model parameters and assessing 
-  model fit are provided. Along the way, the inference method gets applied to a real-world
-  bursty time series, and it is shown how the memory of the Mittag-Leffler distribution affects 
-  the predictive distribution for the time until the next extreme event. 
-
+  model fit are provided. 
+  The inference method is
+  applied to an empirical bursty time series, and it is shown how the memory of the
+  Mittag-Leffler distribution affects prediction of the time until
+  the next extreme event."
+  
 bibliography: CTRMstats.bib
 csl: elsevier-harvard.csl
 output:
   rticles::elsevier_article:
     number_sections: true
     fig_caption: yes
-  htlml_document: default
-                
+  html_document: default
+
 params:
   tail: 0.8
   n: 10000
@@ -173,10 +175,10 @@ model, which is seemingly not available in the literature.
 We review the marked renewal process in Section 2.1, and 
 derive a scaling limit theorem for inter-exceedance times in Section 2.2.
 We give a statistical procedure to estimate model parameters via stability plots in Section 3.1 and 3.4, but first we need to discuss inference for the Mittag-Leffler distribution in Section 3.2 as well as a Likelihood-ratio test to guide the choice, whether a Mittag-Leffler or an exponential distribution fits better to the inter-exceedance times. A simulation study of the effectiveness of our statistical procedure is given in Section 4. In Section 5 we apply our method to a real data set.  In Section 6, we discuss the memory property of the  Mittag-Leffler distribution, and how it affects the predictive distribution for the time until the next threshold crossing event. Finally we close with a discussion and conclusion in Section 7.
-For all statistical computations we have used R [@R]. 
-All code and data used for the analysis in this article has been organized into an R package `CTRE` (<https://github.com/strakaps/CTRE>).
-The source code for the figures generated in this manuscript is 
-available online at <https://github.com/strakaps/bursty-POT>. 
+For all statistical computations we have used `R` [@R] and the package `CTRE`
+[@CTRE]. Source code for simulations and figures generated in this 
+manuscript is available online at <https://github.com/strakaps/bursty-POT>. 
+
 
 # Probabilistic Model
 
@@ -270,49 +272,50 @@ $$
 $$ 
 
 
-*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, it follows that
-	\begin{align*}
-	P\left(\frac{J_1 \vee \ldots \vee J_{\lfloor c \rfloor}-d(c)}{a(c)} \leq x\right) \rightarrow F(x) := F(x,\xi) \text{ as } c \rightarrow \infty,
-	\end{align*}
-	where $x$ is any value from the support of $F$. Then
-	\begin{align*}
-	  F(xa(c)+d(c))^{\lfloor c \rfloor} &\rightarrow F(x) \text{ as } c \rightarrow \infty,\\
-      \Rightarrow  \lfloor c \rfloor \log F(\ell_c)  &\rightarrow \log F(x)\text{ as } c \rightarrow \infty,
-	\end{align*}
+*Proof of Theorem:* 	Due to assumption \eqref{assumptionJs}, for any $x$ from 
+the support of $F(x;\xi)$
+$$
+	P\left(\frac{J_1 \vee \ldots \vee J_{\lfloor c \rfloor}-d(c)}{a(c)} \leq x\right) \rightarrow F(x;\xi)
+\\
+\Longleftrightarrow F_J(xa(c)+d(c))^{\lfloor c \rfloor} \rightarrow F(x;\xi)
+\\
+\Longleftrightarrow  \lfloor c \rfloor \log F_J(\ell_c)  \rightarrow \log F(x;\xi)
+$$
 	with $\ell_c:=xa(c)+d(c)$. Furthermore, since $\log(1-x) \sim -x$ for small $x$ it follows
-    \begin{align}
-      c \cdot p(\ell_c) \rightarrow -\log F_A(x)  \text{ as } c \rightarrow \infty,\label{eq:lplconv}
-    \end{align}
-	 with $p(\ell_c):= 1-F(\ell_c)$ and $F_A$ is the CDF of the limit distribution, the GEV, in \eqref{assumptionJs}. Since $\tau(\ell_c) \sim Geo(p(\ell_c))$ and \eqref{eq:lplconv}
-	it follows that $\tau(\ell_c)/c$ converges to an Exponential distributed random variable,
-	\begin{align*}
-	\frac{\tau(\ell_c)}{c} \Rightarrow E  \text{ as } c \rightarrow \infty
-	\end{align*}
-	 with inverse mean $\lambda:=-\log F_A(x)$. Due to
-	\begin{align*}
-	S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \ \text{ as } c \rightarrow \infty,
-	\end{align*}
+$$
+c \cdot p(\ell_c) \rightarrow -\log F(x;\xi) \quad  \text{ as } c \rightarrow \infty,
+$$
+with $p(\ell_c):= 1-F(\ell_c)$. Due to $\tau(\ell_c) \sim {\rm Geo}(p(\ell_c))$ and above equation,
+	it follows that $\tau(\ell_c)/c$ converges to an Exponential random variable,
+$$
+	\frac{\tau(\ell_c)}{c} \Rightarrow E \quad  \text{ as } c \rightarrow \infty
+$$
+	 with inverse mean $\lambda:=-\log F(x;\xi)$. Due to
+$$
+	S(c):= \sum_{i=1}^{\lfloor c \rfloor} \frac{W_i}{b(c)} \Rightarrow D \quad \text{ as } c \rightarrow \infty,
+$$
     it follows with Gnedenko's transfer theorem (see @gnedenko1983limit), that
-	\begin{align}
-	\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z\ \text{ as }  c \rightarrow \infty, \label{TheoGutArg}
-	\end{align}
+$$
+	\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(\ell_c)}  \Rightarrow Z \quad \text{ as }  c \rightarrow \infty, 
+$$
 	where the distribution of $Z$ has the characteristic function
-	\begin{align}
-    \Psi(s) &= \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy) \nonumber\\
-    &= \int_0^{\infty} \frac{1}{1-\log(\Phi_D(s))/\lambda} \nonumber\\
-    &= \frac{1}{1+s^{\beta}\lambda^{-1}}
-	\end{align}
+$$
+\Psi(s) = \int_0^{\infty} (\Phi_D(s))^{y} F_E(dy)
+= \frac{1}{1-\log(\Phi_D(s))/\lambda}
+= \frac{1}{1+s^{\beta}\lambda^{-1}}
+= \frac{1}{1+(s \lambda^{-1/\beta})^{\beta}}
+$$
     where $\Phi_D(s) = \exp(-s^\beta)$ is the Laplace transform of $D$ 
     and  $F_E(dy)$ is the distribution function of $E$. Hence, $Z$ is Mittag-Leffler distributed with scale parameter $\lambda^{-1/\beta}$. Rewriting
-	\begin{align*}
+$$
     \sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(1/p(\ell_c))} = \left(\sum_{i=1}^{ \tau(\ell_c)} \frac{W_i}{b(c) }\right) \frac{b(c)}{b(1/p(\ell_c))}  
-	\end{align*}
+$$
 	and
-	\begin{align*}
+$$
 	\frac{b(c)}{b(1/p(\ell_c))} = \frac{b(c)}{b(c/(p(\ell_c)c))} \sim (p(\ell_c) \cdot c)^{1/\beta} \rightarrow \lambda^{1/\beta} \text{ as } c \rightarrow \infty,
-	\end{align*}
+$$
 	the second factor converges to $\lambda^{1/\beta}$, and it follows that
-	 $Z \sim ML(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$, the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
+	 $Z \sim {\rm ML}(\beta,1)$. Since $c \rightarrow \infty$ is equivalent to $\ell \uparrow x_R$, the assertion follows with $\ell:=\ell_c$ and $p_\ell:=p(\ell_c)$.
 \qed
 
 For a scale parameter $\sigma > 0$, we write ${\rm ML}(\beta, \sigma)$ for the distribution of $\sigma Z_\beta$. The Mittag-Leffler distribution with parameter $\beta \in (0,1]$ is 
@@ -354,12 +357,12 @@ see the POT approach [@smith1984threshold;
 @leadbetter1991basis; @davison1990models; @beirlantBook Ch.5.3;
 @embrechts2013modelling Ch. 6.5.; @ColesBook Ch.4.].
 With the previous section setting the stage, we assume that only the large
-magnitudes (aka "shocks") follow a MRP.  The smaller magnitudes are possibly
+magnitudes (or "shocks") follow a MRP.  The smaller magnitudes are possibly
 nuisance data that may be irrelevant with respect to the modelling of extremes
 and their waiting times. 
 Accordingly, we assume a threshold $\ell$, and discard all
 data where $x_i \le \ell$, yielding the thresholded dataset
-$\{(t^{(\ell)}_i, x^{(\ell)}_i), i \in I(\ell)\}$, with $x^{(\ell)}_i=x_i-\ell$, where $I(\ell):=\left\{i: x_i \le \ell \right\} \subseteq I$.
+$\{(t^{(\ell)}_i, x^{(\ell)}_i): i \in I(\ell)\}$, with $x^{(\ell)}_i=x_i-\ell$, where $I(\ell):=\left\{i \in I: x_i \ge \ell \right\} \subseteq I$.
 
 However, this raises the question of how high or low the threshold should be
 chosen. Recall that with the POT method for the modelling of extremes, the
@@ -383,32 +386,14 @@ IETs may be left for a fit (high variance).
 For low thresholds, their distribution may be not well represented
 by an MLD; or, too many events may be interpreted as 
 shocks, resulting in a biased estimate of the parameters of the limiting MLD.
-<!-- For illustration, consider the case where measurements are taken daily: -->
-<!-- Then at the lowest threshold, all IETs equal one day, -->
-<!-- leaving no hint at a power-law distribution whatsoever. Raising the threshold -->
-<!-- may or may not produce IETs that start exhibiting a power-law; and both cases -->
-<!-- are represented by the MLD, with $\beta < 1$ or $\beta = 1$. -->
-
-<!-- Suppose the "correct" threshold $\ell_0$ was known, in the sense that  -->
-<!-- thresholding at $\ell_0$ would result precisely in an underlying MRP  -->
-<!-- $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}.  -->
-In case we would have data of a MRP $\{(W_i, J_i): i \in I\}$ as defined in Section \ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of inter-exceedance times. However, in real-world datasets, the MRP assumption is too strong for low thresholds. The unknown data generating process is likely to be more complex, with dependencies or mutliple data generating mechanisms at low thresholds, structures that possibly vanish for higher thresholds. Fitting only the IETs means that the iid assumption applies to exceedances and IETs only.  
-
-<!-- But guessing the correct threshold $\ell_0$ and proceeding with this -->
-<!-- type of inference is less favourable to modelling IETs with the MLD,  -->
-<!-- as we now explain. -->
-<!-- In real-world datasets, a "correct" threshold may not exist: the data  -->
-<!-- $\{(T_i, X_i): i \in I\}$ may be a mixture of an MRP with some other -->
-<!-- time series $\{(T'_i, X'_i): i \in I'\}$, and the supports $\mathcal S'$ -->
-<!-- and $\mathcal S$ of the distributions -->
-<!-- of $X'_i$ and the magnitudes $J_i$ (aka the MRP marks) may overlap. -->
-<!-- Then thresholding at e.g. $\ell_0 = \sup \mathcal S'$  -->
-<!-- no longer results in a "clean" MRP: some $J_i$'s will be removed, meaning -->
-<!-- that some $W_i$'s will be merged into a longer IET. -->
-<!-- The more the threshold $\ell_0$ cuts into $\mathcal S$ from below, the more -->
-<!-- the distributions of IETs will resemble a MLD, according to the Theorem. -->
-<!-- As we do not know to what extent this effect occurs,  -->
-<!-- and since the limit is an MLD, it is practicable to fit an MLD to the IETs to begin with. -->
+If we had MRP data $\{(W_i, J_i): i \in I\}$ as defined in Section 
+\ref{sec:CTRE}, we could apply any tail (and scale) estimator such as e.g. Hill's 
+estimator [@hill1975simple] to the $W_i$ and thus infer the distribution of 
+inter-exceedance times. However, in real-world datasets, the MRP assumption is too 
+strong for low thresholds. The unknown data generating process is likely more 
+complex, with dependencies or multiple data generating mechanisms at low thresholds 
+and structures that may vanish for higher thresholds. Fitting only the IETs means 
+that the iid assumption applies to exceedances and IETs only.  
 
 For high thresholds where few IETs are left, estimating a tail parameter
 by fitting a MLD has advantages over e.g. the Hill estimator: 
@@ -553,7 +538,7 @@ Mittag-Leffler distribution with shape parameter $\hat \beta$ and scale paramete
 $\hat \sigma_0 k^{-1/\beta}$. 
 
 To clarify Step 4: Recall that by the theorem, $\sigma_k / b(1/p_{\ell})$ is expected to stabilize 
-around a constant as $k$ gets smaller. Since $b$ is regularly varying with parameter
+around a constant as $k$ decreases. Since $b$ is regularly varying with parameter
 $1/\beta$, we have $b(1/p_{\ell}) = p_{\ell}^{-1/\beta} / L(1/p_{\ell})$ for some slowly varying function $L$. 
 Approximating $p_{\ell}$ by $\hat p_{\ell} := k / n$, we have 
 $$\text{const} \approx \sigma_k / b(1/p_{\ell}) = \sigma_k \times p_{\ell}^{1/\beta} L(1/p_{\ell}) \approx \sigma_k \times k^{1/\beta} n^{-1/\beta} L(n/k)$$
@@ -562,7 +547,7 @@ $\sigma_k k^{1/\beta}$ stabilizes.
 
 **Remark**:
 
-: We approximated $p_{\ell}$, the probability that an event is larger than $l$, by its relative frequency. One could also approximate this tail probability by the GPD distribution fitted to the exceedances.   
+: We approximated $p_{\ell}$, the probability that an event is larger than $l$, by its relative frequency. One could also approximate this tail probability via the GPD distribution fitted to the exceedances.   
 
 For computationally efficient estimates of the Mittag-Leffler parameters we have used 
 the method of log-transformed moments. This estimation method provides 
@@ -625,28 +610,9 @@ Thin grey lines represent individual simulation runs,
 and the thicker black line is their mean. 
 Recall that $k$ is the index of the order statistics of $J_k$ at which the 
 threshold $\ell$ is placed. 
-<!-- Note that the Hill estimator is based on the waiting times, not on the  -->
-<!-- inter-exceedance times, meaning that the estimation is based on more data.  -->
-<!-- If one were to base the Hill-estimation only on the inter-exceedance times,  -->
-<!-- the sample size would be too small and it would be impossible to deduce an  -->
-<!-- estimate for the tail parameter from the plots (compare Figure \ref{fig:Hillplots}).  -->
-
-<!-- In the right-hand Hill-estimator column, the $k$ on the $x$-axis corresponds to -->
-<!-- $r$ from \eqref{eq:Hill}. -->
-<!-- The Hill estimator appears to be nicely unbiased on Pareto data, -->
-<!-- but compared to the other two estimators, it has a higher variance,  -->
-<!-- as can be seen from the wider spread of the simulated curves.  -->
-<!-- This high variance means that that a single estimate is less reliable compared -->
-<!-- to the other two estimators.  -->
-<!-- This effect is amplified if one only has a thresholded, and thus smaller dataset -->
-<!-- available, to the extent that the Hill estimates become severely flawed -->
-<!-- (see Section \ref{sec:ML}).  -->
 
 The performance of log-Moment and Maximum-Likelihood estimators for the tail resp. the scale parameter is shown in Figure \ref{Fig:TailSimu} resp. \ref{Fig:ScaleSimu}. Both estimators show good performance, with a slight advantage for the Maximum-Likelihood estimator. This advantage is paid for with a higher computational cost. Moreover, the bottom row in Figure \ref{Fig:TailSimu} shows clearly that the log-Moment and Maximum-Likelihood estimators generalize to the exponential case ($\beta = 1$) whereas the Hill-estimator would not.  
-Notice that any data below a certain threshold gets discarded in our approach and hence need not to satisfy the iid assumption. In our simulation study we only simulated data from iid sequences of $(W_k)_{k \in \mathbb{N}}$, in real data situations its likely that there are dependencies or more complex data generating processes vanishing for higher thresholds. We only need the exceedances as well as the inter-exceedance times to be iid. 
- 
-<!-- Since there is no Hill-estimate of a scale parameter, there are only two columns.  -->
-
+Notice that any data below a certain threshold is discarded in our approach and hence need not satisfy the iid assumption. In our simulation study we only simulated data from iid sequences of $(W_k)_{k \in \mathbb{N}}$; in real data situations it is likely that there are dependencies or more complex data generating processes which vanish for higher thresholds. We only need the exceedances and IETs to be iid. 
 
 ```{r TailSimuplots, message=FALSE,echo=FALSE,fig.height=7,fig.align="center",fig.cap="\\label{Fig:TailSimu} Stability Plots for m=100 simulation runs for stable distributed waiting times with a tail parameter of 0.8 (top row), Pareto distributed waiting times with tail parameter 0.8 (middle row) and exponentially distributed waiting times (lower row). Left column: log-Moment estimator, right column: MLE. The grey thin lines are the stability plots for the different simulation runs and the dark lines are their means. The red dotted line shows the true tail parameter.", fig.show='hold', out.width = '100%'}
 
@@ -845,7 +811,7 @@ We now want to apply the proposed method to a real data example, the solar flare
  
 Before we apply the approach described in Section 5 to the solar flare data, we first have to check if all model assumptions are fulfilled. The CTRE model is based on three main assumptions, which are repeated below. For each assumption, we suggest one means of checking if it holds: 
 
-iid :
+iid:
 
 : After removing the "noise observations" below the smallest threshold 
   $\ell_0$, the pair sequence $(T(\ell_0, i), X(\ell_0,i))$ is iid 
@@ -922,7 +888,7 @@ par(mfrow=c(1,2))
 MLestimates(thin_flares_ctre, tail = 0.9, scale = 3 * 1E7) 
 ```
 
-The fit with a Mittag-Leffler distribution ($\beta = 0.9$) seems to be good (see Figure \ref{fig:flare-diagnostics-3}), though there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot (see Figure \ref{fig:flare-diagnostics-2}). We also conduct a bootstrapped LRT for the null hypothesis of exponentially distributed inter-arrival times and received a $p$-value of $p<0.01$. 
+The fit with a Mittag-Leffler distribution ($\beta = 0.9$) seems to be good (see Figure \ref{fig:flare-diagnostics-3}), although there are signs that the power-law tail tapers off for very large inter-threshold crossing times. There is no apparent dependence between threshold exceedance times and event magnitudes seen in the copula plot (see Figure \ref{fig:flare-diagnostics-2}). We also conduct a bootstrapped LRT for the null hypothesis of exponentially distributed inter-arrival times and received a $p$-value of $p<0.01$. 
 
 # Predicting the time of the next threshold crossing
 
@@ -981,6 +947,7 @@ for (k in 1:length(betas)) {
 legend("bottomleft", c("beta = 0.7", "beta = 0.8", "beta = 0.9", "beta = 0.99"), col = c("red","blue","darkgreen","black"), lty = 2:5)
 
 ```
+
 The closer $\beta$ is to $1$, the more the hazard rate mimics that of an 
 exponential distribution (a constant function, see Figure \ref{fig:hazard}, 
 right panel). 
@@ -999,11 +966,11 @@ ii) a high propensity for more threshold crossing events immediately after each 
 
 The Mittag-Leffler distribution captures both phenomena, due to its heavy tail as well as its stretched exponential (peaked) asymptotics for small times. It generalizes the exponential distribution, and in the solar flare data example, this generalization is warranted, because the likelihood-ratio test is strongly significant. 
 
-When we introduced the CTRE model, we assumed that all events are iid This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the iid assumption. For the purposes of statistical inference, we merely require that the inter-threshold-crossing times are iid 
+When we introduced the CTRE model, we assumed that all events are iid. This assumption is likely sufficient but not necessary for our limit theorem to hold. Moreover, any data below a (minimum) threshold $\ell_0$ is discarded for CTREs, and hence need not satisfy the iid assumption. For the purposes of statistical inference, we merely require that the IETs are iid.
 
 The CTRE approach to model "non-Poissonian" threshold crossing times should be contrasted with the well-documented approach of clusters of extremes, see e.g. @ferro2003inference. When the underlying stochastic process is *stationary*, the exceedances of high thresholds form, asymptotically, a *Cluster Poisson Process*.
 In the setting of this article, however, clustering-like dynamics occur due to the *non-stationarity* of the underlying renewal-reward process, which has infinite-mean renewal times. 
-Hence CTRE and Cluster Poisson Process shouldn't be viewed as competing methods, as the underlying data generating processes are quite different. To differentiate between the two models we use the term *bursty* which is standard in the context of heavy-tailed inter-arrival times in the physics community [e.g. @Barabasi2005;@Vasquez2006;@Karsai2012;@Vajna2013]). In weighing the evidence for either of the two data generating processes, criteria could be developed, based e.g. on measures of surprise [@Lee15], which may prove to be valuable for future applied statisticians.
+Hence CTRE and Cluster Poisson Process should not be viewed as competing methods, as the underlying data generating processes are quite different. To differentiate between the two models we use the term *bursty* which is standard in the context of heavy-tailed inter-arrival times in the physics community [e.g. @Barabasi2005;@Vasquez2006;@Karsai2012;@Vajna2013]). In weighing the evidence for either of the two data generating processes, criteria could be developed, based e.g. on measures of surprise [@Lee15], which may prove to be valuable for future applied statisticians.
 
 Finally, we note that assuming a purely scale-free pattern for event times may be too rigid an 
 assumption, which unnecessarily limits the applicability of CTREs. Often, the heavy-tailed character of the inter-arrival time
