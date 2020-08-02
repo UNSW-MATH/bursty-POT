@@ -332,7 +332,7 @@ For a detailed reference on the Mittag-Leffler distribution, see e.g.
 
 **Remark:**
 
-: If $\beta = 1$, the result of the Theorem above is standard, see  
+: If $\beta = 1$, the result of the Theorem above is standard, see
 Equation (2.2) in @Gut1999. In @Anderson1987  a similar result is shown with a different choice of scaling constant. [@MeerschaertStoev08] proved a limit theorem for the maxima of iid random variables separated by infinite mean waiting times. They have also shown that the hitting time of the limit process is Mittag-Leffler distributed. [@Basrak2014] described the asymptotic distribution, under similar assumptions, of all upper orders statistics using point processes.   
 
 **Remark:**
