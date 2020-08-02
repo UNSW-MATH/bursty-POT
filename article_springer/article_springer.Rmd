@@ -1,15 +1,7 @@
 ---
 title: "Statistical Inference for inter-arrival times of extreme events in bursty time series"
 # titlerunning: "CTRE: POT for Bursty Time Series"
-thanks: |
-    Peter Straka was supported by the 
-    Discovery Early Career Research Award DE160101147 on the Project 
-    "Predicting Extremes when Events Occur in Bursts" by the Australian
-    Research Council.
-    Katharina Hees was supported by 
-    the DAAD co-financed by the German Federal Ministry of Education and 
-    Research (BMBF). 
-   
+
 author: 
 
 - name: "Katharina Hees"
@@ -976,15 +968,16 @@ reverting to an exponential distribution) at very long time scales [see e.g. @Me
 
 # Acknowledgements {-}
 
-The authors would like to thank Prof. Peter Scheffler for insights on 
-stochastic process limits for CTRMs, Prof. Roland Fried for discussion 
-regarding the statistical methods and Gurtek Gill who helped create the 
-MittagLeffleR R-package. Peter Straka was supported by the Discovery 
+Peter Straka was supported by the Discovery 
 Early Career Research Award DE160101147 on the Project 
 “Predicting Extremes when Events Occurin Bursts” by 
 the Australian Research Council. Katharina Hees was 
 supported by the DAAD co-financed by the 
 German Federal Ministry of Education and Research (BMBF).
+The authors would like to thank Prof. Peter Scheffler for insights on 
+stochastic process limits for CTRMs, Prof. Roland Fried for discussion 
+regarding the statistical methods and Gurtek Gill who helped create the 
+MittagLeffleR R-package. 
 
 
 \newpage
